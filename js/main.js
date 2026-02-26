@@ -91,9 +91,9 @@
 (function initTypewriter() {
   const el = document.querySelector('.hero-tagline');
   const phrases = [
-    'building things for the web.',
-    'exploring the digital frontier.',
-    'turning ideas into code.',
+    'modernizing legacy industries.',
+    'connecting physical and digital worlds.',
+    'engineering smarter infrastructure.',
   ];
   let phraseIndex = 0;
   let charIndex = 0;
