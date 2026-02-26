@@ -5,7 +5,7 @@
   const canvas = document.getElementById('star-canvas');
   const ctx = canvas.getContext('2d');
   let stars = [];
-  const STAR_COUNT = 180;
+  const STAR_COUNT = window.innerWidth < 768 ? 60 : 180;
 
   function resize() {
     canvas.width = window.innerWidth;
