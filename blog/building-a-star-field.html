@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building an Animated Star Field with Canvas — Cameron Pavloske</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .blog-post {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+    }
+    .blog-post-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 2.5rem;
+    }
+    .blog-post-back:hover { color: var(--accent-blue); }
+    .blog-post-back svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+    }
+    .blog-post h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .blog-post-meta {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .blog-post h2 {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--accent-blue);
+    }
+    .blog-post p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+    .blog-post pre {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    .blog-post code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+    }
+    .blog-post p code {
+      background: rgba(255,255,255,0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="star-canvas"></canvas>
+
+  <nav class="navbar scrolled">
+    <a href="../index.html" class="nav-logo">cameron<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">about</a></li>
+      <li><a href="../index.html#projects">projects</a></li>
+      <li><a href="../index.html#blog">blog</a></li>
+      <li><a href="../index.html#contact">contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <article class="blog-post">
+    <a href="../index.html#blog" class="blog-post-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      back to blog
+    </a>
+
+    <h1>Building an Animated Star Field with Canvas</h1>
+    <p class="blog-post-meta">February 20, 2026</p>
+
+    <p>One of my favorite background effects for dark-themed websites is a subtle animated star field. It adds depth and atmosphere without being distracting. In this post, I'll walk through how I built one using the HTML Canvas API and vanilla JavaScript.</p>
+
+    <h2>Setting Up the Canvas</h2>
+    <p>The first step is creating a full-screen canvas element that sits behind all of our content. We use <code>position: fixed</code> and <code>pointer-events: none</code> so it stays in place and doesn't interfere with clicks.</p>
+
+    <pre><code>&lt;canvas id="star-canvas"&gt;&lt;/canvas&gt;
+
+&lt;style&gt;
+  #star-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+&lt;/style&gt;</code></pre>
+
+    <h2>Generating the Stars</h2>
+    <p>Each star is an object with random position, size, opacity, and drift speed. We store them in an array and regenerate whenever the window resizes.</p>
+
+    <pre><code>const STAR_COUNT = 180;
+let stars = [];
+
+function createStars() {
+  stars = [];
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.4 + 0.3,
+      alpha: Math.random() * 0.6 + 0.2,
+      drift: Math.random() * 0.15 + 0.02,
+    });
+  }
+}</code></pre>
+
+    <h2>The Animation Loop</h2>
+    <p>We use <code>requestAnimationFrame</code> for a smooth 60fps loop. Each frame, we clear the canvas, draw every star with a gentle twinkling effect using a sine wave, and move them slowly upward to simulate drifting through space.</p>
+
+    <pre><code>function draw(time) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (const star of stars) {
+    const twinkle = Math.sin(time * 0.005) * 0.3 + 0.7;
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200, 220, 255, ${star.alpha * twinkle})`;
+    ctx.fill();
+
+    star.y -= star.drift;
+    if (star.y &lt; -5) {
+      star.y = canvas.height + 5;
+      star.x = Math.random() * canvas.width;
+    }
+  }
+
+  requestAnimationFrame(draw);
+}</code></pre>
+
+    <h2>Performance Considerations</h2>
+    <p>Canvas rendering is very efficient for this kind of particle effect. A few hundred circles drawn per frame is trivial for modern GPUs. The key is to avoid creating garbage by reusing star objects instead of allocating new ones each frame.</p>
+
+    <p>Also make sure you're listening for the <code>resize</code> event to update the canvas dimensions — otherwise your stars will render at the wrong resolution on window resize.</p>
+
+    <h2>Wrapping Up</h2>
+    <p>That's all there is to it. A few dozen lines of JavaScript gives you a beautiful, performant animated background that works in every modern browser. No libraries, no build tools — just the platform.</p>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Cameron Pavloske</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

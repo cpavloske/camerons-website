@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cameron Pavloske</title>
+  <meta name="description" content="Cameron Pavloske — developer, builder, explorer of the digital frontier.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Star background -->
+  <canvas id="star-canvas"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">cameron<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#blog">blog</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="aurora"></div>
+    <div class="hero-content">
+      <h1 class="hero-name">Cameron Pavloske</h1>
+      <p class="hero-tagline"><span class="cursor"></span></p>
+    </div>
+    <div class="scroll-indicator">
+      <span>scroll</span>
+      <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-inner">
+      <p class="section-title reveal">// about</p>
+      <h2 class="section-heading reveal">Who I Am</h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>I'm a developer who thrives at the intersection of design and engineering. I enjoy building clean, performant web experiences and exploring new technologies that push the boundaries of what's possible in the browser.</p>
+          <p>When I'm not writing code, you'll find me reading about emerging tech, contributing to open source, or experimenting with creative coding projects.</p>
+        </div>
+        <div class="about-details reveal">
+          <div class="detail-card">
+            <h3>Stack</h3>
+            <p>HTML, CSS, JavaScript, TypeScript, React, Node.js, Python</p>
+          </div>
+          <div class="detail-card">
+            <h3>Interests</h3>
+            <p>Web performance, creative coding, developer tools, open source</p>
+          </div>
+          <div class="detail-card">
+            <h3>Currently</h3>
+            <p>Building side projects and learning new things every day</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="section-inner">
+      <p class="section-title reveal">// projects</p>
+      <h2 class="section-heading reveal">Things I've Built</h2>
+      <div class="projects-grid">
+
+        <div class="project-card reveal">
+          <h3>Nebula UI</h3>
+          <p>A lightweight component library with a cosmic design system, built for rapid prototyping.</p>
+          <div class="project-tags">
+            <span>TypeScript</span><span>CSS</span><span>Storybook</span>
+          </div>
+          <a href="#" class="project-link">View Project <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
+        </div>
+
+        <div class="project-card reveal">
+          <h3>Pulse Analytics</h3>
+          <p>Real-time dashboard for monitoring application metrics with live-updating charts.</p>
+          <div class="project-tags">
+            <span>React</span><span>D3.js</span><span>WebSockets</span>
+          </div>
+          <a href="#" class="project-link">View Project <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
+        </div>
+
+        <div class="project-card reveal">
+          <h3>Codefolio</h3>
+          <p>A CLI tool that generates beautiful portfolio sites from your GitHub profile data.</p>
+          <div class="project-tags">
+            <span>Node.js</span><span>CLI</span><span>GitHub API</span>
+          </div>
+          <a href="#" class="project-link">View Project <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
+        </div>
+
+        <div class="project-card reveal">
+          <h3>Synthwave Radio</h3>
+          <p>A browser-based ambient music player with visualizer, built with the Web Audio API.</p>
+          <div class="project-tags">
+            <span>JavaScript</span><span>Web Audio</span><span>Canvas</span>
+          </div>
+          <a href="#" class="project-link">View Project <svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg></a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog">
+    <div class="section-inner">
+      <p class="section-title reveal">// blog</p>
+      <h2 class="section-heading reveal">Recent Writing</h2>
+      <div class="blog-list">
+
+        <a href="blog/building-a-star-field.html" class="blog-item reveal">
+          <div class="blog-item-content">
+            <h3>Building an Animated Star Field with Canvas</h3>
+            <p class="blog-summary">How I created a performant particle background using vanilla JavaScript and the Canvas API.</p>
+          </div>
+          <span class="blog-date">2026-02-20</span>
+        </a>
+
+        <a href="#" class="blog-item reveal">
+          <div class="blog-item-content">
+            <h3>Why I Still Love Vanilla CSS</h3>
+            <p class="blog-summary">A case for writing CSS without frameworks in a world full of utility classes.</p>
+          </div>
+          <span class="blog-date">2026-01-15</span>
+        </a>
+
+        <a href="#" class="blog-item reveal">
+          <div class="blog-item-content">
+            <h3>My Developer Toolbox in 2026</h3>
+            <p class="blog-summary">The tools, extensions, and workflows that keep me productive every day.</p>
+          </div>
+          <span class="blog-date">2026-01-03</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-inner">
+      <p class="section-title reveal">// contact</p>
+      <h2 class="section-heading reveal">Get In Touch</h2>
+      <div class="contact-content reveal">
+        <p>Have a question, idea, or just want to say hello? My inbox is always open.</p>
+        <a href="mailto:hello@cameronpavloske.dev" class="contact-email">hello@cameronpavloske.dev</a>
+        <div class="social-links">
+          <!-- GitHub -->
+          <a href="https://github.com/" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 .5C5.37.5 0 5.78 0 12.292c0 5.211 3.438 9.63 8.205 11.188.6.111.82-.254.82-.567 0-.28-.01-1.022-.015-2.005-3.338.711-4.042-1.582-4.042-1.582-.546-1.361-1.333-1.723-1.333-1.723-1.089-.731.083-.716.083-.716 1.205.082 1.838 1.215 1.838 1.215 1.07 1.803 2.809 1.282 3.495.981.108-.763.417-1.282.76-1.577-2.665-.295-5.466-1.309-5.466-5.827 0-1.287.465-2.339 1.228-3.164-.123-.298-.532-1.497.117-3.12 0 0 1.001-.314 3.28 1.209A11.5 11.5 0 0112 6.844c1.02.005 2.047.136 3.006.398 2.277-1.523 3.276-1.209 3.276-1.209.651 1.623.242 2.822.12 3.12.765.825 1.226 1.877 1.226 3.164 0 4.53-2.805 5.527-5.475 5.817.43.366.823 1.089.823 2.195 0 1.585-.015 2.865-.015 3.254 0 .316.216.683.825.567C20.565 21.917 24 17.5 24 12.292 24 5.78 18.627.5 12 .5z"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <!-- Twitter / X -->
+          <a href="https://x.com/" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2026 Cameron Pavloske. Built with vanilla HTML, CSS &amp; JS.</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
