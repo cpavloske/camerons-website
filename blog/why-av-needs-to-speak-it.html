@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why AV Needs to Speak IT — Cameron Pavloske</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .blog-post {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+    }
+    .blog-post-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 2.5rem;
+    }
+    .blog-post-back:hover { color: var(--accent-blue); }
+    .blog-post-back svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+    }
+    .blog-post h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .blog-post-meta {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .blog-post h2 {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--accent-blue);
+    }
+    .blog-post p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+    .blog-post ul {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+    }
+    .blog-post li {
+      margin-bottom: 0.5rem;
+    }
+    .blog-post pre {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    .blog-post code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+    }
+    .blog-post p code, .blog-post li code {
+      background: rgba(255,255,255,0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="star-canvas"></canvas>
+
+  <nav class="navbar scrolled">
+    <a href="../index.html" class="nav-logo">cameron<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">about</a></li>
+      <li><a href="../index.html#projects">projects</a></li>
+      <li><a href="../index.html#blog">blog</a></li>
+      <li><a href="../index.html#contact">contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <article class="blog-post">
+    <a href="../index.html#blog" class="blog-post-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      back to blog
+    </a>
+
+    <h1>Why AV Needs to Speak IT</h1>
+    <p class="blog-post-meta">February 20, 2026</p>
+
+    <p>For decades, audiovisual systems have lived in their own world. Dedicated matrix switchers, proprietary control processors, and serial cables running through conduit to every room. The AV team handled AV, the IT team handled the network, and the two rarely crossed paths.</p>
+
+    <p>That era is ending. As AV systems move to IP, they are becoming network devices whether anyone planned for it or not. The question is no longer if AV and IT will converge, but whether organizations will manage that convergence intentionally or let it happen by accident.</p>
+
+    <h2>The Problem with AV as a Silo</h2>
+
+    <p>Traditional AV installations are built as closed systems. A control processor talks to a switcher over RS-232, the switcher feeds displays over HDMI, and everything is wired point-to-point. It works, but it creates real operational problems:</p>
+
+    <ul>
+      <li><strong>No remote visibility.</strong> If a display goes dark in a conference room across the building, someone has to physically walk there to troubleshoot. There are no monitoring dashboards, no alerts, and no logs.</li>
+      <li><strong>Scaling is painful.</strong> Adding a room means running new cabling, adding ports to the switcher, and updating the control system programming. Every room is a custom job.</li>
+      <li><strong>No lifecycle management.</strong> Firmware updates, if they happen at all, require a technician on-site with a laptop and a serial cable. There is no centralized way to patch or update devices across a fleet.</li>
+      <li><strong>Security blind spots.</strong> Many legacy AV devices have no authentication, no encryption, and no audit trail. Once someone is on the local network segment, they often have unrestricted access.</li>
+    </ul>
+
+    <p>These are the same problems IT solved years ago with centralized management, monitoring, and standardized protocols. AV has just been slow to follow.</p>
+
+    <h2>What "Speaking IT" Actually Means</h2>
+
+    <p>Bringing AV into the IT fold is not about replacing every piece of hardware overnight. It is about treating AV endpoints the way we treat any other managed device on the network. That means:</p>
+
+    <ul>
+      <li><strong>IP addressing and DNS.</strong> Every AV device gets a proper network identity, lives in an appropriate VLAN, and can be reached and managed over the network.</li>
+      <li><strong>Monitoring and alerting.</strong> AV endpoints report health, status, and errors to the same platforms IT already uses. When a display loses signal or an amplifier overheats, someone gets an alert.</li>
+      <li><strong>Authentication and access control.</strong> No more open telnet ports with no password. Devices support credentials, certificates, or API keys just like any other infrastructure component.</li>
+      <li><strong>Standardized protocols.</strong> Moving from proprietary serial commands to REST APIs, SNMP, or other protocols that IT teams already know how to work with.</li>
+    </ul>
+
+    <h2>The Payoff</h2>
+
+    <p>When AV systems become first-class citizens on the network, organizations see immediate benefits. Troubleshooting goes from truck rolls to remote diagnostics. Scaling a deployment means provisioning a device on the network rather than pulling new cable. Firmware updates can be pushed across an entire fleet from a single interface.</p>
+
+    <p>More importantly, it changes the relationship between AV and IT teams. Instead of parallel organizations maintaining separate infrastructure, they share tools, share knowledge, and share responsibility. The network becomes the platform for everything, and AV is just another service running on it.</p>
+
+    <h2>Where to Start</h2>
+
+    <p>If your organization is still running traditional AV systems, the transition does not have to happen all at once. A practical starting point:</p>
+
+    <ul>
+      <li><strong>Audit what you have.</strong> Identify which devices are already IP-capable but not being managed that way. Many modern AV products have network interfaces that are simply never configured.</li>
+      <li><strong>Get AV on a VLAN.</strong> Even before replacing hardware, segmenting AV traffic onto its own VLAN with proper QoS gives IT visibility and control over the traffic.</li>
+      <li><strong>Pick one room as a pilot.</strong> Deploy a fully IP-based AV setup in a single space. Use it to build internal knowledge, work out the kinks, and demonstrate the value before rolling out broadly.</li>
+    </ul>
+
+    <p>The AV industry is catching up. More manufacturers are shipping devices with proper network management built in. The tools are there. The gap is in how organizations choose to deploy and manage them.</p>
+
+    <p>AV needs to speak IT because the network is where everything else already lives. The sooner we bring these systems into that shared infrastructure, the easier they become to manage, scale, and secure.</p>
+
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Cameron Pavloske</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
