@@ -52,9 +52,12 @@
     createStars();
   });
 
-  resize();
-  createStars();
-  requestAnimationFrame(draw);
+  // Defer canvas work so the page paints first
+  requestAnimationFrame(() => {
+    resize();
+    createStars();
+    requestAnimationFrame(draw);
+  });
 })();
 
 /* ========================================
