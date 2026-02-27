@@ -286,7 +286,7 @@
 (function initTypewriter() {
   const el = document.querySelector('.hero-tagline');
   const phrases = [
-    'modernizing legacy industries.',
+    'modernizing the systems connecting the world.',
     'connecting physical and digital worlds.',
     'engineering smarter infrastructure.',
   ];
