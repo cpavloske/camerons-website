@@ -2,16 +2,16 @@
    CSS Variables & Reset
    ======================================== */
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #1a0a10;
-  --bg-card: rgba(40, 10, 20, 0.6);
-  --text-primary: #f0e6e6;
-  --text-secondary: #a8888e;
-  --accent-blue: #8C1D40;
-  --accent-violet: #500000;
-  --accent-cyan: #FFFFFF;
-  --glow-blue: rgba(140, 29, 64, 0.4);
-  --glow-violet: rgba(80, 0, 0, 0.3);
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #0f1629;
+  --bg-card: rgba(15, 22, 41, 0.6);
+  --text-primary: #e0e6f0;
+  --text-secondary: #8892a8;
+  --accent-blue: #4e7cff;
+  --accent-violet: #7c3aed;
+  --accent-cyan: #06d6a0;
+  --glow-blue: rgba(78, 124, 255, 0.4);
+  --glow-violet: rgba(124, 58, 237, 0.3);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-bg: rgba(255, 255, 255, 0.04);
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -81,8 +81,8 @@ img {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(80, 0, 0, 0.18), transparent),
-    radial-gradient(ellipse 70% 50% at 70% 80%, rgba(140, 29, 64, 0.15), transparent);
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(124, 58, 237, 0.18), transparent),
+    radial-gradient(ellipse 70% 50% at 70% 80%, rgba(78, 124, 255, 0.15), transparent);
   background-size: 200% 200%;
   animation: auroraShift 12s ease-in-out infinite alternate;
 }
@@ -115,7 +115,7 @@ img {
   justify-content: space-between;
   padding: 0 2rem;
   z-index: 1000;
-  background: rgba(10, 10, 15, 0.4);
+  background: rgba(10, 14, 26, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
@@ -123,7 +123,7 @@ img {
 }
 
 .navbar.scrolled {
-  background: rgba(10, 10, 15, 0.92);
+  background: rgba(10, 14, 26, 0.92);
   border-bottom: 1px solid var(--glass-border);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
@@ -358,8 +358,8 @@ section {
 }
 
 .detail-card:hover {
-  border-color: rgba(140, 29, 64, 0.2);
-  box-shadow: 0 0 20px rgba(140, 29, 64, 0.08);
+  border-color: rgba(78, 124, 255, 0.2);
+  box-shadow: 0 0 20px rgba(78, 124, 255, 0.08);
 }
 
 .detail-card h3 {
@@ -411,8 +411,8 @@ section {
 
 .project-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(140, 29, 64, 0.25);
-  box-shadow: 0 8px 40px rgba(140, 29, 64, 0.1), 0 0 60px rgba(80, 0, 0, 0.06);
+  border-color: rgba(78, 124, 255, 0.25);
+  box-shadow: 0 8px 40px rgba(78, 124, 255, 0.1), 0 0 60px rgba(124, 58, 237, 0.06);
 }
 
 .project-card:hover::before {
@@ -446,9 +446,9 @@ section {
   font-size: 0.72rem;
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
-  background: rgba(140, 29, 64, 0.1);
+  background: rgba(78, 124, 255, 0.1);
   color: var(--accent-blue);
-  border: 1px solid rgba(140, 29, 64, 0.15);
+  border: 1px solid rgba(78, 124, 255, 0.15);
 }
 
 .project-link {
@@ -499,8 +499,8 @@ section {
 
 .blog-item:hover {
   transform: translateX(6px);
-  border-color: rgba(140, 29, 64, 0.2);
-  box-shadow: 0 4px 24px rgba(140, 29, 64, 0.08);
+  border-color: rgba(78, 124, 255, 0.2);
+  box-shadow: 0 4px 24px rgba(78, 124, 255, 0.08);
 }
 
 .blog-item-content {
@@ -594,8 +594,8 @@ section {
 
 .social-links a:hover {
   color: var(--accent-blue);
-  border-color: rgba(140, 29, 64, 0.3);
-  box-shadow: 0 0 20px rgba(140, 29, 64, 0.15);
+  border-color: rgba(78, 124, 255, 0.3);
+  box-shadow: 0 0 20px rgba(78, 124, 255, 0.15);
   transform: translateY(-2px);
 }
 
@@ -643,7 +643,7 @@ section {
     right: 0;
     width: 260px;
     height: 100vh;
-    background: rgba(10, 10, 15, 0.97);
+    background: rgba(10, 14, 26, 0.97);
     flex-direction: column;
     padding: 5rem 2rem 2rem;
     gap: 1.5rem;
@@ -694,7 +694,7 @@ section {
   .blog-item {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: rgba(40, 10, 20, 0.7);
+    background: rgba(15, 22, 41, 0.7);
   }
 
   .navbar {
