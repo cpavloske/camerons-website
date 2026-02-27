@@ -6,8 +6,8 @@
   const ctx = canvas.getContext('2d');
 
   const isMobile = window.innerWidth < 768;
-  const R = 78, G = 124, B = 255;   // accent blue #4e7cff
-  const PR = 6, PG = 214, PB = 160; // packet color — active green #06d6a0
+  const R = 140, G = 29, B = 64;    // accent maroon #8C1D40
+  const PR = 255, PG = 255, PB = 255; // packet color — white #FFFFFF
 
   // Hub nodes (routers/switches) and endpoints (devices)
   const HUB_COUNT = isMobile ? 5 : 12;
