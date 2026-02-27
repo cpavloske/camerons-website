@@ -5,8 +5,8 @@
   --bg-primary: #0a0e1a;
   --bg-secondary: #0f1629;
   --bg-card: rgba(15, 22, 41, 0.6);
-  --text-primary: #e0e6f0;
-  --text-secondary: #8892a8;
+  --text-primary: #f0f2f8;
+  --text-secondary: #a8b0c0;
   --accent-blue: #4e7cff;
   --accent-violet: #7c3aed;
   --accent-cyan: #06d6a0;
@@ -30,14 +30,14 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 body {
   font-family: var(--font-body);
   background: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.75;
   overflow-x: hidden;
 }
 
