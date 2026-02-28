@@ -1,131 +1,67 @@
 /* ========================================
-   Network Topology Background
+   Aurora Signal Background
+   Smooth aurora waves with subtle scan lines
+   for an AV/surveillance aesthetic
    ======================================== */
-(function initNetwork() {
+(function initAurora() {
   const canvas = document.getElementById('star-canvas');
   const ctx = canvas.getContext('2d');
 
   const isMobile = window.innerWidth < 768;
-  const R = 78, G = 124, B = 255;   // accent blue #4e7cff
-  const PR = 6, PG = 214, PB = 160; // packet color — active green #06d6a0
-
-  // Hub nodes (routers/switches) and endpoints (devices)
-  const HUB_COUNT = isMobile ? 5 : 12;
-  const ENDPOINT_COUNT = isMobile ? 25 : 60;
-  const HUB_REACH = isMobile ? 250 : 350;
-  const PACKET_COUNT = isMobile ? 12 : 30;
-
-  let nodes = [];
-  let edges = [];   // persistent edge list rebuilt periodically
-  let packets = []; // data packets traveling along edges
   let w = 0;
   let h = 0;
-  let lastEdgeRebuild = 0;
+
+  // Aurora blobs — large soft color sources that drift slowly
+  const BLOB_COUNT = isMobile ? 3 : 5;
+  const blobs = [];
+
+  // Scan line config
+  const SCAN_LINE_GAP = 3;        // pixels between scan lines
+  const SCAN_LINE_ALPHA = 0.03;   // very faint
 
   function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
   }
 
-  function createNodes() {
-    nodes = [];
+  // Predefined blob positions to ensure good coverage
+  const blobSeeds = [
+    { xFrac: 0.2, yFrac: 0.3 },   // top-left area
+    { xFrac: 0.8, yFrac: 0.2 },   // top-right area
+    { xFrac: 0.5, yFrac: 0.7 },   // center-bottom
+    { xFrac: 0.15, yFrac: 0.8 },  // bottom-left
+    { xFrac: 0.85, yFrac: 0.6 },  // right-center
+  ];
 
-    // Hub nodes — spread in a grid with jitter
-    const hubCols = Math.ceil(Math.sqrt(HUB_COUNT * (w / h)));
-    const hubRows = Math.ceil(HUB_COUNT / hubCols);
-    const cellW = w / hubCols;
-    const cellH = h / hubRows;
-    for (let i = 0; i < HUB_COUNT; i++) {
-      const col = i % hubCols;
-      const row = Math.floor(i / hubCols);
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 0.06 + 0.02;
-      nodes.push({
-        x: cellW * (col + 0.3 + Math.random() * 0.4),
-        y: cellH * (row + 0.3 + Math.random() * 0.4),
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        radius: Math.random() * 1.5 + 2.5,
-        alpha: 0.8,
-        pulseSpeed: Math.random() * 0.004 + 0.002,
-        pulseOffset: Math.random() * Math.PI * 2,
-        isHub: true,
-      });
-    }
+  function createBlobs() {
+    blobs.length = 0;
+    const colors = [
+      { r: 78,  g: 124, b: 255 },  // accent blue
+      { r: 124, g: 58,  b: 237 },  // accent violet
+      { r: 6,   g: 214, b: 160 },  // accent cyan
+      { r: 78,  g: 124, b: 255 },  // blue again
+      { r: 124, g: 58,  b: 237 },  // violet again
+    ];
 
-    // Endpoint nodes
-    for (let i = 0; i < ENDPOINT_COUNT; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 0.12 + 0.04;
-      nodes.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        radius: Math.random() * 0.8 + 0.8,
-        alpha: Math.random() * 0.3 + 0.3,
-        pulseSpeed: Math.random() * 0.008 + 0.003,
-        pulseOffset: Math.random() * Math.PI * 2,
-        isHub: false,
-      });
-    }
-
-    rebuildEdges();
-    createPackets();
-  }
-
-  // Build stable edge list (hub-hub backbone + endpoint-to-hub spokes)
-  function rebuildEdges() {
-    edges = [];
-
-    // Hub-to-hub backbone
-    for (let i = 0; i < HUB_COUNT; i++) {
-      const a = nodes[i];
-      for (let j = i + 1; j < HUB_COUNT; j++) {
-        const b = nodes[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < HUB_REACH) {
-          edges.push({ from: i, to: j, type: 'backbone' });
-        }
-      }
-    }
-
-    // Endpoint-to-nearest-hub spokes
-    for (let i = HUB_COUNT; i < nodes.length; i++) {
-      const ep = nodes[i];
-      let closest = -1;
-      let closestDist = Infinity;
-
-      for (let h = 0; h < HUB_COUNT; h++) {
-        const hub = nodes[h];
-        const dx = ep.x - hub.x, dy = ep.y - hub.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < HUB_REACH && dist < closestDist) {
-          closest = h;
-          closestDist = dist;
-        }
-      }
-
-      if (closest >= 0) {
-        edges.push({ from: i, to: closest, type: 'spoke' });
-      }
-    }
-  }
-
-  // Create data packets that travel along edges
-  function createPackets() {
-    packets = [];
-    if (edges.length === 0) return;
-
-    for (let i = 0; i < PACKET_COUNT; i++) {
-      const edgeIdx = Math.floor(Math.random() * edges.length);
-      packets.push({
-        edge: edgeIdx,
-        t: Math.random(),                      // position along edge 0-1
-        speed: Math.random() * 0.003 + 0.001,  // travel speed
-        forward: Math.random() > 0.5,          // direction
-        size: Math.random() * 1.2 + 1,         // 1-2.2px
+    for (let i = 0; i < BLOB_COUNT; i++) {
+      const seed = blobSeeds[i];
+      blobs.push({
+        radius: Math.random() * 200 + (isMobile ? 300 : 500),
+        color: colors[i % colors.length],
+        alpha: Math.random() * 0.06 + 0.12,  // 0.12 – 0.18
+        // Drift parameters
+        xFreq:   Math.random() * 0.00006 + 0.00002,
+        yFreq:   Math.random() * 0.00005 + 0.00002,
+        xAmp:    Math.random() * (w * 0.15) + (w * 0.08),
+        yAmp:    Math.random() * (h * 0.12) + (h * 0.06),
+        xPhase:  Math.random() * Math.PI * 2,
+        yPhase:  Math.random() * Math.PI * 2,
+        // Base position — seeded for good coverage
+        baseX: seed.xFrac * w,
+        baseY: seed.yFrac * h,
+        // Breathing
+        breathFreq:  Math.random() * 0.0003 + 0.00015,
+        breathPhase: Math.random() * Math.PI * 2,
       });
     }
   }
@@ -133,124 +69,56 @@
   function draw(time) {
     ctx.clearRect(0, 0, w, h);
 
-    // Update node positions
-    for (const node of nodes) {
-      node.x += node.vx + Math.sin(time * 0.0003 + node.pulseOffset) * 0.03;
-      node.y += node.vy + Math.cos(time * 0.0004 + node.pulseOffset) * 0.03;
+    // --- Draw aurora blobs with additive blending ---
+    ctx.globalCompositeOperation = 'screen';
+    for (const blob of blobs) {
+      const bx = blob.baseX + Math.sin(time * blob.xFreq + blob.xPhase) * blob.xAmp;
+      const by = blob.baseY + Math.cos(time * blob.yFreq + blob.yPhase) * blob.yAmp;
 
-      if (node.x < 0)  { node.x = 0; node.vx = Math.abs(node.vx); }
-      if (node.x > w)  { node.x = w; node.vx = -Math.abs(node.vx); }
-      if (node.y < 0)  { node.y = 0; node.vy = Math.abs(node.vy); }
-      if (node.y > h)  { node.y = h; node.vy = -Math.abs(node.vy); }
-    }
+      const breath = Math.sin(time * blob.breathFreq + blob.breathPhase) * 0.3 + 0.7;
+      const alpha = blob.alpha * breath;
 
-    // Rebuild edges every 2 seconds to account for drift
-    if (time - lastEdgeRebuild > 2000) {
-      rebuildEdges();
-      // Re-assign packets to valid edges
-      for (const pkt of packets) {
-        if (pkt.edge >= edges.length) {
-          pkt.edge = Math.floor(Math.random() * edges.length);
-          pkt.t = 0;
-        }
-      }
-      lastEdgeRebuild = time;
-    }
+      const grad = ctx.createRadialGradient(bx, by, 0, bx, by, blob.radius);
+      grad.addColorStop(0,   `rgba(${blob.color.r},${blob.color.g},${blob.color.b},${alpha})`);
+      grad.addColorStop(0.4, `rgba(${blob.color.r},${blob.color.g},${blob.color.b},${alpha * 0.5})`);
+      grad.addColorStop(0.7, `rgba(${blob.color.r},${blob.color.g},${blob.color.b},${alpha * 0.15})`);
+      grad.addColorStop(1,   `rgba(${blob.color.r},${blob.color.g},${blob.color.b},0)`);
 
-    // --- Draw edges ---
-    for (const edge of edges) {
-      const a = nodes[edge.from];
-      const b = nodes[edge.to];
-      const dx = a.x - b.x, dy = a.y - b.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const fade = Math.max(0, 1 - dist / HUB_REACH);
-
-      const isBackbone = edge.type === 'backbone';
-      ctx.lineWidth = isBackbone ? 1.2 : 0.5;
-      const baseAlpha = isBackbone ? 0.25 : 0.15;
-
+      ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      ctx.strokeStyle = `rgba(${R},${G},${B},${baseAlpha * fade})`;
-      ctx.stroke();
-    }
-
-    // --- Update & draw data packets ---
-    for (const pkt of packets) {
-      if (edges.length === 0) break;
-      const edge = edges[pkt.edge];
-      const a = nodes[edge.from];
-      const b = nodes[edge.to];
-
-      // Move packet along edge
-      pkt.t += pkt.forward ? pkt.speed : -pkt.speed;
-
-      // When packet reaches end, pick a new random edge (simulates routing)
-      if (pkt.t > 1 || pkt.t < 0) {
-        pkt.edge = Math.floor(Math.random() * edges.length);
-        pkt.t = pkt.forward ? 0 : 1;
-        pkt.forward = Math.random() > 0.5;
-        continue;
-      }
-
-      // Interpolate position along edge
-      const px = a.x + (b.x - a.x) * pkt.t;
-      const py = a.y + (b.y - a.y) * pkt.t;
-
-      // Bright glow trail
-      ctx.beginPath();
-      ctx.arc(px, py, pkt.size + 2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${PR},${PG},${PB},0.08)`;
-      ctx.fill();
-
-      // Bright core
-      ctx.beginPath();
-      ctx.arc(px, py, pkt.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${PR},${PG},${PB},0.7)`;
+      ctx.arc(bx, by, blob.radius, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // --- Draw hub nodes with glow ---
-    for (let i = 0; i < HUB_COUNT; i++) {
-      const node = nodes[i];
-      const pulse = Math.sin(time * node.pulseSpeed + node.pulseOffset) * 0.3 + 0.7;
+    // Switch back to normal blending for overlays
+    ctx.globalCompositeOperation = 'source-over';
 
-      // Outer glow
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${R},${G},${B},${0.06 * pulse})`;
-      ctx.fill();
-
-      // Core
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${R},${G},${B},${node.alpha * pulse})`;
-      ctx.fill();
+    // --- Scan lines (CRT / surveillance feel) ---
+    ctx.fillStyle = `rgba(0,0,0,${SCAN_LINE_ALPHA})`;
+    for (let y = 0; y < h; y += SCAN_LINE_GAP) {
+      ctx.fillRect(0, y, w, 1);
     }
 
-    // --- Draw endpoint nodes ---
-    for (let i = HUB_COUNT; i < nodes.length; i++) {
-      const node = nodes[i];
-      const pulse = Math.sin(time * node.pulseSpeed + node.pulseOffset) * 0.3 + 0.7;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${R},${G},${B},${node.alpha * pulse})`;
-      ctx.fill();
-    }
+    // --- Slow scan beam (surveillance camera sweep) ---
+    const beamY = ((time * 0.015) % (h + 200)) - 100;
+    const beamGrad = ctx.createLinearGradient(0, beamY - 60, 0, beamY + 60);
+    beamGrad.addColorStop(0, 'rgba(78,124,255,0)');
+    beamGrad.addColorStop(0.5, 'rgba(78,124,255,0.04)');
+    beamGrad.addColorStop(1, 'rgba(78,124,255,0)');
+    ctx.fillStyle = beamGrad;
+    ctx.fillRect(0, beamY - 60, w, 120);
 
     requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', () => {
     resize();
-    createNodes();
+    createBlobs();
   });
 
-  // Defer canvas work so the page paints first
   requestAnimationFrame(() => {
     resize();
-    createNodes();
+    createBlobs();
     requestAnimationFrame(draw);
   });
 })();
