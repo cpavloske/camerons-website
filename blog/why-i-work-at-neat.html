@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why I Work at Neat — Cameron Pavloske</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .blog-post {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+    }
+    .blog-post-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 2.5rem;
+    }
+    .blog-post-back:hover { color: var(--accent-blue); }
+    .blog-post-back svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+    }
+    .blog-post h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .blog-post-meta {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .blog-post h2 {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--accent-blue);
+    }
+    .blog-post p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+    .blog-post pre {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    .blog-post code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+    }
+    .blog-post p code {
+      background: rgba(255,255,255,0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="star-canvas"></canvas>
+
+  <nav class="navbar scrolled">
+    <a href="../index.html" class="nav-logo">cameron<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">about</a></li>
+      <li><a href="../index.html#projects">projects</a></li>
+      <li><a href="../index.html#blog">blog</a></li>
+      <li><a href="../index.html#contact">contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <article class="blog-post">
+    <a href="../index.html#blog" class="blog-post-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      back to blog
+    </a>
+
+    <h1>Why I Work at Neat</h1>
+    <p class="blog-post-meta">February 28, 2026</p>
+
+    <p>In 2017, I found myself sitting around a conference room table at American Airlines with my manager, staring down one of the most ambitious AV projects I had ever taken on. We had been tasked by the CIO with putting video conferencing in every room of American's new headquarters, a multi-million dollar effort. It would become the second Fortune 100 campus I had been fortunate enough to help build from scratch, though this time, as Senior Infrastructure Engineer, I was in charge of the specification.</p>
+
+    <p>We were a Cisco WebEx shop at the time, and the most logical path would have been to deploy Cisco end to end. But we had also been asked to support as wide a range of conferencing platforms as possible. Teams and Zoom Rooms weren't really a thing yet. Skype was off the table. So we landed on what the industry called a soft codec solution: HP mini PCs driving a web of DSPs, microphones, speakers, and Crestron processors, all stitched together with custom software that my colleague and I wrote and maintained ourselves. The software would let users join a call from a Windows client, then wipe all session data when the meeting ended. It worked. It was even elegant for its time. Some of those rooms are still running that solution today.</p>
+
+    <p>But my manager asked me something during those early planning conversations that I have never forgotten. He looked around at the complexity we were about to deploy and asked, simply: where is the all in one solution? How does that not exist?</p>
+
+    <p>We looked. We looked hard. We even flew to Korea to meet with Samsung engineers, who already had the chip architecture in their displays that could theoretically run conferencing apps natively. The answer we got back was essentially that it was too hard. Microphones wouldn't be sensitive enough. Speakers wouldn't project far enough. The cost to build it would be prohibitive. We flew home and kept building the complicated thing.</p>
+
+    <p>That question sat with me for years.</p>
+
+    <p>We finished the headquarters. My manager became my director as we both moved up the ranks. I eventually became a Principal Architect in the Collaboration group, and somewhere along the way inherited responsibility for American's video surveillance platform. That turned out to matter more than I expected.</p>
+
+    <p>The video surveillance problem was the AV problem wearing a different uniform. Cameras split between IP and analog standards fed into on-site servers that required manual management and frequent physical intervention. This was how American's existing systems were built, and frankly how a lot of integrators were still deploying. It needed to be moved into the modern age, but there were a few problems with that. The aging camera infrastructure, limited outbound data pipes at airports, and the need to maintain live views and local recordings all pointed to the same answer: it needed to work as an edge cloud model. And nothing on the market was built that way. The traditional physical security vendors simply were not thinking in those terms.</p>
+
+    <p>Then I found Ava, a startup that had built exactly the architecture I had been drawing on whiteboards. Intelligent edge processing, cloud management, the kind of design that asks where the industry needs to go rather than where it has been. Working with the Ava team changed how I thought about what a startup could accomplish when the people building the product truly understood the problem.</p>
+
+    <p>The full Ava at American story will have to be another blog post. We used that architecture to do some really cool things.</p>
+
+    <p>Meanwhile, Neat had launched their first Neat Bar on Zoom, followed shortly by the Neat Board. Someone had finally built a true all in one conferencing device, not a mini PC strapped to the back of a touchscreen, but a purpose built system where the compute, camera, microphone array, and speakers were designed together from the ground up. I watched from the sideline, because we weren't a Zoom shop. I watched them invent individual camera framing. I watched them earn Microsoft Teams Room certification.</p>
+
+    <p>When American switched from WebEx to Teams during Covid, the door opened to start deploying Microsoft Teams Rooms. That earlier decision to stay platform agnostic also proved its worth, allowing us to switch our entire conferencing platform without replacing a single piece of existing hardware. And when Neat released Neat Pulse, a cloud management platform for monitoring and managing devices at scale, the last remaining barrier for using Neat disappeared. It became an easy decision to standardize on Neat for all future conference rooms.</p>
+
+    <p>But liking the product we were deploying was only part of why I ended up at Neat.</p>
+
+    <p>Some of the same people I had worked with at Ava had moved to Neat. The same philosophy was there. The same forward looking vision. The same instinct to solve the hard problem correctly rather than ship the convenient answer. When a technical position opened up in Texas, I had a decision to make.</p>
+
+    <p>Leaving American Airlines after everything we had built together was genuinely difficult. I had great colleagues, meaningful work, and a career I was proud of. But I kept coming back to that conference room in 2017, and my manager's question, and the years we spent working around an answer that didn't exist yet.</p>
+
+    <p>It exists now. And the best part is that Neat is only just getting started. I couldn't let the opportunity pass to be part of it.</p>
+
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Cameron Pavloske</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
