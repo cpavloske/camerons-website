@@ -383,6 +383,7 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.75rem;
+  max-width: 540px;
 }
 
 .project-card {

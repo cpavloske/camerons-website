@@ -154,9 +154,8 @@
 (function initTypewriter() {
   const el = document.querySelector('.hero-tagline');
   const phrases = [
-    'modernizing the systems connecting the world.',
-    'connecting physical and digital worlds.',
-    'engineering smarter infrastructure.',
+    'solving the problems others work around.',
+    'bringing legacy infrastructure into the modern age.',
   ];
   let phraseIndex = 0;
   let charIndex = 0;
