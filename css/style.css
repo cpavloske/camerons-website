@@ -172,8 +172,13 @@ img {
   color: var(--text-primary);
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   width: 100%;
+}
+
+.nav-links a.active {
+  color: var(--text-primary);
 }
 
 .nav-toggle {
@@ -306,6 +311,12 @@ section {
   letter-spacing: 2px;
   text-transform: uppercase;
   animation: gentleBounce 2.5s ease-in-out infinite;
+  transition: opacity 0.6s ease;
+}
+
+.scroll-indicator.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .scroll-indicator svg {
@@ -537,6 +548,11 @@ section {
 /* ========================================
    Contact Section
    ======================================== */
+#contact .section-inner {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
 .contact-content {
   text-align: center;
 }
@@ -544,7 +560,7 @@ section {
 .contact-content > p {
   color: var(--text-secondary);
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   max-width: 480px;
   margin-left: auto;
   margin-right: auto;
@@ -555,7 +571,7 @@ section {
   font-size: 1.25rem;
   color: var(--accent-blue);
   display: inline-block;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
   position: relative;
 }
 
