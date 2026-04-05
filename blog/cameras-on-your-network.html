@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap? — Cameron Pavloske</title>
+  <meta name="description" content="The most underleveraged sensor network in your organization is already installed. IT leaders who move first on camera intelligence will build an advantage that compounds over time.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap? — Cameron Pavloske">
+  <meta property="og:description" content="The most underleveraged sensor network in your organization is already installed. IT leaders who move first on camera intelligence will build an advantage that compounds over time.">
+  <meta property="og:url" content="https://cameronpavloske.com/blog/cameras-on-your-network.html">
+  <meta property="og:image" content="https://cameronpavloske.com/blog/og-cameras-on-your-network.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-81Y5DN2PHQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-81Y5DN2PHQ');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .blog-post {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(var(--nav-height) + 3rem) 2rem 6rem;
+    }
+    .blog-post-back {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 2.5rem;
+    }
+    .blog-post-back:hover { color: var(--accent-blue); }
+    .blog-post-back svg {
+      width: 14px; height: 14px;
+      stroke: currentColor; fill: none; stroke-width: 2;
+    }
+    .blog-post h1 {
+      font-family: var(--font-mono);
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+    }
+    .blog-post-meta {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .blog-post h2 {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      color: var(--accent-blue);
+    }
+    .blog-post p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+    .blog-post pre {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    .blog-post code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+    }
+    .blog-post p code {
+      background: rgba(255,255,255,0.05);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+    .blog-post-disclaimer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--glass-border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="star-canvas"></canvas>
+
+  <nav class="navbar scrolled">
+    <a href="../index.html" class="nav-logo">cam<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">about</a></li>
+      <li><a href="../index.html#projects">projects</a></li>
+      <li><a href="../index.html#blog">blog</a></li>
+      <li><a href="../index.html#contact">contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <article class="blog-post">
+    <a href="../index.html#blog" class="blog-post-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      back to blog
+    </a>
+
+    <h1>IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?</h1>
+    <p class="blog-post-meta">April 5, 2026</p>
+
+    <p>You have cameras everywhere. Warehouses, production floors, offices, logistics hubs. They have been running for years, capturing continuous data about your physical operations. And if your organization is like most, you are not asking them for anything beyond incident review.</p>
+
+    <p>That should change. Fast. The IT leaders who move first will build an advantage that compounds over time.</p>
+
+    <p>I have spent most of my career at the intersection of IT infrastructure and cameras. Designing and deploying camera infrastructure across one of the largest enterprise environments in the country, and more recently at Neat, thinking every day about what a camera can do when you push it further than the obvious answer. That background has given me a clear view of something I think you are walking past every single day.</p>
+
+    <p>The most underleveraged sensor network in your organization is already installed. The infrastructure you already own is capable of far more than security footage. The question is whether you will be the one to unlock it.</p>
+
+    <h2>You Already Have the Infrastructure</h2>
+
+    <p>The near term opportunity does not require a moonshot. It requires a decision.</p>
+
+    <p>What you have probably never done is treat your cameras as a source of operational intelligence. But the platforms that make this possible now exist. AI analytics layers that sit on top of your existing camera feeds, regardless of brand, and start answering questions that have nothing to do with security. How long did that process actually take? Where are the bottlenecks in your facility? Is that SOP being followed? The cameras were already capturing the answers. You just never had a way to ask.</p>
+
+    <p>The companies that have made this shift are already seeing results. Heathrow Airport layered AI analytics on top of 540 existing cameras across 116 gates in 2025. The system tracks turnaround tasks like baggage unloading, refueling, and boarding, giving ground crews and airlines real time visibility into what is actually happening at the gate rather than what the schedule says should be happening. British Airways integrated the platform into their operations after a successful pilot at Terminal 5. The cameras are not watching for perimeter breaches. They are unlocking gate capacity and reducing aircraft idle time. (<a href="https://www.passengerterminaltoday.com/news/operations-news/heathrow-deploys-another-540-cameras-to-support-assaias-ai-powered-turnaround-system.html" target="_blank" rel="noopener">Read more</a>)</p>
+
+    <p>Restaurant chains are discovering the same opportunity. Platforms like Wobot and Tenyks now integrate with existing security camera systems to answer operational questions that would have been impossible to track at scale: How long are customers waiting at the drive thru before someone takes their order? Are kitchen staff following food safety protocols? Which stations are creating bottlenecks during the lunch rush? Wobot alone has developed over 100 use cases for its software, from detecting when a customer is waiting without an employee present to monitoring PPE compliance in the kitchen. The cameras were already there for loss prevention. What changed is that AI can now layer on top of those feeds without replacing the hardware, turning a security expense into an operational asset. (<a href="https://www.restaurantbusinessonline.com/technology/restaurants-take-closer-look-computer-vision" target="_blank" rel="noopener">Read more</a>)</p>
+
+    <p>These are not exotic use cases reserved for tech giants. They are basic operational questions that most companies still answer through manual observation, lagging reports, or not at all. The difference is that these organizations made a decision to treat their camera infrastructure as an operational asset rather than a security expense. If you make this shift now, you are building an intelligence advantage that compounds over time. If you wait, you will not just be behind. You will be standing in front of a budget committee trying to fund infrastructure from scratch at exactly the moment your competitors are already harvesting the results of theirs.</p>
+
+    <h2>I Believe Natural Language Will Soon Let Anyone in Your Organization Direct the Cameras</h2>
+
+    <p>Unlocking the infrastructure is only half the problem. The other half is who in your organization is actually able to use it.</p>
+
+    <p>Until now, getting something meaningful out of a camera feed required a specialist. A computer vision engineer who could translate a business question into a model that could actually detect it. That translation step has been the quiet barrier that kept camera intelligence inside organizations large enough to staff the expertise. If you did not have a machine learning team, you made do with off the shelf algorithms that may or may not have matched what your operation actually looked like.</p>
+
+    <p>I think that constraint is about to disappear. Multimodal AI models can now interpret images and answer questions about them in natural language. The gap between having a camera and having a camera that does something useful is collapsing. I believe what currently requires a dedicated computer vision team will soon be a prompt. Some of the largest names in the camera industry are already thinking this way. Motorola's Avigilon Unity now uses large language models to generate alerts from plain language descriptions, scanning every camera on a platform for scenarios operators define themselves. (<a href="https://www.motorolasolutions.com/newsroom/press-releases/motorola-solutions-expands-avigilon-enterprise-security-suite.html" target="_blank" rel="noopener">Read more</a>) That is still early. The current capability triggers existing detection models. The next step is language generating the models, making every camera a general purpose sensor for any question your organization can ask.</p>
+
+    <p>Think about what this will mean for your organization. A logistics manager will describe in plain language that she wants to know when a dock door has been idle for more than twenty minutes during peak hours, and the system will figure out how to see it. A construction manager will define what workers removing concrete molds too early, before the structure has fully set, looks like and receive a real time signal the next time it happens. The camera will stop being a fixed function device and become a general purpose sensor that anyone in your organization can direct.</p>
+
+    <p>The tools that make this possible are being built right now. If your camera infrastructure is still siloed under physical security while IT watches from the outside, that is not just an organizational quirk. It is a capability gap that is about to matter a great deal.</p>
+
+    <h2>Who Watches the Machines? I Think Your Cameras Do.</h2>
+
+    <p>Follow the logic one step further. Once anyone in your organization can direct a camera with a plain language description, the question stops being "what can we detect" and starts being "what do we need to verify."</p>
+
+    <p>Autonomous systems are moving into physical environments at a pace that is only accelerating. Robotics making decisions on factory floors. AI coordinating logistics and production. Machines managing processes that used to require human judgment at every step. The efficiency case for all of it is real and the momentum is not slowing down.</p>
+
+    <p>But as those systems take on more responsibility in the physical world, a question emerges that I think becomes one of your defining challenges over the next decade. How do you verify that the AI is actually doing what you think it is doing?</p>
+
+    <p>Software telemetry tells you what the system reported about itself. A camera tells you what actually happened. Those two things diverge more often than anyone is currently accounting for, and the gap between them matters enormously as the stakes of autonomous physical operations increase.</p>
+
+    <p>The pattern is clear: as physical AI scales, so does the need for physical ground truth.</p>
+
+    <p>If you are deploying autonomous systems, this is not a theoretical concern. It is an emerging governance requirement. If you have already built the habit of treating your camera infrastructure as an operational platform, that accountability layer will be available when you need it. If you are still treating cameras as a facilities expense, you will be building from scratch at exactly the moment the pressure to govern physical AI becomes impossible to ignore.</p>
+
+    <h2>The Platform Has Been There the Whole Time</h2>
+
+    <p>You have been asking where the next source of competitive advantage will come from. The answer is already installed, already networked, and already running.</p>
+
+    <p>The first move is not technical. Find out who owns your camera infrastructure today. Then ask whether IT has a seat at the table when camera projects are scoped, funded, and deployed. If the answer is no, that is the gap to close first. The rest follows from there.</p>
+
+    <p>Your next competitive advantage is not in the cloud. It has been on the ceiling the whole time.</p>
+
+    <p class="blog-post-disclaimer">All thoughts and opinions are my own.</p>
+
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 Cameron Pavloske</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
