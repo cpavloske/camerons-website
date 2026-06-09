@@ -30,6 +30,12 @@
   <!-- Aurora background -->
   <canvas id="star-canvas"></canvas>
 
+  <!-- Film grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+
   <!-- Navbar -->
   <nav class="navbar">
     <a href="#" class="nav-logo">cam<span>.</span></a>
@@ -46,7 +52,12 @@
 
   <!-- Hero -->
   <section class="hero" id="hero">
-    <div class="aurora"></div>
+    <div class="hud" aria-hidden="true">
+      <div class="hud-item hud-tl"><span class="hud-dot"></span>SYS &middot; NOMINAL</div>
+      <div class="hud-item hud-tr">UPTIME <span id="hud-uptime">00:00:00</span></div>
+      <div class="hud-item hud-bl">PING <span id="hud-ping">--</span> MS</div>
+      <div class="hud-item hud-br"><canvas id="hud-spark" width="72" height="16"></canvas>TX <span id="hud-rate">--</span></div>
+    </div>
     <div class="hero-content">
       <h1 class="hero-name">Cameron Pavloske</h1>
       <p class="hero-tagline"><span class="cursor"></span></p>
@@ -93,6 +104,7 @@
       <div class="projects-grid">
 
         <div class="project-card reveal">
+          <span class="project-index">// 01</span>
           <h3>Neat Pulse MCP Server</h3>
           <p>A custom Model Context Protocol server that integrates the Neat Pulse REST API with Claude Code, exposing 37 tools for AI-assisted management of video conferencing devices, sensor data, and organizational controls.</p>
           <div class="project-tags">
@@ -102,6 +114,7 @@
         </div>
 
         <div class="project-card reveal">
+          <span class="project-index">// 02</span>
           <h3>Neat Pad Clock</h3>
           <p>A minimal clock and live weather display built for the Neat Pad. Auto-detects location via IP geolocation and shows current conditions with hourly precipitation forecasts. No dependencies, just HTML.</p>
           <div class="project-tags">
@@ -148,7 +161,7 @@
       <h2 class="section-heading reveal">Get In Touch</h2>
       <div class="contact-content reveal">
         <p>Want to talk IT modernization, IoT, or anything at the intersection of AV, cameras, and AI? Drop me a line.</p>
-        <a href="mailto:cpavloske@gmail.com" class="contact-email">cpavloske@gmail.com</a>
+        <a href="mailto:cpavloske@gmail.com" class="contact-email"><span class="prompt">$</span> mailto cpavloske@gmail.com<span class="cursor"></span></a>
         <div class="social-links">
           <!-- GitHub -->
           <a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
