@@ -2,51 +2,110 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@400;700&family=Architects+Daughter&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       width: 1200px;
       height: 630px;
       overflow: hidden;
-      background: #0a0e1a;
+      position: relative;
+      background-color: #f6f3ea;
+      background-image:
+        linear-gradient(rgba(22, 36, 61, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 36, 61, 0.055) 1px, transparent 1px),
+        linear-gradient(rgba(22, 36, 61, 0.095) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 36, 61, 0.095) 1px, transparent 1px);
+      background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 80px 100px;
       font-family: 'JetBrains Mono', monospace;
+      color: #16243d;
     }
-    .site {
-      font-size: 22px;
-      color: #4e7cff;
-      margin-bottom: 40px;
-      letter-spacing: 0.02em;
-    }
-    .site span { color: #7c3aed; }
-    h1 {
-      font-size: 52px;
+    .badge {
+      display: inline-block;
+      font-size: 18px;
       font-weight: 700;
-      color: #f0f2f8;
-      line-height: 1.2;
-      margin-bottom: 24px;
+      letter-spacing: 0.15em;
+      color: #185FA5;
+      border: 2px solid #185FA5;
+      padding: 4px 16px;
+      margin-bottom: 36px;
+      width: fit-content;
+    }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 84px;
+      font-weight: 700;
+      color: #16243d;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .rule {
+      width: 560px;
+      height: 4px;
+      background: #16243d;
+      margin-bottom: 34px;
     }
     .tagline {
       font-size: 22px;
-      color: rgba(192, 198, 210, 0.7);
-      line-height: 1.5;
+      color: #36425e;
+      line-height: 1.6;
+      max-width: 760px;
     }
-    .border-left {
+    .title-block {
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 6px;
-      background: linear-gradient(180deg, #4e7cff, #7c3aed);
+      bottom: 44px; right: 56px;
+      font-size: 14px;
+      border: 2px solid #16243d;
+      background: #f6f3ea;
+      border-collapse: collapse;
     }
+    .title-block td {
+      border: 1px solid rgba(22, 36, 61, 0.25);
+      padding: 6px 16px;
+      white-space: nowrap;
+    }
+    .title-block td:first-child { color: #36425e; font-size: 12px; }
+    .sticky {
+      position: absolute;
+      top: 64px; right: 88px;
+      width: 190px;
+      background: #f9eda3;
+      box-shadow: 3px 8px 14px rgba(22, 36, 61, 0.2);
+      transform: rotate(4deg);
+      padding: 34px 22px 24px;
+      font-family: 'Architects Daughter', cursive;
+      font-size: 24px;
+      color: #3a4560;
+      text-align: center;
+    }
+    .sticky::before {
+      content: '';
+      position: absolute;
+      top: -13px; left: 50%;
+      width: 110px; height: 28px;
+      transform: translateX(-50%) rotate(-3deg);
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 1px 3px rgba(22, 36, 61, 0.12);
+    }
+    .sticky .check { color: #185FA5; margin-right: 8px; }
   </style>
 </head>
 <body>
-  <div class="border-left"></div>
-  <div class="site">cam<span>.</span></div>
+  <div class="badge">C.PAVLOSKE</div>
   <h1>Cameron Pavloske</h1>
+  <div class="rule"></div>
   <div class="tagline">Senior Solutions Engineer at Neat<br>Solving the problems others work around &mdash; bringing legacy infrastructure into the modern age.</div>
+
+  <div class="sticky"><span class="check">&#10003;</span>gig 'em</div>
+
+  <table class="title-block">
+    <tr><td>PROJECT</td><td>PERSONAL SITE</td></tr>
+    <tr><td>DRAWN BY</td><td>C. PAVLOSKE</td></tr>
+    <tr><td>SCALE</td><td>NTS</td></tr>
+  </table>
 </body>
 </html>
