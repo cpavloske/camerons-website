@@ -1,15 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0a0f"/>
-      <stop offset="100%" stop-color="#12121a"/>
-    </linearGradient>
-    <linearGradient id="letter" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#4E7CFF"/>
-      <stop offset="100%" stop-color="#7C3AED"/>
-    </linearGradient>
-  </defs>
-  <rect width="128" height="128" rx="24" fill="url(#bg)"/>
-  <text x="64" y="92" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="88" fill="url(#letter)">C</text>
-  <circle cx="100" cy="88" r="8" fill="#06D6A0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g transform="rotate(-5 16 16)">
+    <rect x="4" y="4" width="24" height="24" fill="#f9eda3"/>
+    <path d="M28 21 L28 28 L21 28 Z" fill="#e3d27e"/>
+    <rect x="11" y="1.5" width="10" height="5" fill="#ffffff" opacity="0.6" transform="rotate(3 16 4)"/>
+    <text x="15.5" y="23.5" font-family="Georgia, 'Times New Roman', serif" font-size="17" font-weight="bold" text-anchor="middle" fill="#16243d">C.</text>
+  </g>
 </svg>
