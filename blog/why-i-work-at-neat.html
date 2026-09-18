@@ -11,6 +11,7 @@
   <meta property="og:url" content="https://cameronpavloske.com/blog/why-i-work-at-neat.html">
   <meta property="og:image" content="https://cameronpavloske.com/blog/og-why-i-work-at-neat.png">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#2b1018">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-81Y5DN2PHQ"></script>
@@ -22,31 +23,40 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="blog">
 
-  <canvas id="trail" aria-hidden="true"></canvas>
+  <header class="nav">
+    <a href="../index.html" class="nav-logo show" id="nav-logo">Cameron Pavloske</a>
+    <div class="nav-actions">
+      <button class="btn round" id="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+        <svg class="bars" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+        <svg class="x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <a class="btn" href="../index.html#contact">Get in touch</a>
+    </div>
+  </header>
 
-  <nav class="nav">
-    <a href="../index.html" class="nav-logo">C.PAVLOSKE</a>
-    <ul class="nav-links">
-      <li><a href="../index.html#about">about</a></li>
-      <li><a href="../index.html#projects">projects</a></li>
-      <li><a href="../index.html#blog">blog</a></li>
-      <li><a href="../index.html#contact">contact</a></li>
+  <nav class="menu" id="menu" aria-label="Site">
+    <ul class="menu-list">
+      <li><a href="../index.html#about" style="--i:0"><small>01</small>About</a></li>
+      <li><a href="../index.html#projects" style="--i:1"><small>02</small>Projects</a></li>
+      <li><a href="../index.html#writing" style="--i:2"><small>03</small>Writing</a></li>
+      <li><a href="../index.html#contact" style="--i:3"><small>04</small>Contact</a></li>
+      <li><a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer" style="--i:4"><small>05</small>GitHub<span class="ext"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></a></li>
     </ul>
   </nav>
 
   <article class="post">
-    <a href="../index.html#blog" class="back">
+    <a href="../index.html#writing" class="back">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-      back to blog
+      Back to writing
     </a>
 
-    <p class="post-label"><span class="badge">DWG B-001</span> BLOG</p>
-    <h1>Why I Work at Neat<span class="underline"></span></h1>
+    <p class="post-label">Writing</p>
+    <h1>Why I Work at Neat</h1>
     <p class="post-meta">February 28, 2026</p>
 
     <p>In 2017, I found myself sitting around a conference room table at American Airlines with my manager, staring down one of the most ambitious AV projects I had ever taken on. We had been tasked by the CIO with putting video conferencing in every room of American's new headquarters, a multi-million dollar effort. It would become the second Fortune 100 campus I had been fortunate enough to help build from scratch, though this time, as Senior Infrastructure Engineer, I was in charge of the specification.</p>
@@ -84,8 +94,10 @@
   </article>
 
   <footer>
-    <span>&copy; 2026 Cameron Pavloske</span>
-    <span>DWG: B-001 &middot; SHEET 1 OF 1 &middot; NTS</span>
+    <div class="foot-meta">
+      <span>&copy; 2026 Cameron Pavloske</span>
+      <a href="../index.html#writing">More writing</a>
+    </div>
   </footer>
 
   <script src="../js/main.js"></script>
