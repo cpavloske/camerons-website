@@ -128,11 +128,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ========================================
    Hero
    ======================================== */
-.hero {
-  position: relative;
-  min-height: 100svh;
-  padding-top: 14vh;
-}
+.hero { padding: 0; }
+.hero > .pin-stage { position: relative; min-height: 100svh; padding-top: 14vh; }
 .hero-name {
   text-align: center;
   font-size: 11.2vw;
@@ -199,6 +196,11 @@ section { position: relative; padding: clamp(90px, 14vh, 180px) var(--gutter); }
   font-weight: 700; letter-spacing: -0.035em; line-height: 1;
 }
 .sec-head h2 span { display: block; color: var(--accent); }
+
+/* Pinned sections: sticky stage + spacer that provides the hold */
+.pin > .pin-hold { height: var(--hold, 40vh); }
+.pin:not(.pinned) > .pin-hold { display: none; }
+.pin.pinned > .pin-stage { position: sticky; top: var(--top, 0px); }
 
 /* Reveal */
 [data-reveal] { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 1s var(--ease); transition-delay: var(--d, 0s); }
@@ -405,7 +407,7 @@ footer {
 @media (max-width: 767px) {
   :root { --nav-h: 72px; }
   body { font-size: 17px; }
-  .hero { padding-top: 16vh; }
+  .hero > .pin-stage { padding-top: 16vh; }
   .hero-name { font-size: 20vw; line-height: 0.88; }
   .hero-name .sp { display: block; height: 0; }
   .hero-sub { bottom: 34vh; max-width: 80vw; }

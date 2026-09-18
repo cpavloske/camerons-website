@@ -24,6 +24,39 @@ if (loader) {
 }
 
 /* ========================================
+   Pinned sections
+   Each [data-pin] section's content is moved into a
+   sticky stage followed by a spacer, so the section
+   locks in place for a beat before scrolling on. Stages
+   taller than the viewport don't pin.
+   ======================================== */
+const pins = [...document.querySelectorAll('[data-pin]')].map(sec => {
+  const stage = document.createElement('div');
+  stage.className = 'pin-stage';
+  while (sec.firstChild) stage.appendChild(sec.firstChild);
+  const hold = document.createElement('div');
+  hold.className = 'pin-hold';
+  hold.setAttribute('aria-hidden', 'true');
+  sec.append(stage, hold);
+  sec.classList.add('pin');
+  return { sec, stage };
+});
+
+function updatePins() {
+  const vh = window.innerHeight;
+  pins.forEach(p => {
+    const h = p.stage.offsetHeight;
+    const ok = !REDUCED && h <= vh;
+    p.sec.classList.toggle('pinned', ok);
+    // Centre short stages in the viewport while they hold
+    p.stage.style.setProperty('--top', (ok ? Math.max(0, (vh - h) / 2) : 0) + 'px');
+  });
+}
+updatePins();
+window.addEventListener('resize', updatePins);
+window.addEventListener('load', updatePins);
+
+/* ========================================
    Menu
    ======================================== */
 const menuBtn = document.getElementById('menu-btn');
