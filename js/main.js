@@ -6,13 +6,17 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
 /* ========================================
-   Preloader: count up, then slide away
+   Preloader: count up, then slide away.
+   Plays once per session; the <head> script adds
+   .no-intro on repeat views so it never shows.
    ======================================== */
 const loader = document.getElementById('loader');
 if (loader) {
   const num = loader.querySelector('span');
   const start = performance.now();
-  const DUR = REDUCED ? 0 : 900;
+  const seen = document.documentElement.classList.contains('no-intro');
+  try { sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
+  const DUR = REDUCED || seen ? 0 : 900;
   (function tick(now) {
     const p = DUR ? clamp((now - start) / DUR, 0, 1) : 1;
     num.textContent = Math.round(p * 100);
@@ -58,17 +62,34 @@ window.addEventListener('load', updatePins);
 
 /* ========================================
    Menu
+   Closed, the menu is inert so its links stay out of
+   the tab order. Open, the page behind it is inert
+   instead, and Escape closes it.
    ======================================== */
 const menuBtn = document.getElementById('menu-btn');
-if (menuBtn) {
-  menuBtn.addEventListener('click', () => {
-    const open = document.body.classList.toggle('menu-open');
+const menu = document.getElementById('menu');
+if (menuBtn && menu) {
+  const behind = [...document.body.children].filter(el => !el.matches('.nav, .menu, script'));
+  const setMenu = open => {
+    document.body.classList.toggle('menu-open', open);
     menuBtn.setAttribute('aria-expanded', open);
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Menu');
+    menu.inert = !open;
+    behind.forEach(el => { el.inert = open; });
+  };
+  setMenu(false);
+  menuBtn.addEventListener('click', () => {
+    const open = !document.body.classList.contains('menu-open');
+    setMenu(open);
+    if (open) menu.querySelector('a').focus({ preventScroll: true });
   });
-  document.querySelectorAll('.menu a').forEach(a => a.addEventListener('click', () => {
-    document.body.classList.remove('menu-open');
-    menuBtn.setAttribute('aria-expanded', 'false');
-  }));
+  document.querySelectorAll('.menu a, .nav a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+      setMenu(false);
+      menuBtn.focus();
+    }
+  });
 }
 
 /* ========================================

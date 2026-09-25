@@ -53,6 +53,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-variant-numeric: tabular-nums;
 }
 .loader.done { transform: translateY(-100%); visibility: hidden; }
+/* The intro plays once per session; after that the hero copy needn't wait for it */
+.no-intro .loader { display: none; }
+.no-intro .hero-sub { --d: 0.15s !important; }
+.no-intro .latest { --d: 0.3s !important; }
 
 /* ========================================
    Header
@@ -65,8 +69,17 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   pointer-events: none;
 }
 .nav > * { pointer-events: auto; }
-/* Blog pages: fade the header into the page so it never sits on top of body text */
-.blog .nav { background: linear-gradient(to bottom, var(--bg) 45%, transparent); }
+/* Fade the header into the page so it never sits on top of content.
+   Follows the body's dark-section colour swap and steps aside while the menu is open. */
+.nav::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background-color: var(--bg);
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  transition: background-color 0.9s ease, opacity 0.3s ease 0.45s;
+}
+.on-dark .nav::before { background-color: var(--bg-2); }
+.menu-open .nav::before { opacity: 0; transition: none; }
 .nav-logo {
   font-weight: 700;
   font-size: 26px;
@@ -230,6 +243,8 @@ section { position: relative; padding: clamp(90px, 14vh, 180px) var(--gutter); }
   height: 560px;
   max-width: 1100px; margin: 0 auto;
 }
+/* The transform is scroll-driven so it can't transition; a registered --tilt lets just the hover straighten ease */
+@property --tilt { syntax: '<number>'; inherits: false; initial-value: 1; }
 .fan .card {
   position: absolute; left: 50%; top: 50%;
   width: min(380px, 84vw);
@@ -237,10 +252,11 @@ section { position: relative; padding: clamp(90px, 14vh, 180px) var(--gutter); }
   padding: 26px 26px 24px;
   --pc: 0;
   opacity: var(--pc);
-  transform: translate(calc(var(--x) * var(--pc)), calc((1 - var(--pc)) * 120px)) rotate(calc(var(--r) * var(--pc))) scale(calc(0.85 + 0.15 * var(--pc)));
-  transition: none;
+  transform: translate(calc(var(--x) * var(--pc)), calc((1 - var(--pc)) * 120px)) rotate(calc(var(--r) * var(--pc) * var(--tilt, 1))) scale(calc(0.85 + 0.15 * var(--pc)));
+  transition: --tilt 0.5s var(--ease);
 }
 .fan .card:hover { z-index: 5; }
+@media (hover: hover) { .fan .card:hover { --tilt: 0; } }
 .card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .card .tags span { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 999px; background: rgba(43, 16, 24, 0.08); color: #5d4a4f; }
 .card .num { position: absolute; top: 18px; right: 22px; font-size: 13px; color: #8a5d69; font-weight: 500; }
@@ -402,7 +418,7 @@ footer {
   .facts li { grid-template-columns: 1fr; gap: 6px; }
   /* Stack the fanned cards instead of spreading them */
   .fan { height: auto; display: grid; gap: 20px; }
-  .fan .card { position: static; margin: 0; width: 100%; --pc: 1; opacity: 1; transform: rotate(calc(var(--r) * 0.3)) !important; }
+  .fan .card { position: static; margin: 0; width: 100%; --pc: 1; opacity: 1; transform: rotate(calc(var(--r) * var(--tilt, 1))) !important; }
 }
 @media (max-width: 767px) {
   :root { --nav-h: 72px; }
@@ -429,7 +445,7 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   [data-reveal], .words .w i { opacity: 1; transform: none; transition: none; }
-  .fan .card { --pc: 1; }
+  .fan .card { --pc: 1; transition: none; }
   .bubble, .bubble.in { transform: scale(1); transition: none; }
   .loader { display: none; }
 }
