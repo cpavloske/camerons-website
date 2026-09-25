@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — Cameron Pavloske</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#2b1018">
+  <!-- GitHub Pages serves this at any missing URL, so every path is root-relative -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-81Y5DN2PHQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-81Y5DN2PHQ');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <header class="nav">
+    <a href="/" class="nav-logo show" id="nav-logo">Cameron Pavloske</a>
+    <div class="nav-actions">
+      <button class="btn round" id="menu-btn" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+        <svg class="bars" viewBox="0 0 24 24"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+        <svg class="x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <a class="btn" href="/#contact">Get in touch</a>
+    </div>
+  </header>
+
+  <nav class="menu" id="menu" aria-label="Site">
+    <ul class="menu-list">
+      <li><a href="/#about" style="--i:0"><small>01</small>About</a></li>
+      <li><a href="/#writing" style="--i:1"><small>02</small>Writing</a></li>
+      <li><a href="/#projects" style="--i:2"><small>03</small>Projects</a></li>
+      <li><a href="/#contact" style="--i:3"><small>04</small>Contact</a></li>
+      <li><a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer" style="--i:4"><small>05</small>GitHub<span class="ext"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></a></li>
+    </ul>
+  </nav>
+
+  <main class="lost">
+    <p class="code" data-reveal>404</p>
+    <h1 class="words">No <em>signal</em></h1>
+    <p data-reveal style="--d:.1s">This page doesn't exist, or it has moved.</p>
+    <a class="btn" data-reveal style="--d:.2s" href="/">Back to the homepage</a>
+  </main>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
