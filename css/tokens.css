@@ -71,6 +71,7 @@
   --step-3:  2rem;
   --step-4:  clamp(2.25rem, 5vw, 3.5rem);
   --step-5:  clamp(2.75rem, 8vw, 5.5rem);   /* logo */
+  --step-hello: clamp(2rem, 4.4vw, 4.25rem);  /* Cameron's name in the scene */
 
   --leading-tight: 1.05;
   --leading-snug:  1.25;
@@ -118,17 +119,23 @@
   --stop:       42svh;   /* scroll distance between box faces */
   --desk-top:   57%;     /* horizon: where the desk surface starts in the scene */
   --box-ratio:  0.72;    /* box width / height */
-  --box-h:      min(calc(var(--scene-h) * 0.9), calc(92vw / var(--box-ratio)), 780px);  /* reading size */
+  --box-depth:  0.28;    /* box depth / height: narrow side panels, like a real cereal box */
+  --box-h:      min(calc(var(--scene-h) * 0.9), 780px);  /* reading size; the box is only ever scaled down from this */
   --box-w:      calc(var(--box-h) * var(--box-ratio));
+  --box-d:      calc(var(--box-h) * var(--box-depth));
+  --fit:        0.92;    /* widest a face may be on screen, as a fraction of scene width */
   --box-persp:  1700px;
   --desk-s:     0.62;    /* box scale while it stands on the desk */
-  --desk-xf:    -0.1;    /* box x offset on the desk, as a fraction of scene width */
+  --desk-xf:    -0.04;   /* box x offset on the desk, as a fraction of scene width */
   --desk-foot:  0.9;     /* where the box base meets the desk, fraction of scene height */
   --read-xf:    -0.05;   /* x offset while a face is held up for reading */
   --rest-ry:    -26;     /* degrees: jaunty turn of the box on the desk */
   --rest-rx:    -6;      /* degrees: slight look down at the box */
   --lean:       26;      /* degrees the box leans toward the next face while scrolling */
-  --dof-blur:   3px;     /* depth of field on everything behind the desk */
+  --dof-blur:   2.6px;   /* depth of field on the wall */
+  --dof-tv:     1.3px;   /* the TV sits at the back of the desk, only slightly soft */
+  --tv-x:       66%;     /* TV center, across the scene */
+  --tv-foot:    5.5%;    /* how far below the desk's back edge the TV stands */
   --dof-intro:  9px;     /* foreground blur while the camera is on the TV */
   --tv-w:       clamp(190px, 25vw, 380px);
   --bowl-w:     clamp(230px, 27vw, 420px);
@@ -156,6 +163,16 @@
   --fold:           rgba(255, 246, 227, 0.16);  /* glue flap line on the front */
   --cream-wash:     rgba(255, 246, 227, 0.4);   /* placeholder game boxes on the back */
 
+  /* Realistic materials (Phase 2, after Cameron asked for more realism) */
+  --ceramic-deep:   #a79c8a;  /* bowl in deep shade */
+  --steel-hi:       #f4f6f8;
+  --steel-dark:     #6c737b;
+  --o-light:        #f7cf78;  /* toasted O, lit side */
+  --o-deep:         #8a5413;  /* toasted O, edge */
+  --chrome:         #c9ced4;  /* TV screen trim */
+  --sheen:          rgba(255, 255, 255, 0.14);  /* light catching the box board */
+  --vignette:       radial-gradient(ellipse 120% 105% at 42% 46%, transparent 52%, rgba(26, 12, 10, 0.4) 100%);
+
   /* ---------- Scene timing, read by JS (Phase 2) ---------- */
   --dur-spin:         900ms;   /* box rotating to a face */
   --dur-return:       450ms;   /* box settling back after a short drag */
@@ -166,7 +183,10 @@
   --dur-intro-pull:   1150ms;  /* intro total = 2650ms, under 3s (section 4) */
   --dur-click:        160ms;   /* TV channel click flash */
   --dur-flicker:      4200ms;  /* TV light flicker loop */
-  --dur-toon:         2600ms;  /* placeholder cartoon loop on the TV */
+  --dur-toon:         2600ms;  /* cartoon loop on the TV (Phase 4c) */
+  --dur-focus:        2800ms;  /* how long the TV stays in focus after a channel change */
+  --dur-card:         2400ms;  /* NOW SHOWING card on the TV */
+  --dur-tv-static:    140ms;   /* burst of static between channels */
   --dur-bounce:       1500ms;  /* Ping idle bounce, full cycle */
   --dur-wiggle:       900ms;   /* antenna wiggle, full cycle */
   --dur-blink:        110ms;
@@ -197,10 +217,13 @@
     --tabbar-h: 56px;
     --topbar-h: 44px;
     --desk-top: 55%;
-    --desk-s:   0.8;
-    --desk-xf:  -0.07;
+    --desk-s:   0.6;
+    --desk-xf:  -0.1;
+    --desk-foot: 0.93;
     --read-xf:  0;
-    --tv-w:     52vw;
+    --tv-w:     42vw;
+    --tv-x:     80%;
+    --tv-foot:  3%;
     --bowl-w:   50vw;
   }
 }

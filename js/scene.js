@@ -80,22 +80,24 @@
     var M = {};
     function measure() {
       M.w = scene.clientWidth; M.h = scene.clientHeight;
-      M.bw = rig.offsetWidth; M.bh = rig.offsetHeight;
-      M.stop = (track.offsetHeight - scene.offsetHeight) / 4;
-      M.deskS = num('--desk-s'); M.deskX = num('--desk-xf') * M.w; M.foot = num('--desk-foot');
+      M.bw = rig.offsetWidth; M.bh = rig.offsetHeight; M.bd = M.bh * num('--box-depth');
+      M.fit = Math.min(1, num('--fit') * M.w / M.bw);   // scale that fits a wide face on screen
+      M.stop = (track.offsetHeight - scene.offsetHeight) / 5;
+      M.deskS = Math.min(num('--desk-s'), 0.8 * M.w / M.bw); M.deskX = num('--desk-xf') * M.w; M.foot = num('--desk-foot');
       M.readX = num('--read-xf') * M.w;
     }
     // Where the box sits for each face. s: scale, z: push back so the facing panel is at true size.
     function poseFor(name) {
       if (name === 'front') {
         return { x: M.deskX, y: M.h * (M.foot - 0.5) - M.bh * M.deskS / 2, s: M.deskS,
-                 rx: num('--rest-rx'), ry: num('--rest-ry'), z: -M.bw / 2, lift: 0 };
+                 rx: num('--rest-rx'), ry: num('--rest-ry'), z: -M.bd / 2, lift: 0 };
       }
+      // sides are narrow and shown at full size; the wide faces shrink to fit small screens
       var p = { x: M.readX, y: 0, s: 1, rx: 0, ry: 0, z: -M.bw / 2, lift: 1 };
       if (name === 'about') p.ry = 90;
       if (name === 'writing') p.ry = -90;
-      if (name === 'projects') p.ry = 180;
-      if (name === 'contact') { p.rx = 90; p.z = -M.bh / 2; }
+      if (name === 'projects') { p.ry = 180; p.z = -M.bd / 2; p.s = M.fit; }
+      if (name === 'contact') { p.rx = 90; p.z = -M.bh / 2; p.s = M.fit; }
       return p;
     }
 
@@ -122,9 +124,9 @@
       }
 
       // contact shadow: footprint width follows the turn, fades as the box is lifted
-      var foot = Math.abs(ca) + Math.abs(sa);
+      var foot = Math.abs(ca) + Math.abs(sa) * M.bd / M.bw;
       var k2 = pose.s / M.deskS;
-      shadow.style.transform = 'translateX(' + pose.x.toFixed(1) + 'px) scale(' + (foot * 0.8 * k2 * (1 - pose.lift * 0.35)).toFixed(3) + ',' + (1 + pose.lift * 0.6).toFixed(3) + ')';
+      shadow.style.transform = 'translateX(' + pose.x.toFixed(1) + 'px) scale(' + (foot * k2 * (1 - pose.lift * 0.35)).toFixed(3) + ',' + (1 + pose.lift * 0.6).toFixed(3) + ')';
       shadow.style.opacity = (1 - pose.lift * 0.72).toFixed(3);
     }
 
@@ -277,16 +279,75 @@
     }
     api.tv = { show: show, click: click };
 
+    /* ---------- TV channels: one real post or project each ----------
+       Read from the page so titles and dates are never retyped here. */
+    var card = document.getElementById('tv-card');
+    var cap = document.getElementById('tv-caption');
+    var tvHit = document.getElementById('tv-hit');
+    var el = { ch: document.getElementById('tv-ch'), kicker: document.getElementById('tv-kicker'),
+               title: document.getElementById('tv-title'), meta: document.getElementById('tv-meta') };
+    var channels = [];
+    [].forEach.call(document.querySelectorAll('#bowl .post-list li'), function (li, i) {
+      var a = li.querySelector('a'), t = li.querySelector('time');
+      channels.push({ kicker: i === 0 ? 'Latest writing' : 'Writing', title: a.textContent.trim(),
+                      meta: t ? t.textContent.trim() : '', href: a.getAttribute('href') });
+    });
+    [].forEach.call(document.querySelectorAll('#projects .project'), function (li) {
+      var a = li.querySelector('h3 a');
+      channels.push({ kicker: 'Project: ' + li.querySelector('.kicker').textContent.trim(),
+                      title: li.querySelector('h3').textContent.trim(),
+                      meta: li.querySelector('.tags').textContent.trim(),
+                      href: a ? a.getAttribute('href') : '#projects', ext: !!a });
+    });
+    var chan = 0, cardTimer = 0, focusTimer = 0;
+    function paint(c, tone, label) {
+      card.setAttribute('data-tone', tone);
+      card.setAttribute('data-len', c.title.length < 26 ? 'short' : 'long');
+      el.ch.textContent = label; el.kicker.textContent = c.kicker; el.title.textContent = c.title; el.meta.textContent = c.meta;
+    }
+    function paintChannel() {
+      var c = channels[chan];
+      paint(c, String(chan % 4), 'CH 0' + (chan + 1));
+      cap.querySelector('span').textContent = c.title;
+      cap.setAttribute('href', c.href);
+      if (c.ext) { cap.setAttribute('target', '_blank'); cap.setAttribute('rel', 'noopener noreferrer'); }
+      else { cap.removeAttribute('target'); cap.removeAttribute('rel'); }
+    }
+    // a burst of static, a click, then the picture; the TV pulls into focus for a moment
+    function tune(fn) {
+      clearTimeout(cardTimer);
+      show('static');
+      setTimeout(function () { click(); fn(); show('card'); }, sec('--dur-tv-static') * 1000);
+      root.style.setProperty('--dof-tv-now', '0px');
+      clearTimeout(focusTimer);
+      focusTimer = setTimeout(function () { root.style.removeProperty('--dof-tv-now'); }, sec('--dur-focus') * 1000);
+    }
+    tvHit.addEventListener('click', function () {
+      chan = (chan + 1) % channels.length;
+      tune(paintChannel);
+      if (window.uptimeTrack) window.uptimeTrack('tv_channel_change');
+    });
+    // turning the box changes the channel to a title card for that face, then back
+    document.addEventListener('uptime:face', function (e) {
+      if (!api.ready) return;
+      var face = e.detail.face;
+      if (face === 'front') { tune(paintChannel); return; }
+      var tab = document.querySelector('.flap a[data-face="' + face + '"]');
+      tune(function () { paint({ kicker: 'Now showing', title: tab.textContent.trim(), meta: '' }, 'now', ''); });
+      cardTimer = setTimeout(function () { tune(paintChannel); }, sec('--dur-card') * 1000);
+    });
+    api.tv.channels = channels;
+
     /* ---------- opening sequence (DESIGN.md section 4) ---------- */
     function introLength() {
       return root.classList.contains('intro-pending')
         ? (sec('--dur-intro-static') + sec('--dur-intro-bars') + sec('--dur-intro-pull')) * 1000 : 0;
     }
     function settled() {
-      root.style.removeProperty('--dof-back'); root.style.removeProperty('--dof-fore');
+      root.style.removeProperty('--dof-back'); root.style.removeProperty('--dof-fore'); root.style.removeProperty('--dof-tv-now');
       root.classList.add('is-settled');
       gsap.set(cam, { clearProps: 'transform,transformOrigin' });
-      show('toon');
+      show('card');
       api.ready = true;
       document.dispatchEvent(new CustomEvent('uptime:ready'));
     }
@@ -298,8 +359,10 @@
       var ox = r.left + r.width / 2 - c.left, oy = r.top + r.height / 2 - c.top;
       gsap.set(cam, { transformOrigin: ox + 'px ' + oy + 'px', x: c.width / 2 - ox, y: c.height / 2 - oy, scale: k });
       var dof = { back: 0, fore: parseFloat(tok('--dof-intro')) };
+      var tvRatio = parseFloat(tok('--dof-tv')) / parseFloat(tok('--dof-blur'));
       function applyDof() {
         root.style.setProperty('--dof-back', dof.back.toFixed(2) + 'px');
+        root.style.setProperty('--dof-tv-now', (dof.back * tvRatio).toFixed(2) + 'px');
         root.style.setProperty('--dof-fore', dof.fore.toFixed(2) + 'px');
       }
       applyDof(); show('static');
@@ -308,7 +371,7 @@
       var t1 = sec('--dur-intro-static'), t2 = t1 + sec('--dur-intro-bars'), pull = sec('--dur-intro-pull');
       var tl = gsap.timeline({ onComplete: finish });
       tl.add(function () { click(); show('bars'); }, t1)
-        .add(function () { click(); show('toon'); }, t2)
+        .add(function () { click(); show('card'); }, t2)
         .to(cam, { x: 0, y: 0, scale: 1, duration: pull, ease: tok('--g-spin') }, t2)
         .to(dof, { back: parseFloat(tok('--dof-blur')), fore: 0, duration: pull, ease: tok('--g-spin'), onUpdate: applyDof }, t2);
       var done = false;

@@ -86,6 +86,13 @@
         <circle class="o-fill" r="10"/>
         <path class="o-hi" d="M-8.2 -5.8 A10 10 0 0 1 2.6 -9.7"/>
       </symbol>
+      <!-- realistic materials for the props on the desk -->
+      <linearGradient id="g-o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="st-o-light"/><stop offset="0.55" class="st-o-gold"/><stop offset="1" class="st-o-shade"/></linearGradient>
+      <symbol id="o-real" viewBox="-18 -12 36 24">
+        <ellipse class="or-edge" rx="11.5" ry="6.4"/>
+        <ellipse class="or-fill" rx="11.5" ry="6.4" stroke="url(#g-o)"/>
+        <path class="or-hi" d="M-9.4 -3.6 A11.5 6.4 0 0 1 2.4 -6.3"/>
+      </symbol>
       <symbol id="o-flat" viewBox="-18 -12 36 24">
         <ellipse class="o-out" rx="11.5" ry="6.4"/>
         <ellipse class="o-fill" rx="11.5" ry="6.4"/>
@@ -95,7 +102,7 @@
   </svg>
 
   <header class="topbar">
-    <span class="wordmark">Uptime O's</span>
+    <a class="wordmark" href="/">Cameron Pavloske</a>
     <!-- TOP FLAP: navigation (DESIGN.md section 5). Sticky bottom tab bar on phones. -->
     <nav class="flap" aria-label="Box panels">
       <ul role="list">
@@ -120,22 +127,30 @@
       <section class="scene" id="scene" aria-label="A Saturday morning desk with a box of Uptime O's, a half eaten bowl, and a TV">
         <div class="cam" id="cam">
 
-          <!-- Background: wall, window light, sideboard, TV. Soft focus. -->
+          <!-- Background: wall and window light. Soft focus. -->
           <div class="back" aria-hidden="true">
             <div class="wall"></div>
             <div class="sun"></div>
-            <div class="sideboard"></div>
-            <div class="tv" id="tv">
+          </div>
+
+          <!-- Foreground: desk, box, bowl. In focus. -->
+          <div class="fore">
+            <div class="desk" aria-hidden="true"></div>
+            <div class="desk-light" aria-hidden="true"></div>
+
+            <!-- Old CRT at the back of the desk, a little out of focus -->
+            <div class="tv" id="tv" aria-hidden="true">
               <div class="tv-ears"><i></i><i></i><b></b></div>
               <div class="tv-cab">
-                <div class="tv-screen" id="tv-screen" data-show="toon">
+                <div class="tv-screen" id="tv-screen" data-show="card">
                   <canvas class="tv-static" width="96" height="72"></canvas>
                   <div class="tv-bars"><p>Saturday morning programming will begin shortly.</p></div>
-                  <div class="tv-toon">
-                    <i class="toon-sun"></i>
-                    <i class="toon-cloud"></i>
-                    <i class="toon-hills"></i>
-                    <i class="toon-ping"></i>
+                  <!-- The TV is the "latest" slot: channels are built from the real posts and projects -->
+                  <div class="tv-card" id="tv-card" data-tone="0">
+                    <span class="tv-ch" id="tv-ch">CH 01</span>
+                    <span class="tv-kicker" id="tv-kicker">Latest writing</span>
+                    <span class="tv-title" id="tv-title">IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?</span>
+                    <span class="tv-meta" id="tv-meta">Apr 5, 2026</span>
                   </div>
                   <div class="tv-lines"></div>
                   <div class="tv-glare"></div>
@@ -144,12 +159,17 @@
               </div>
               <div class="tv-feet"><i></i><i></i></div>
             </div>
-          </div>
 
-          <!-- Foreground: desk, box, bowl. In focus. -->
-          <div class="fore">
-            <div class="desk" aria-hidden="true"></div>
-            <div class="desk-light" aria-hidden="true"></div>
+            <!-- The TV is in the soft focus background; these two controls sit in focus on top of it -->
+            <button class="tv-hit" id="tv-hit" type="button" aria-label="Change the TV channel"></button>
+            <a class="tv-caption" id="tv-caption" href="/blog/cameras-on-your-network.html"><b>On now</b><span>IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?</span></a>
+
+            <!-- Whose desk this is -->
+            <div class="hello" id="hello">
+              <h1>Cameron Pavloske</h1>
+              <p class="hello-role">Senior Solutions Engineer at Neat · Dallas, TX</p>
+              <p class="hello-lede">Bringing legacy infrastructure into the future.</p>
+            </div>
 
             <div class="box-stage">
               <div class="box-shadow" id="box-shadow" aria-hidden="true"></div>
@@ -160,10 +180,10 @@
                   <!-- Reserved: clean corner for a future ribbon (out of scope, DESIGN.md section 15) -->
                   <div class="ribbon-spot" aria-hidden="true"></div>
 
-                  <h1 class="logo" id="logo" aria-label="Uptime O's">
+                  <p class="logo" id="logo" role="img" aria-label="Uptime O's">
                     <span class="logo-line" aria-hidden="true"><i>U</i><i>P</i><i>T</i><i>I</i><i>M</i><i>E</i></span>
                     <span class="logo-line logo-o" aria-hidden="true"><i>O</i><i>'</i><i>s</i></span>
-                  </h1>
+                  </p>
                   <p class="starburst"><span>Now with <b>15 years</b> of architecture!</span></p>
                   <p class="tagline">Part of a balanced enterprise breakfast.</p>
 
@@ -296,67 +316,88 @@
             <a class="bowl" id="bowl-prop" href="#bowl" aria-label="Grab a spoon: see what's in the bowl">
               <svg viewBox="0 0 420 300" focusable="false" aria-hidden="true">
                 <defs>
+                  <linearGradient id="g-ceramic" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" class="st-white"/><stop offset="0.28" class="st-ceramic"/><stop offset="0.72" class="st-ceramic-shade"/><stop offset="1" class="st-ceramic-deep"/></linearGradient>
+                  <radialGradient id="g-inner" cx="0.64" cy="0.82" r="0.8"><stop offset="0" class="st-white"/><stop offset="0.5" class="st-ceramic"/><stop offset="1" class="st-ceramic-deep"/></radialGradient>
+                  <radialGradient id="g-milk" cx="0.6" cy="0.66" r="0.72"><stop offset="0" class="st-white"/><stop offset="0.5" class="st-milk"/><stop offset="1" class="st-milk-shade"/></radialGradient>
+                  <linearGradient id="g-steel" x1="0.3" y1="0" x2="0.5" y2="1"><stop offset="0" class="st-steel-dark"/><stop offset="0.32" class="st-steel-hi"/><stop offset="0.6" class="st-steel"/><stop offset="1" class="st-steel-dark"/></linearGradient>
+                  <radialGradient id="g-steel-head" cx="0.4" cy="0.35" r="0.7"><stop offset="0" class="st-steel-hi"/><stop offset="0.6" class="st-steel"/><stop offset="1" class="st-steel-dark"/></radialGradient>
+                  <linearGradient id="g-shade" x1="0" y1="0" x2="1" y2="0"><stop offset="0.4" class="st-clear"/><stop offset="1" class="st-shadow"/></linearGradient>
+                  <filter id="soft" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="7"/></filter>
+                  <filter id="soft2" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="2.4"/></filter>
                   <clipPath id="bowl-clip"><path d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/></clipPath>
-                  <clipPath id="milk-clip"><ellipse cx="210" cy="136" rx="120" ry="31"/></clipPath>
+                  <clipPath id="inner-clip"><ellipse cx="210" cy="117" rx="163" ry="48"/></clipPath>
+                  <clipPath id="milk-clip"><ellipse cx="210" cy="138" rx="122" ry="31"/></clipPath>
                 </defs>
-                <ellipse class="b-shadow" cx="236" cy="262" rx="176" ry="24"/>
+
+                <!-- shadows on the desk: long soft cast to the right, tight contact under the foot -->
+                <ellipse class="b-cast" cx="270" cy="258" rx="180" ry="24" filter="url(#soft)"/>
+                <ellipse class="b-contact" cx="214" cy="258" rx="96" ry="11" filter="url(#soft2)"/>
+
                 <!-- strays and a drip on the desk -->
-                <ellipse class="b-o-shadow" cx="33" cy="270" rx="13" ry="5"/>
-                <use href="#o-flat" x="12" y="250" width="40" height="27"/>
-                <ellipse class="b-o-shadow" cx="72" cy="290" rx="13" ry="5"/>
-                <use href="#o-flat" x="50" y="270" width="40" height="27"/>
+                <ellipse class="b-contact" cx="35" cy="272" rx="13" ry="4" filter="url(#soft2)"/>
+                <use href="#o-real" x="12" y="250" width="40" height="27"/>
+                <ellipse class="b-contact" cx="74" cy="292" rx="13" ry="4" filter="url(#soft2)"/>
+                <use href="#o-real" x="50" y="270" width="40" height="27"/>
                 <path class="b-drip" d="M360 276 q14 -8 30 -2 q12 5 4 12 q-10 7 -26 3 q-16 -4 -8 -13z"/>
+                <path class="b-drip-hi" d="M366 277 q10 -5 20 -2"/>
                 <ellipse class="b-drip" cx="404" cy="268" rx="5" ry="2.6"/>
 
-                <ellipse class="b-foot" cx="210" cy="254" rx="74" ry="10"/>
-                <path class="b-body" d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/>
+                <ellipse class="b-foot" cx="210" cy="253" rx="72" ry="9"/>
+                <path d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z" fill="url(#g-ceramic)"/>
                 <g clip-path="url(#bowl-clip)">
-                  <path class="b-stripe" d="M10 150 Q210 262 410 150"/>
-                  <ellipse class="b-shade" cx="352" cy="214" rx="96" ry="120"/>
+                  <path class="b-stripe" d="M10 146 Q210 258 410 146"/>
+                  <path class="b-stripe-thin" d="M10 172 Q210 284 410 172"/>
+                  <path d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z" fill="url(#g-shade)"/>
+                  <ellipse class="b-spec" cx="84" cy="178" rx="11" ry="42" transform="rotate(20 84 178)" filter="url(#soft2)"/>
+                  <ellipse class="b-bounce" cx="210" cy="262" rx="120" ry="16" filter="url(#soft)"/>
                 </g>
-                <path class="b-line" d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/>
-                <path class="b-hi" d="M58 150 Q72 204 122 232"/>
 
-                <ellipse class="b-rim" cx="210" cy="112" rx="176" ry="56"/>
-                <ellipse class="b-inner" cx="210" cy="116" rx="161" ry="47"/>
-                <ellipse class="b-inner-lit" cx="210" cy="127" rx="146" ry="38"/>
+                <ellipse cx="210" cy="112" rx="176" ry="56" fill="url(#g-ceramic)"/>
+                <ellipse class="b-rim-hi" cx="210" cy="112" rx="175" ry="55"/>
+                <ellipse cx="210" cy="117" rx="163" ry="48" fill="url(#g-inner)"/>
+                <g clip-path="url(#inner-clip)">
+                  <ellipse class="b-inner-shadow" cx="150" cy="84" rx="170" ry="40" filter="url(#soft)"/>
+                </g>
                 <!-- soggy O's stuck to the inside edge -->
                 <g class="soggy">
-                  <use href="#o-flat" x="62" y="96" width="34" height="23" transform="rotate(-24 79 107)"/>
-                  <use href="#o-flat" x="318" y="92" width="34" height="23" transform="rotate(22 335 103)"/>
-                  <use href="#o-flat" x="150" y="76" width="30" height="20"/>
+                  <use href="#o-real" x="60" y="98" width="34" height="23" transform="rotate(-24 77 109)"/>
+                  <use href="#o-real" x="320" y="94" width="34" height="23" transform="rotate(22 337 105)"/>
+                  <use href="#o-real" x="150" y="78" width="30" height="20"/>
                 </g>
                 <!-- shallow pool of milk -->
-                <ellipse class="b-milk" cx="210" cy="136" rx="120" ry="31"/>
+                <ellipse cx="210" cy="138" rx="122" ry="31" fill="url(#g-milk)"/>
                 <g clip-path="url(#milk-clip)">
-                  <ellipse class="b-milk-shade" cx="210" cy="112" rx="124" ry="26"/>
-                  <ellipse class="spoon-under" cx="158" cy="140" rx="34" ry="14" transform="rotate(-10 158 140)"/>
+                  <ellipse class="b-milk-shadow" cx="150" cy="112" rx="120" ry="22" filter="url(#soft)"/>
+                  <ellipse class="spoon-under" cx="158" cy="142" rx="36" ry="14" transform="rotate(-10 158 142)" filter="url(#soft2)"/>
                 </g>
-                <path class="b-sheen" d="M118 146 Q150 160 196 162"/>
+                <ellipse class="b-meniscus" cx="210" cy="138" rx="122" ry="31"/>
+                <path class="b-sheen" d="M236 158 Q270 160 300 150"/>
                 <path class="b-sheen" d="M262 124 Q286 126 300 134"/>
                 <g class="floaters" id="floaters">
-                  <ellipse class="b-o-shadow" cx="230" cy="131" rx="13" ry="6"/><use href="#o-flat" x="208" y="113" width="40" height="27"/>
-                  <ellipse class="b-o-shadow" cx="270" cy="146" rx="13" ry="6"/><use href="#o-flat" x="248" y="128" width="40" height="27"/>
-                  <ellipse class="b-o-shadow" cx="300" cy="134" rx="12" ry="5"/><use href="#o-flat" x="280" y="118" width="36" height="24"/>
-                  <ellipse class="b-o-shadow" cx="216" cy="154" rx="13" ry="6"/><use href="#o-flat" x="194" y="136" width="40" height="27"/>
-                  <ellipse class="b-o-shadow" cx="252" cy="160" rx="12" ry="5"/><use href="#o-flat" x="232" y="144" width="36" height="24"/>
-                  <ellipse class="b-o-shadow" cx="128" cy="126" rx="12" ry="5"/><use href="#o-flat" x="108" y="110" width="36" height="24"/>
+                  <ellipse class="b-o-shadow" cx="231" cy="133" rx="13" ry="5" filter="url(#soft2)"/><use href="#o-real" x="208" y="113" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="271" cy="148" rx="13" ry="5" filter="url(#soft2)"/><use href="#o-real" x="248" y="128" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="301" cy="136" rx="12" ry="4.5" filter="url(#soft2)"/><use href="#o-real" x="280" y="118" width="36" height="24"/>
+                  <ellipse class="b-o-shadow" cx="217" cy="156" rx="13" ry="5" filter="url(#soft2)"/><use href="#o-real" x="194" y="136" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="253" cy="162" rx="12" ry="4.5" filter="url(#soft2)"/><use href="#o-real" x="232" y="144" width="36" height="24"/>
+                  <ellipse class="b-o-shadow" cx="129" cy="128" rx="12" ry="4.5" filter="url(#soft2)"/><use href="#o-real" x="108" y="110" width="36" height="24"/>
                 </g>
                 <!-- spoon resting in the bowl, handle toward the viewer -->
                 <g class="b-spoon">
-                  <ellipse class="spoon-head" cx="160" cy="138" rx="30" ry="12" transform="rotate(-10 160 138)"/>
-                  <path class="spoon-glint" d="M140 136 Q150 130 166 131"/>
-                  <path class="spoon-out" d="M186 142 L306 176 L404 232"/>
-                  <path class="spoon-fill" d="M186 142 L306 176 L404 232"/>
-                  <path class="spoon-glint" d="M312 176 L396 224"/>
+                  <path class="spoon-shadow" d="M196 150 L302 180 L398 236 L392 246 L296 194 L192 160 Z" filter="url(#soft2)"/>
+                  <ellipse cx="160" cy="138" rx="30" ry="12" transform="rotate(-10 160 138)" fill="url(#g-steel-head)"/>
+                  <ellipse class="spoon-edge" cx="160" cy="138" rx="30" ry="12" transform="rotate(-10 160 138)"/>
+                  <path class="spoon-glint" d="M140 135 Q150 129 166 130"/>
+                  <path d="M184 136 L300 168 L398 224 Q411 232 405 241 Q397 248 386 241 L296 185 L182 148 Z" fill="url(#g-steel)"/>
+                  <path class="spoon-edge" d="M184 136 L300 168 L398 224 Q411 232 405 241 Q397 248 386 241 L296 185 L182 148 Z"/>
+                  <path class="spoon-glint" d="M306 173 L394 224"/>
                 </g>
-                <!-- front lip of the bowl, over the spoon handle shadow -->
-                <path class="b-rim-front" d="M34 112 A176 56 0 0 0 386 112"/>
               </svg>
             </a>
 
             <p class="hint" id="hint" aria-hidden="true">Drag the box to spin it</p>
           </div>
+          <!-- photographic finish: vignette and fine grain over the whole scene -->
+          <div class="grade" aria-hidden="true"></div>
         </div>
       </section>
 
@@ -468,7 +509,7 @@
           <h2 class="visually-hidden" id="contact-h">Contact</h2>
           <p class="contact-blurb">Want to talk about where IT and IoT are headed, or anything at the intersection of AV, cameras, and AI? Drop me a line.</p>
           <figure class="barcode" aria-hidden="true">
-            <svg viewBox="0 0 226 68" focusable="false"><rect x="6" y="0" width="2" height="68"/><rect x="10" y="0" width="2" height="68"/><rect x="14" y="0" width="1" height="60"/><rect x="17" y="0" width="1" height="60"/><rect x="19" y="0" width="1" height="60"/><rect x="22" y="0" width="1" height="60"/><rect x="26" y="0" width="2" height="60"/><rect x="30" y="0" width="1" height="60"/><rect x="34" y="0" width="2" height="60"/><rect x="37" y="0" width="1" height="60"/><rect x="39" y="0" width="2" height="60"/><rect x="42" y="0" width="2" height="60"/><rect x="46" y="0" width="1" height="60"/><rect x="48" y="0" width="3" height="60"/><rect x="54" y="0" width="1" height="60"/><rect x="57" y="0" width="3" height="60"/><rect x="61" y="0" width="1" height="60"/><rect x="64" y="0" width="2" height="60"/><rect x="67" y="0" width="1" height="60"/><rect x="71" y="0" width="1" height="60"/><rect x="73" y="0" width="2" height="60"/><rect x="76" y="0" width="1" height="60"/><rect x="80" y="0" width="1" height="60"/><rect x="83" y="0" width="1" height="60"/><rect x="87" y="0" width="1" height="60"/><rect x="91" y="0" width="1" height="60"/><rect x="93" y="0" width="2" height="60"/><rect x="97" y="0" width="3" height="60"/><rect x="102" y="0" width="1" height="60"/><rect x="104" y="0" width="1" height="60"/><rect x="106" y="0" width="1" height="60"/><rect x="110" y="0" width="2" height="68"/><rect x="114" y="0" width="2" height="68"/><rect x="118" y="0" width="2" height="60"/><rect x="122" y="0" width="3" height="60"/><rect x="126" y="0" width="1" height="60"/><rect x="129" y="0" width="1" height="60"/><rect x="133" y="0" width="1" height="60"/><rect x="136" y="0" width="1" height="60"/><rect x="138" y="0" width="2" height="60"/><rect x="141" y="0" width="1" height="60"/><rect x="145" y="0" width="3" height="60"/><rect x="151" y="0" width="3" height="60"/><rect x="157" y="0" width="2" height="60"/><rect x="161" y="0" width="2" height="60"/><rect x="164" y="0" width="1" height="60"/><rect x="167" y="0" width="1" height="60"/><rect x="170" y="0" width="2" height="60"/><rect x="175" y="0" width="1" height="60"/><rect x="179" y="0" width="1" height="60"/><rect x="182" y="0" width="2" height="60"/><rect x="186" y="0" width="1" height="60"/><rect x="190" y="0" width="1" height="60"/><rect x="194" y="0" width="2" height="60"/><rect x="198" y="0" width="1" height="60"/><rect x="202" y="0" width="3" height="60"/><rect x="206" y="0" width="1" height="60"/><rect x="208" y="0" width="2" height="60"/><rect x="214" y="0" width="2" height="68"/><rect x="218" y="0" width="2" height="68"/></svg>
+            <svg viewBox="0 0 226 68" preserveAspectRatio="none" focusable="false"><rect x="6" y="0" width="2" height="68"/><rect x="10" y="0" width="2" height="68"/><rect x="14" y="0" width="1" height="60"/><rect x="17" y="0" width="1" height="60"/><rect x="19" y="0" width="1" height="60"/><rect x="22" y="0" width="1" height="60"/><rect x="26" y="0" width="2" height="60"/><rect x="30" y="0" width="1" height="60"/><rect x="34" y="0" width="2" height="60"/><rect x="37" y="0" width="1" height="60"/><rect x="39" y="0" width="2" height="60"/><rect x="42" y="0" width="2" height="60"/><rect x="46" y="0" width="1" height="60"/><rect x="48" y="0" width="3" height="60"/><rect x="54" y="0" width="1" height="60"/><rect x="57" y="0" width="3" height="60"/><rect x="61" y="0" width="1" height="60"/><rect x="64" y="0" width="2" height="60"/><rect x="67" y="0" width="1" height="60"/><rect x="71" y="0" width="1" height="60"/><rect x="73" y="0" width="2" height="60"/><rect x="76" y="0" width="1" height="60"/><rect x="80" y="0" width="1" height="60"/><rect x="83" y="0" width="1" height="60"/><rect x="87" y="0" width="1" height="60"/><rect x="91" y="0" width="1" height="60"/><rect x="93" y="0" width="2" height="60"/><rect x="97" y="0" width="3" height="60"/><rect x="102" y="0" width="1" height="60"/><rect x="104" y="0" width="1" height="60"/><rect x="106" y="0" width="1" height="60"/><rect x="110" y="0" width="2" height="68"/><rect x="114" y="0" width="2" height="68"/><rect x="118" y="0" width="2" height="60"/><rect x="122" y="0" width="3" height="60"/><rect x="126" y="0" width="1" height="60"/><rect x="129" y="0" width="1" height="60"/><rect x="133" y="0" width="1" height="60"/><rect x="136" y="0" width="1" height="60"/><rect x="138" y="0" width="2" height="60"/><rect x="141" y="0" width="1" height="60"/><rect x="145" y="0" width="3" height="60"/><rect x="151" y="0" width="3" height="60"/><rect x="157" y="0" width="2" height="60"/><rect x="161" y="0" width="2" height="60"/><rect x="164" y="0" width="1" height="60"/><rect x="167" y="0" width="1" height="60"/><rect x="170" y="0" width="2" height="60"/><rect x="175" y="0" width="1" height="60"/><rect x="179" y="0" width="1" height="60"/><rect x="182" y="0" width="2" height="60"/><rect x="186" y="0" width="1" height="60"/><rect x="190" y="0" width="1" height="60"/><rect x="194" y="0" width="2" height="60"/><rect x="198" y="0" width="1" height="60"/><rect x="202" y="0" width="3" height="60"/><rect x="206" y="0" width="1" height="60"/><rect x="208" y="0" width="2" height="60"/><rect x="214" y="0" width="2" height="68"/><rect x="218" y="0" width="2" height="68"/></svg>
             <figcaption>CAMERON PAVLOSKE</figcaption>
           </figure>
           <div class="receipt">

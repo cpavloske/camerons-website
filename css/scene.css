@@ -55,12 +55,14 @@
   isolation: isolate;
   background: var(--wall-shade);
 }
-.is-3d .track { height: calc(var(--scene-h) + 4 * var(--stop)); }
+/* four stops between the five faces, plus one spare so the last face can be read before the page moves on */
+.is-3d .track { height: calc(var(--scene-h) + 5 * var(--stop)); }
 .is-3d .scene { position: sticky; top: var(--topbar-h); }
 .cam, .back, .fore { position: absolute; inset: 0; }
 .cam { will-change: transform; }
-.fore { filter: blur(var(--dof-fore, 0px)); }
-.is-settled .fore { filter: none; }
+/* Opening sequence: everything near the camera starts out of focus, the TV sharp */
+.desk, .box-stage, .bowl, .hello { filter: blur(var(--dof-fore, 0px)); }
+.is-settled .desk, .is-settled .box-stage, .is-settled .bowl, .is-settled .hello { filter: none; }
 
 /* Cover that hides the scene until the opening sequence starts.
    If scene.js never runs, the cover lifts by itself. */
@@ -92,30 +94,31 @@
   filter: blur(calc(var(--dof-back, var(--dof-blur)) + 3px));
   opacity: 0.9;
 }
-.sideboard {
-  position: absolute; left: 46%; right: -4%;
-  top: calc(var(--desk-top) - 12%); height: 16%;
-  background:
-    linear-gradient(180deg, var(--sideboard-top) 0 14%, var(--sideboard) 14% 100%);
-  border-radius: var(--radius-s) 0 0 0;
-  box-shadow: 0 -2px 0 var(--wood-light) inset;
-  filter: blur(var(--dof-back, var(--dof-blur)));
+/* ---------------- The TV: an old CRT at the back of the desk ----------------
+   HTML and CSS, sized in --tu units (1% of the TV width). */
+.tv, .tv-hit {
+  position: absolute;
+  left: calc(var(--tv-x) - var(--tv-w) / 2);
+  bottom: calc(100% - var(--desk-top) - var(--tv-foot));
+  width: var(--tv-w);
 }
-
-/* ---------------- The TV (HTML and CSS, sized in --tu units) ---------------- */
 .tv {
   --tu: calc(var(--tv-w) / 100);
-  position: absolute;
-  left: calc(71% - var(--tv-w) / 2);
-  bottom: calc(100% - var(--desk-top) + 11.5%);
-  width: var(--tv-w);
-  filter: blur(var(--dof-back, var(--dof-blur)));
+  filter: blur(var(--dof-tv-now, var(--dof-back, var(--dof-tv))));
+}
+.is-settled .tv { transition: filter var(--dur-slow) var(--ease-in-out); }
+/* shadow and glow the TV throws on the desk */
+.tv::before {
+  content: ""; position: absolute; left: -6%; right: -22%; bottom: calc(var(--tu) * -5); height: calc(var(--tu) * 16);
+  background: radial-gradient(ellipse at 44% 40%, var(--shadow-deep) 0 30%, transparent 70%);
+  filter: blur(calc(var(--tu) * 2.5));
 }
 .tv-ears { position: relative; height: calc(var(--tu) * 20); }
 .tv-ears i {
   position: absolute; bottom: 0; left: 50%;
-  width: calc(var(--tu) * 1.4); height: calc(var(--tu) * 30);
-  background: var(--steel); border-radius: var(--radius-pill);
+  width: calc(var(--tu) * 1.3); height: calc(var(--tu) * 31);
+  background: linear-gradient(90deg, var(--steel-dark), var(--steel-hi) 45%, var(--steel-dark));
+  border-radius: var(--radius-pill);
   transform-origin: 50% 100%;
 }
 .tv-ears i:nth-child(1) { transform: rotate(-34deg); }
@@ -123,7 +126,7 @@
 .tv-ears b {
   position: absolute; bottom: calc(var(--tu) * -2); left: 50%;
   width: calc(var(--tu) * 16); height: calc(var(--tu) * 5); margin-left: calc(var(--tu) * -8);
-  background: var(--ink); border-radius: 50% 50% 0 0;
+  background: radial-gradient(ellipse at 40% 20%, var(--steel-dark), var(--ink) 70%); border-radius: 50% 50% 0 0;
 }
 .tv-cab {
   position: relative;
@@ -131,27 +134,30 @@
   padding: calc(var(--tu) * 5);
   aspect-ratio: 1.36;
   background:
+    linear-gradient(100deg, var(--sheen) 0, transparent 28%, transparent 60%, var(--shadow-ink) 100%),
     var(--tex-wood),
-    linear-gradient(180deg, var(--wood-mid), var(--tv-shell) 30%, var(--sideboard));
-  border-radius: calc(var(--tu) * 6);
+    linear-gradient(180deg, var(--wood-mid), var(--tv-shell) 26%, var(--sideboard));
+  border-radius: calc(var(--tu) * 5);
   box-shadow:
-    inset 0 calc(var(--tu) * 1) 0 var(--wood-light),
-    inset 0 calc(var(--tu) * -2) calc(var(--tu) * 3) var(--shadow-deep),
-    0 calc(var(--tu) * 2) calc(var(--tu) * 4) var(--shadow-ink);
+    inset 0 calc(var(--tu) * 0.8) 0 var(--wood-light),
+    inset 0 calc(var(--tu) * -2.5) calc(var(--tu) * 4) var(--shadow-deep),
+    inset calc(var(--tu) * -2) 0 calc(var(--tu) * 4) var(--shadow-ink);
 }
 .tv-screen {
   position: relative; overflow: hidden;
-  border-radius: 13% / 16%;
+  border-radius: 12% / 15%;
   background: var(--tv-glass);
   box-shadow:
-    0 0 0 calc(var(--tu) * 1.6) var(--ink),
-    0 0 calc(var(--tu) * 14) var(--tv-glow);
+    0 0 0 calc(var(--tu) * 0.7) var(--ink),
+    0 0 0 calc(var(--tu) * 2) var(--chrome),
+    0 0 0 calc(var(--tu) * 2.6) var(--ink),
+    0 0 calc(var(--tu) * 16) var(--tv-glow);
 }
 .tv-screen > * { position: absolute; inset: 0; width: 100%; height: 100%; }
-.tv-static, .tv-bars, .tv-toon { opacity: 0; }
+.tv-static, .tv-bars, .tv-card { opacity: 0; }
 .tv-screen[data-show="static"] .tv-static,
 .tv-screen[data-show="bars"] .tv-bars,
-.tv-screen[data-show="toon"] .tv-toon { opacity: 1; }
+.tv-screen[data-show="card"] .tv-card { opacity: 1; }
 .tv-static { image-rendering: pixelated; }
 .tv-bars {
   display: grid; place-items: end center;
@@ -170,37 +176,33 @@
   font-size: calc(var(--tu) * 3.3); line-height: 1.15; letter-spacing: 0.06em;
   text-transform: uppercase; text-align: center;
 }
-/* Placeholder cartoon: Ping hopping across the hills. Phase 4c adds real loops. */
-.tv-toon { background: linear-gradient(180deg, var(--sky-blue) 0 68%, var(--grass-green) 68%); overflow: hidden; }
-.tv-toon i { position: absolute; display: block; }
-.toon-sun { right: 12%; top: 12%; width: 20%; aspect-ratio: 1; border-radius: 50%; background: var(--sunny-yellow); }
-.toon-cloud { left: 12%; top: 20%; width: 26%; height: 11%; border-radius: var(--radius-pill); background: var(--milk-cream); animation: toon-drift calc(var(--dur-toon) * 4) linear infinite; }
-.toon-hills {
-  left: -20%; right: -20%; bottom: 14%; height: 26%;
-  background: radial-gradient(ellipse 16% 100% at 50% 100%, var(--grass-green) 99%, transparent 100%) 0 0 / 34% 100% repeat-x;
-  animation: toon-scroll var(--dur-toon) linear infinite;
+/* Channel card: one real post or project per channel */
+.tv-card {
+  display: flex; flex-direction: column; justify-content: center; gap: calc(var(--tu) * 1.6);
+  padding: 9% 9% 8%;
+  background: var(--halftone), var(--sky-blue); color: var(--box-burgundy);
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch); text-transform: uppercase;
 }
-.toon-ping {
-  left: 38%; bottom: 20%; width: 24%; height: 22%;
-  background: var(--sunny-yellow);
-  border: calc(var(--tu) * 1) solid var(--box-burgundy); border-radius: 38%;
-  animation: toon-hop calc(var(--dur-toon) / 4) var(--ease-in-out) infinite alternate;
-}
-.toon-ping::before, .toon-ping::after {
-  content: ""; position: absolute; bottom: 96%; width: 8%; height: 60%;
-  background: var(--box-burgundy); border-radius: var(--radius-pill);
-}
-.toon-ping::before { left: 22%; transform: rotate(-16deg); }
-.toon-ping::after { right: 22%; transform: rotate(16deg); }
-@keyframes toon-hop { to { transform: translateY(-70%); } }
-@keyframes toon-scroll { to { transform: translateX(-13.6%); } }
-@keyframes toon-drift { from { transform: translateX(-80%); } to { transform: translateX(320%); } }
+.tv-card[data-tone="1"] { background: var(--halftone), var(--sunny-yellow); }
+.tv-card[data-tone="2"] { background: var(--halftone), var(--grass-green); }
+.tv-card[data-tone="3"] { background: var(--halftone-light), var(--box-burgundy); color: var(--milk-cream); }
+.tv-card[data-tone="now"] { background: var(--halftone-light), var(--ink); color: var(--sunny-yellow); }
+.tv-ch { position: absolute; top: 7%; right: 9%; font-family: var(--font-label); font-stretch: normal; font-weight: 800; font-size: calc(var(--tu) * 3.4); letter-spacing: 0.08em; color: var(--grass-green); text-shadow: 0 0 calc(var(--tu) * 1) var(--grass-green); }
+.tv-card[data-tone="2"] .tv-ch { color: var(--milk-cream); text-shadow: none; }
+.tv-kicker { font-weight: 900; font-size: calc(var(--tu) * 3.9); letter-spacing: 0.1em; }
+.tv-title { font-weight: 900; font-size: calc(var(--tu) * 6.6); line-height: 0.98; letter-spacing: 0.01em; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.tv-card[data-len="short"] .tv-title { font-size: calc(var(--tu) * 10.5); }
+.tv-meta { font-family: var(--font-fine); font-stretch: var(--fine-stretch); font-weight: 700; font-size: calc(var(--tu) * 3.4); letter-spacing: 0.06em; }
 
 .tv-lines { background: var(--scanlines); mix-blend-mode: multiply; animation: tv-flicker var(--dur-flicker) steps(1) infinite; }
+/* curved glass: highlight top left, falloff into the corners */
 .tv-glare {
   background:
-    radial-gradient(ellipse 60% 40% at 28% 18%, var(--glint), transparent 70%),
-    radial-gradient(ellipse 120% 120% at 50% 50%, transparent 55%, var(--shadow-deep) 100%);
+    radial-gradient(ellipse 55% 38% at 26% 16%, var(--glint), transparent 72%),
+    radial-gradient(ellipse 30% 14% at 74% 90%, var(--sheen), transparent 70%),
+    radial-gradient(ellipse 112% 112% at 50% 50%, transparent 52%, var(--shadow-deep) 100%);
+  box-shadow: inset 0 0 calc(var(--tu) * 5) var(--shadow-deep);
+  border-radius: inherit;
 }
 .tv-screen.tv-click::after {
   content: ""; position: absolute; inset: 0; background: var(--white);
@@ -212,8 +214,10 @@
 .tv-panel { display: flex; flex-direction: column; align-items: center; gap: calc(var(--tu) * 4); padding-top: calc(var(--tu) * 4); }
 .tv-panel .knob {
   width: calc(var(--tu) * 11); aspect-ratio: 1; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, var(--wood-light), var(--o-shade) 60%, var(--wood-dark));
-  box-shadow: 0 0 0 calc(var(--tu) * 0.8) var(--ink);
+  background:
+    linear-gradient(var(--ink), var(--ink)) 50% 12% / 8% 34% no-repeat,
+    radial-gradient(circle at 36% 30%, var(--steel-hi), var(--chrome) 34%, var(--steel-dark) 78%);
+  box-shadow: 0 0 0 calc(var(--tu) * 0.7) var(--ink), 0 calc(var(--tu) * 1) calc(var(--tu) * 1.5) var(--shadow-deep);
 }
 .tv-panel .grille {
   width: 80%; flex: 1; margin-bottom: calc(var(--tu) * 2);
@@ -222,6 +226,27 @@
 }
 .tv-feet { display: flex; justify-content: space-between; padding: 0 12%; }
 .tv-feet i { width: calc(var(--tu) * 6); height: calc(var(--tu) * 4); background: var(--ink); border-radius: 0 0 var(--radius-s) var(--radius-s); }
+
+/* In focus controls over the TV */
+.tv-hit { height: calc(var(--tv-w) * 0.78); z-index: 2; padding: 0; border: 0; background: none; cursor: pointer; border-radius: var(--radius-m); display: none; }
+.is-3d .tv-hit { display: block; }
+.tv-caption {
+  position: absolute; z-index: calc(var(--z-box) + 2);
+  left: calc(var(--tv-x) + var(--tv-w) / 2 + var(--space-s));
+  bottom: calc(100% - var(--desk-top) + var(--space-l));
+  width: min(15rem, calc(100% - var(--tv-x) - var(--tv-w) / 2 - var(--space-l)));
+  display: grid; gap: var(--space-3xs);
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--scrim); color: var(--milk-cream);
+  border-left: 4px solid var(--sunny-yellow); border-radius: var(--radius-s);
+  font-family: var(--font-label); font-size: var(--step--1); font-weight: 700; line-height: var(--leading-snug);
+  text-decoration: none;
+  transition: opacity var(--dur-mid) var(--ease-out), visibility var(--dur-mid);
+}
+.tv-caption b { font-family: var(--font-panel); font-stretch: var(--panel-stretch); font-weight: 900; font-size: var(--step--2); letter-spacing: 0.12em; text-transform: uppercase; color: var(--sunny-yellow); }
+.tv-caption span { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.tv-caption:hover span { color: var(--sunny-yellow); }
+.scene[data-face]:not([data-face="front"]) .tv-caption { opacity: 0; visibility: hidden; }
 
 /* ---------------- The desk: a plane in real perspective ---------------- */
 .desk {
@@ -241,7 +266,7 @@
   position: absolute; left: 0; right: 0; top: var(--desk-top); bottom: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 34% 60% at 71% 0%, var(--tv-cast), transparent 70%),
+    radial-gradient(ellipse 30% 46% at var(--tv-x) 14%, var(--tv-cast), transparent 72%),
     linear-gradient(100deg, var(--light-warm) 0%, transparent 46%),
     linear-gradient(180deg, var(--shadow-ink) 0, transparent 7%, transparent 62%, var(--shadow-ink) 100%);
   animation: tv-flicker var(--dur-flicker) steps(1) infinite;
@@ -268,12 +293,16 @@
   width: var(--box-w); height: var(--box-h);
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
 }
-.is-3d .face-front  { transform: translateZ(calc(var(--box-w) / 2)); }
-.is-3d .face-back   { transform: rotateY(180deg) translateZ(calc(var(--box-w) / 2)); }
+.is-3d .face-front  { transform: translateZ(calc(var(--box-d) / 2)); }
+.is-3d .face-back   { transform: rotateY(180deg) translateZ(calc(var(--box-d) / 2)); }
+/* narrow side panels */
+.is-3d .box-rig .face-left,
+.is-3d .box-rig .face-right { width: var(--box-d); left: calc((var(--box-w) - var(--box-d)) / 2); --u: calc(var(--box-d) / 100); }
 .is-3d .face-right  { transform: rotateY(90deg) translateZ(calc(var(--box-w) / 2)); }
 .is-3d .face-left   { transform: rotateY(-90deg) translateZ(calc(var(--box-w) / 2)); }
+/* shallow top and bottom */
 .is-3d .box-rig .face-top,
-.is-3d .box-rig .face-bottom { height: var(--box-w); top: calc((var(--box-h) - var(--box-w)) / 2); }
+.is-3d .box-rig .face-bottom { height: var(--box-d); top: calc((var(--box-h) - var(--box-d)) / 2); }
 .is-3d .face-top    { transform: rotateX(90deg) translateZ(calc(var(--box-h) / 2)); }
 .is-3d .face-bottom { transform: rotateX(-90deg) translateZ(calc(var(--box-h) / 2)); }
 
@@ -283,30 +312,44 @@
   background: var(--ink); opacity: var(--sh, 0);
 }
 
+/* Light catching the board: soft sheen from the upper left, darker toward the base */
+.is-3d .box-rig .face::before {
+  content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background:
+    linear-gradient(118deg, var(--sheen) 0%, transparent 36%, transparent 64%, var(--edge-wear) 100%),
+    linear-gradient(0deg, var(--edge-wear), transparent 10%);
+}
+
 /* Still scene only: fake side and top so the flat front reads as a box */
 html:not(.is-3d) .face-top { display: none; }
 html:not(.is-3d) .face-front::before,
 html:not(.is-3d) .face-front::after { content: ""; position: absolute; background: var(--box-burgundy); }
 html:not(.is-3d) .face-front::before {   /* right side */
-  left: 100%; top: 0; width: 22%; height: 100%;
+  left: 100%; top: 0; width: 15%; height: 100%;
   transform-origin: 0 0; transform: skewY(-24deg);
   box-shadow: inset 0 0 0 100vmax var(--shadow-ink);
 }
 html:not(.is-3d) .face-front::after {    /* top flap */
-  left: 0; bottom: 100%; width: 100%; height: 9.8%;
+  left: 0; bottom: 100%; width: 100%; height: 6.7%;
   transform-origin: 0 100%; transform: skewX(-66deg);
   background: var(--cardboard);
 }
 
-/* Contact shadow on the desk. scene.js reshapes it as the box turns. */
+/* Shadow on the desk: tight contact shadow plus a long soft cast away from the window.
+   scene.js reshapes it as the box turns and lifts. */
 .box-shadow {
   position: absolute; left: 50%;
   top: calc(var(--desk-foot) * 100%);
-  width: calc(var(--box-w) * var(--desk-s) * 1.5); height: calc(var(--box-w) * var(--desk-s) * 0.2);
-  margin: calc(var(--box-w) * var(--desk-s) * -0.1) 0 0 calc(var(--box-w) * var(--desk-s) * -0.6);
+  width: calc(var(--box-w) * var(--desk-s) * 1.3); height: calc(var(--box-w) * var(--desk-s) * 0.16);
+  margin: calc(var(--box-w) * var(--desk-s) * -0.09) 0 0 calc(var(--box-w) * var(--desk-s) * -0.6);
   transform: translateX(calc(var(--desk-xf) * 100vw));
-  background: radial-gradient(ellipse at 42% 50%, var(--shadow-deep) 0 34%, transparent 70%);
-  filter: blur(6px);
+  background: radial-gradient(ellipse at 46% 50%, var(--shadow-deep) 0 40%, transparent 72%);
+  filter: blur(5px);
+}
+.box-shadow::after {
+  content: ""; position: absolute; left: 30%; top: -60%; width: 130%; height: 240%;
+  background: radial-gradient(ellipse at 40% 50%, var(--shadow-ink) 0 30%, transparent 70%);
+  filter: blur(14px);
 }
 
 /* ---------------- The bowl ---------------- */
@@ -321,37 +364,84 @@ html:not(.is-3d) .face-front::after {    /* top flap */
 .bowl svg { overflow: visible; transition: transform var(--dur-mid) var(--ease-out); }
 .bowl:hover svg { transform: translateY(-1.5%); }
 
+/* printed O's (box art): ink outline */
 .o-out { fill: none; stroke: var(--box-burgundy); stroke-width: 9.5; }
 .o-fill { fill: none; stroke: var(--o-gold); stroke-width: 6; }
 .o-hi { fill: none; stroke: var(--milk-cream); stroke-width: 1.8; stroke-linecap: round; opacity: 0.7; }
 #o-flat .o-out { stroke-width: 9; }
 #o-flat .o-fill { stroke-width: 5.6; }
+/* real O's (on the desk and in the milk): shaded, no outline */
+.or-edge { fill: none; stroke: var(--o-deep); stroke-width: 7.2; }
+.or-fill { fill: none; stroke-width: 6; }
+.or-hi { fill: none; stroke: var(--white); stroke-width: 1.5; stroke-linecap: round; opacity: 0.55; }
 
-.b-shadow { fill: var(--shadow-deep); filter: blur(7px); }
-.b-foot { fill: var(--ceramic-shade); stroke: var(--box-burgundy); stroke-width: 4; }
-.b-body { fill: var(--ceramic); }
-.b-stripe { fill: none; stroke: var(--sky-blue); stroke-width: 22; }
-.b-shade { fill: var(--ceramic-shade); opacity: 0.75; }
-.b-line { fill: none; stroke: var(--box-burgundy); stroke-width: 4.5; stroke-linejoin: round; }
-.b-hi { fill: none; stroke: var(--white); stroke-width: 6; stroke-linecap: round; opacity: 0.7; }
-.b-rim { fill: var(--ceramic); stroke: var(--box-burgundy); stroke-width: 4.5; }
-.b-inner { fill: var(--ceramic-shade); }
-.b-inner-lit { fill: var(--ceramic); }
-.b-milk { fill: var(--milk-cream); stroke: var(--milk-shade); stroke-width: 2; }
-.b-milk-shade { fill: var(--milk-shade); opacity: 0.8; }
-.b-sheen { fill: none; stroke: var(--white); stroke-width: 3.5; stroke-linecap: round; opacity: 0.85; }
-.b-o-shadow { fill: var(--milk-shade); }
-.b-drip { fill: var(--milk-cream); stroke: var(--milk-shade); stroke-width: 1.5; }
-.b-rim-front { fill: none; stroke: var(--box-burgundy); stroke-width: 4.5; stroke-linecap: round; }
-.soggy .o-fill { stroke: var(--o-shade); }
-.soggy { opacity: 0.92; }
-.spoon-under { fill: var(--steel); opacity: 0.45; }
+/* gradient stops, so SVG materials still take their colors from tokens */
+.st-white { stop-color: var(--white); }
+.st-ceramic { stop-color: var(--ceramic); }
+.st-ceramic-shade { stop-color: var(--ceramic-shade); }
+.st-ceramic-deep { stop-color: var(--ceramic-deep); }
+.st-milk { stop-color: var(--milk-cream); }
+.st-milk-shade { stop-color: var(--milk-shade); }
+.st-steel { stop-color: var(--steel); }
+.st-steel-hi { stop-color: var(--steel-hi); }
+.st-steel-dark { stop-color: var(--steel-dark); }
+.st-o-light { stop-color: var(--o-light); }
+.st-o-gold { stop-color: var(--o-gold); }
+.st-o-shade { stop-color: var(--o-shade); }
+.st-clear { stop-color: var(--ink); stop-opacity: 0; }
+.st-shadow { stop-color: var(--ink); stop-opacity: 0.34; }
+
+.b-cast { fill: var(--shadow-deep); opacity: 0.75; }
+.b-contact { fill: var(--shadow-deep); }
+.b-foot { fill: var(--ceramic-deep); }
+.b-stripe { fill: none; stroke: var(--sky-blue); stroke-width: 20; }
+.b-stripe-thin { fill: none; stroke: var(--sky-blue); stroke-width: 4; }
+.b-spec { fill: var(--white); opacity: 0.85; }
+.b-bounce { fill: var(--wood-light); opacity: 0.35; }   /* warm light bounced up from the desk */
+.b-rim-hi { fill: none; stroke: var(--white); stroke-width: 2; opacity: 0.9; }
+.b-inner-shadow { fill: var(--ink); opacity: 0.22; }
+.b-milk-shadow { fill: var(--ink); opacity: 0.16; }
+.b-meniscus { fill: none; stroke: var(--white); stroke-width: 1.6; opacity: 0.9; }
+.b-sheen { fill: none; stroke: var(--white); stroke-width: 3; stroke-linecap: round; opacity: 0.8; }
+.b-o-shadow { fill: var(--ink); opacity: 0.2; }
+.b-drip { fill: var(--milk-cream); stroke: var(--milk-shade); stroke-width: 1.2; }
+.b-drip-hi { fill: none; stroke: var(--white); stroke-width: 2; stroke-linecap: round; }
+.soggy { opacity: 0.86; }
+.spoon-under { fill: var(--steel-dark); opacity: 0.3; }
+.spoon-shadow { fill: var(--ink); opacity: 0.28; }
+.spoon-edge { fill: none; stroke: var(--steel-dark); stroke-width: 1; }
+.spoon-glint { fill: none; stroke: var(--white); stroke-width: 2.4; stroke-linecap: round; opacity: 0.9; }
+/* the printed spoon in Ping's hand keeps its ink outline */
 .spoon-head { fill: var(--steel); stroke: var(--box-burgundy); stroke-width: 4; }
 .spoon-out { fill: none; stroke: var(--box-burgundy); stroke-width: 17; stroke-linecap: round; stroke-linejoin: round; }
 .spoon-fill { fill: none; stroke: var(--steel); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
-.spoon-glint { fill: none; stroke: var(--white); stroke-width: 2.6; stroke-linecap: round; opacity: 0.8; }
-/* desk strays sit on wood, so their shadow is the desk shadow */
-.bowl svg > .b-o-shadow { fill: var(--shadow-ink); }
+
+/* photographic finish over the whole scene */
+.grade {
+  position: absolute; inset: 0; z-index: var(--z-ui); pointer-events: none;
+  background: var(--tex-paper), var(--vignette);
+  mix-blend-mode: multiply;
+}
+
+/* ---------------- Who this site belongs to ---------------- */
+.hello {
+  position: absolute; z-index: calc(var(--z-box) - 2);
+  left: clamp(var(--gutter), 5vw, var(--space-2xl)); top: 9%;
+  max-width: 24vw;
+  color: var(--box-burgundy);
+  transition: opacity var(--dur-mid) var(--ease-out), visibility var(--dur-mid);
+}
+.hello h1 {
+  font-family: var(--font-logo); font-weight: 400;
+  font-size: var(--step-hello); line-height: 0.95; letter-spacing: 0.005em;
+}
+.hello-role {
+  margin-top: var(--space-xs);
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch);
+  font-size: var(--step-0); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; line-height: var(--leading-snug);
+}
+.hello-lede { margin-top: var(--space-2xs); font-style: italic; font-size: var(--step-1); line-height: var(--leading-snug); }
+.scene[data-face]:not([data-face="front"]) .hello { opacity: 0; visibility: hidden; }
 
 /* ---------------- Hint ---------------- */
 .hint {
@@ -383,6 +473,8 @@ html:not(.is-3d) .face-front::after {    /* top flap */
   box-shadow: var(--shadow-print), var(--shadow-panel);
   scroll-margin-top: calc(var(--topbar-h) + var(--space-m));
 }
+
+.panels .face-left, .panels .face-right { --face-w: min(calc(100vw - 2 * var(--gutter)), 320px); }
 
 /* Plain list of posts under the bowl */
 .bowl-list {
@@ -419,9 +511,11 @@ html:not(.is-3d) .face-front::after {    /* top flap */
 /* ---------------- Phones (DESIGN.md section 13) ---------------- */
 @media (max-width: 767px) {
   .home .topbar .wordmark { font-size: var(--step-0); }
-  .tv { left: auto; right: -5%; bottom: auto; top: 5%; }
-  .sideboard { display: none; }
-  .sun { width: 46%; left: -6%; }
+  .tv-caption { left: auto; right: var(--gutter); bottom: calc(100% - var(--desk-top) - var(--tv-foot) + var(--tv-w) * 0.82); width: 46vw; }
+  .hello { top: 4%; max-width: 58vw; }
+  .hello-role { font-size: var(--step--1); margin-top: var(--space-2xs); }
+  .hello-lede { font-size: var(--step-0); }
+  .sun { width: 50%; left: 44%; top: 3%; }
   .bowl { right: -9%; bottom: -1%; }
-  .hint { bottom: auto; top: var(--space-2xs); }
+  .hint { bottom: var(--space-2xs); left: var(--gutter); transform: none; }
 }
