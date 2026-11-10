@@ -180,8 +180,8 @@ Header: `PING'S SATURDAY FUN ZONE!`
 
 **Game 2: Connect the Dots**
 - Title: `CONNECT THE DOTS TO SEE WHAT PING BUILT!`
-- Numbered dots draw the three tier agent pyramid: Domain Agents, Orchestration, Interface.
-- Completion opens the Writing bowl. When an agent architecture post is published, link completion directly to it.
+- Numbered dots draw a security camera connected by lines to a small network of devices.
+- Completion links to the existing post **"Cameras on Your Network"** (`/blog/cameras-on-your-network.html`).
 
 **Game 3: Word Search**
 - Title: `FIND ALL 10 WORDS!`
@@ -275,7 +275,7 @@ Each blog post can get its own limited edition box flavor shown on a pantry shel
 - `cameras-on-your-network.html` → `NEW! CAMERA CRUNCH, Now With Extra Network Clusters`
 - `why-i-work-at-neat.html` → `HOME TEAM HONEY O's, Made With Real Conviction`
 
-Every future post gets its own flavor name in the same spirit.
+When Cameron publishes a new post himself, it gets its own flavor name in the same spirit.
 
 Older posts become collectible boxes on the shelf. Selecting a box opens that article.
 
@@ -389,6 +389,12 @@ These rules apply to every session, no matter which model is running it.
 - Everything runs in the browser. Libraries load from public CDNs with pinned versions.
 - Keep assets small. Compress images, keep audio clips short, and prefer SVG and code over large image or video files.
 - The test script runs locally. Do not add hosting services or deployment pipelines.
+
+### Content: use only what exists
+- The site uses only the blog posts that exist in `/blog/` today: `cameras-on-your-network.html` and `why-i-work-at-neat.html`. (`_template.html` is a template, not a post.)
+- Never invent posts, titles, summaries, quotes, dates, or projects. Never add placeholder or "coming soon" posts.
+- Post titles, dates, and summaries shown anywhere on the site (bowl flags, checklist, shelf, plain view) are pulled from the existing post pages and current homepage exactly as written.
+- Projects are only the ones already on the current homepage.
 
 ### Files that must be preserved
 - `CNAME` (custom domain), `google830d2e2b89d4ea3b.html` (Search Console verification), `robots.txt`, `site.webmanifest`, favicons and app icons, and all `og-*` images must stay exactly where they are.
