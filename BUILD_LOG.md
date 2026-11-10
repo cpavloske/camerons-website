@@ -92,3 +92,13 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
 ---
 
 ## Entries
+
+### 2026-11-09 · Opus 5.5 · Phase 1.1 tokens, analytics, pinned libs
+- **Built:** `css/tokens.css` (brand palette from section 2, supporting scene palette, fonts, type scale, spacing, shadows, easing, durations, layout). `js/analytics.js` (only file that touches gtag). `js/libs.js` (lazy loader holding every pinned CDN URL).
+- **Decisions:**
+  - Fonts: Titan One (logo, chunky rounded), Archivo variable (condensed panel caps at `font-stretch: 72%`, nutrition label grotesque at normal width, fine print at 80%), Source Serif 4 (articles and body). All Google Fonts. Google Fonts has no version pinning; it is a stylesheet, not a library, so this is accepted.
+  - GA: the tag now loads from `js/analytics.js`, included as `<script src="/js/analytics.js" data-ga-id="G-81Y5DN2PHQ" defer>`. The ID appears literally in every page and in the script. It skips localhost, `*.local`, `*.test`, and private IPs (10/8, 127/8, 172.16/12, 192.168/16, 169.254/16), so phone previews over Wi-Fi do not count either. Scene code calls `window.uptimeTrack(name, params)`; only the 8 events in section 16 are allowed. Old pages (posts, 404, template) still carry the original inline tag until they are restyled; it is byte identical to before.
+  - Pinned libs (jsDelivr, all checked 200): gsap 3.15.0 (+ ScrollTrigger, DrawSVGPlugin, Flip), lenis 1.3.27, matter-js 0.20.0. Picked versions at least 2 weeks old; gsap 3.15.1 came out Nov 4 so it was skipped.
+- **Tokens added beyond section 2:** wood, wall, ceramic, TV, steel, and O colors for the scene props; alpha helpers built from the brand colors. Reason: the static scene needs them and section 16 requires them to live in tokens.css.
+- **Tests:** test script not written yet (lands in 1.3).
+- **Next:** 1.2 plain view at `/ingredients.html`.

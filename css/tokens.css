@@ -1,0 +1,120 @@
+/* ==========================================================
+   UPTIME O's design tokens
+   The single source of style (DESIGN.md section 16).
+   Every color, font, size, spacing step, easing curve, and
+   duration used anywhere on the site lives here. If a new one
+   is needed, add it here and record why in BUILD_LOG.md.
+   ========================================================== */
+
+:root {
+  /* ---------- Brand palette (DESIGN.md section 2) ---------- */
+  --box-burgundy: #2b1018;   /* primary box color, logo outline, dark text */
+  --box-red:      #c8202f;   /* starbursts, NEW flags. Never body text */
+  --sunny-yellow: #ffc928;   /* logo fill, highlights, Ping accents */
+  --milk-cream:   #fff6e3;   /* panels, nutrition label, milk */
+  --sky-blue:     #4fb3e8;   /* back panel, Saturday sky */
+  --grass-green:  #3fae4a;   /* success, completed games */
+  --ink:          #1a1a1a;   /* fine print, body text */
+
+  /* ---------- Supporting palette (scene props) ---------- */
+  /* Added in Phase 1 for the static scene fallback. */
+  --white:          #ffffff;
+  --wood-light:     #c98a52;  /* desk highlight grain */
+  --wood-mid:       #a8683a;  /* desk base */
+  --wood-dark:      #6e3f20;  /* desk grain lines, desk edge */
+  --wall-warm:      #f3d9a8;  /* back wall in morning light */
+  --wall-shade:     #d9b47c;  /* wall falloff away from the window */
+  --ceramic:        #f4efe6;  /* bowl body */
+  --ceramic-shade:  #cfc6b6;  /* bowl underside */
+  --tv-shell:       #5a4632;  /* CRT wood grain cabinet */
+  --tv-glass:       #20302c;  /* screen when dark */
+  --tv-glow:        #9fe3ff;  /* screen light cast */
+  --steel:          #b9bec4;  /* spoon, antennas */
+  --o-gold:         #e9a93a;  /* toasted O */
+  --o-shade:        #b8761f;  /* O inner edge */
+
+  /* Alpha helpers (built from the palette above) */
+  --shadow-ink:     rgba(26, 26, 26, 0.28);
+  --shadow-soft:    rgba(26, 26, 26, 0.14);
+  --light-warm:     rgba(255, 201, 40, 0.18);   /* sunny-yellow morning light */
+  --cream-fade:     rgba(255, 246, 227, 0.72);  /* milk-cream, for fine print on dark */
+  --scrim:          rgba(43, 16, 24, 0.86);     /* box-burgundy overlay */
+
+  /* ---------- Semantic roles ---------- */
+  --text:           var(--ink);
+  --text-on-dark:   var(--milk-cream);
+  --surface:        var(--milk-cream);
+  --surface-dark:   var(--box-burgundy);
+  --accent:         var(--sunny-yellow);
+  --excite:         var(--box-red);
+  --success:        var(--grass-green);
+  --focus-ring:     var(--sky-blue);
+
+  /* ---------- Type families (DESIGN.md section 2) ---------- */
+  /* Loaded from Google Fonts: Titan One, Archivo (variable wdth + wght), Source Serif 4 */
+  --font-logo:      'Titan One', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+  --font-panel:     'Archivo', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;  /* use with --panel-stretch */
+  --font-label:     'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;       /* nutrition label */
+  --font-body:      'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-fine:      'Archivo', 'Arial Narrow', Arial, sans-serif;
+
+  --panel-stretch:  72%;   /* font-stretch for condensed panel headings */
+  --fine-stretch:   80%;
+  --fine-opacity:   0.72;
+
+  /* ---------- Type scale ---------- */
+  --step--2: 0.6875rem;  /* 11px fine print */
+  --step--1: 0.8125rem;  /* 13px */
+  --step-0:  1rem;       /* 16px */
+  --step-1:  1.1875rem;  /* 19px body reading */
+  --step-2:  1.5rem;
+  --step-3:  2rem;
+  --step-4:  clamp(2.25rem, 5vw, 3.5rem);
+  --step-5:  clamp(2.75rem, 8vw, 5.5rem);   /* logo */
+
+  --leading-tight: 1.05;
+  --leading-snug:  1.25;
+  --leading-body:  1.7;
+  --measure:       66ch;
+
+  /* ---------- Spacing ---------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs:  0.75rem;
+  --space-s:   1rem;
+  --space-m:   1.5rem;
+  --space-l:   2rem;
+  --space-xl:  3rem;
+  --space-2xl: 4.5rem;
+  --gutter:    1rem;     /* 16px side gutter at phone width */
+
+  /* ---------- Shape ---------- */
+  --radius-s:    4px;
+  --radius-m:    10px;
+  --radius-pill: 999px;
+  --rule-heavy:  10px;   /* nutrition label thick rule */
+  --rule-mid:    5px;
+  --rule-thin:   1px;
+  --outline-logo: 3px;   /* logo stroke */
+
+  /* ---------- Shadows ---------- */
+  --shadow-print: 3px 3px 0 var(--box-burgundy);           /* printed drop shadow on headlines */
+  --shadow-panel: 0 18px 40px -18px var(--shadow-ink);
+  --shadow-contact: 0 22px 18px -14px var(--shadow-ink);   /* box on desk */
+
+  /* ---------- Motion ---------- */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    150ms;
+  --dur-mid:     320ms;
+  --dur-slow:    700ms;
+
+  /* ---------- Layout ---------- */
+  --tabbar-h:   56px;    /* mobile sticky bottom tab bar */
+  --topbar-h:   40px;
+  --z-scene:    0;
+  --z-box:      10;
+  --z-ui:       50;
+  --z-overlay:  90;
+}
