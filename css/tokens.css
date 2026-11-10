@@ -109,6 +109,7 @@
   --dur-fast:    150ms;
   --dur-mid:     320ms;
   --dur-slow:    700ms;
+  --dur-loop:    1600ms;  /* one cycle of a small idle loop, like Ping's wave */
 
   /* ---------- Layout ---------- */
   --tabbar-h:   56px;    /* mobile sticky bottom tab bar */

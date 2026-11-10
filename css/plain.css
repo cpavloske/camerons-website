@@ -1,0 +1,61 @@
+/* ==========================================================
+   plain.css: JUST THE INGREDIENTS (DESIGN.md section 10).
+   Clean, fast, fully accessible. No 3D, no physics, no games.
+   ========================================================== */
+
+.plain {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: var(--space-xl) var(--gutter) var(--space-2xl);
+  font-size: var(--step-1);
+}
+.plain section { padding-top: var(--space-xl); }
+.plain section + section { border-top: var(--rule-thin) solid var(--shadow-soft); margin-top: var(--space-xl); }
+.plain p + p, .plain p + dl, .plain dl + p, .plain ul + p { margin-top: var(--space-s); }
+
+.plain h1 {
+  font-family: var(--font-logo); font-weight: 400;
+  font-size: var(--step-4); line-height: var(--leading-tight);
+  color: var(--box-burgundy);
+}
+.plain h2 { font-size: var(--step-2); color: var(--box-burgundy); margin-bottom: var(--space-s); }
+.plain h3 { font-family: var(--font-label); font-size: var(--step-1); font-weight: 800; line-height: var(--leading-snug); }
+
+.plain-kicker { font-size: var(--step--1); color: var(--box-burgundy); margin-bottom: var(--space-2xs); }
+.plain-role { font-family: var(--font-label); font-size: var(--step-0); font-weight: 600; margin-top: var(--space-2xs); }
+.plain-lede { font-style: italic; margin-top: var(--space-s); }
+
+.plain a { color: var(--box-burgundy); text-underline-offset: 3px; text-decoration-thickness: 2px; }
+.plain a:hover { text-decoration-color: var(--box-red); }
+
+.facts { margin: var(--space-m) 0 0; display: grid; gap: var(--space-s); }
+.facts div { display: grid; gap: var(--space-3xs); }
+.facts dt { font-family: var(--font-panel); font-stretch: var(--panel-stretch); font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--step--1); }
+.facts dd { margin: 0; }
+
+.plain-posts, .plain-projects, .plain-contact { display: grid; gap: var(--space-m); }
+.plain-posts a { font-family: var(--font-label); font-weight: 800; font-size: var(--step-1); line-height: var(--leading-snug); }
+.plain-posts time { display: block; font-family: var(--font-fine); font-stretch: var(--fine-stretch); font-size: var(--step--1); margin: var(--space-3xs) 0; }
+.plain-projects .tags, .plain-projects .note { font-family: var(--font-fine); font-stretch: var(--fine-stretch); font-size: var(--step--1); margin: var(--space-3xs) 0; }
+.plain-contact { gap: var(--space-2xs); }
+.plain-contact b { display: inline-block; min-width: 6rem; font-family: var(--font-panel); font-stretch: var(--panel-stretch); text-transform: uppercase; font-size: var(--step--1); letter-spacing: 0.04em; }
+.plain-contact a { overflow-wrap: anywhere; }
+
+.plain-foot { margin-top: var(--space-2xl); }
+
+/* Ping waving from the corner */
+.ping-wave {
+  position: fixed; right: var(--space-s); bottom: var(--space-s);
+  width: 44px; height: 44px;
+  pointer-events: none;
+}
+.ping-body, .ping-leg { fill: var(--sunny-yellow); stroke: var(--box-burgundy); stroke-width: 2.5; }
+.ping-antennas line, .ping-arm path { stroke: var(--box-burgundy); stroke-width: 2.5; stroke-linecap: round; }
+.ping-antennas circle, .ping-arm circle { fill: var(--box-burgundy); }
+.ping-eye { fill: var(--box-burgundy); }
+.ping-arm { transform-origin: 40px 27px; animation: ping-wave var(--dur-loop) var(--ease-in-out) 3; }
+@keyframes ping-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-22deg); }
+  75% { transform: rotate(14deg); }
+}

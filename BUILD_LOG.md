@@ -102,3 +102,15 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
 - **Tokens added beyond section 2:** wood, wall, ceramic, TV, steel, and O colors for the scene props; alpha helpers built from the brand colors. Reason: the static scene needs them and section 16 requires them to live in tokens.css.
 - **Tests:** test script not written yet (lands in 1.3).
 - **Next:** 1.2 plain view at `/ingredients.html`.
+
+### 2026-11-09 · Opus 5.5 · Phase 1.2 plain view
+- **Built:** `/ingredients.html` (JUST THE INGREDIENTS), `css/base.css` (reset, focus ring, skip link, `.topbar`, `.plain-link`, `.panel-head`, `.fine-print`, `.btn-chunky`, global reduced motion kill switch), `css/plain.css`, `js/prefs.js`.
+- **Content:** bio paragraphs, the three facts, both posts (title, date, summary copied exactly from the current homepage), both projects (copy exact), contact blurb, email, LinkedIn, GitHub. Nothing invented.
+- **Decisions:**
+  - Plain view is its own page, not a mode of the homepage. It is lighter, crawlable, and never loads scene code. Session preference key `uptime-plain` in sessionStorage. Visiting `/ingredients.html` sets it `on`; any link with `data-plain="off"` (the BACK TO THE BOX link) clears it. The homepage will redirect to plain view when it is `on` (added with the scene in 1.3). `plain_view_toggle` fires only on a real change.
+  - Ping in plain view: a 44px SVG in the bottom right corner that waves 3 times then stops. This is a stand in drawn from section 3 (yellow body, burgundy outline, two antenna ears, LED eyes, stubby legs). **Phase 2 owns Ping's final look and should replace this SVG to match.**
+  - Added token `--dur-loop: 1600ms` for one idle loop cycle (Ping's wave).
+  - `.claude/launch.json` now runs `python3 -m http.server 8000`, matching section 16.
+- **Visual values:** page bg `--milk-cream`, text `--ink`, headings `--box-burgundy`, top strip `--box-burgundy` with `--milk-cream` text and `--sunny-yellow` wordmark in Titan One. Link underline 2px, offset 3px, hover color `--box-red`. Section dividers 1px `--shadow-soft`.
+- **Tests:** test script not written yet (lands in 1.4). Checked by eye in the preview at desktop width.
+- **Next:** 1.3 static fallback of the scene on `index.html`.

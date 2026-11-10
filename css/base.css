@@ -1,0 +1,104 @@
+/* ==========================================================
+   base.css: reset and shared building blocks for every
+   Uptime O's page. Values come only from tokens.css.
+   ========================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-s);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* Skip link */
+.skip {
+  position: absolute; left: var(--gutter); top: -100px;
+  z-index: var(--z-overlay);
+  background: var(--surface-dark); color: var(--text-on-dark);
+  padding: var(--space-2xs) var(--space-s);
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch);
+  font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+  text-decoration: none; border-radius: var(--radius-s);
+}
+.skip:focus { top: var(--space-2xs); }
+
+/* Top strip with the plain view link (DESIGN.md section 10) */
+.topbar {
+  position: relative; z-index: var(--z-ui);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-s);
+  min-height: var(--topbar-h);
+  padding: 0 var(--gutter);
+  background: var(--surface-dark); color: var(--text-on-dark);
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch);
+  font-size: var(--step--1); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.topbar a { text-decoration: none; }
+.topbar a:hover { color: var(--accent); }
+.topbar .wordmark { font-family: var(--font-logo); font-stretch: normal; font-weight: 400; letter-spacing: 0.02em; color: var(--accent); }
+.plain-link {
+  display: inline-flex; align-items: center; gap: var(--space-2xs);
+  padding: var(--space-3xs) var(--space-xs);
+  border: 2px solid currentColor; border-radius: var(--radius-pill);
+}
+
+/* Shared type roles */
+.panel-head {
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch);
+  font-weight: 900; text-transform: uppercase; letter-spacing: 0.02em;
+  line-height: var(--leading-tight);
+}
+.fine-print {
+  font-family: var(--font-fine); font-stretch: var(--fine-stretch);
+  font-size: var(--step--2); line-height: var(--leading-snug);
+  opacity: var(--fine-opacity);
+}
+
+/* Chunky button */
+.btn-chunky {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2xs);
+  min-height: 44px;
+  padding: var(--space-2xs) var(--space-m);
+  background: var(--accent); color: var(--box-burgundy);
+  border: 3px solid var(--box-burgundy); border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-print);
+  font-family: var(--font-panel); font-stretch: var(--panel-stretch);
+  font-size: var(--step-0); font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase;
+  text-decoration: none; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+.btn-chunky:hover { transform: translate(-1px, -1px); }
+.btn-chunky:active { transform: translate(3px, 3px); box-shadow: none; }
+
+/* Reduced motion: no animation anywhere (DESIGN.md section 14) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
