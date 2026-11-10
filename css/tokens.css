@@ -111,6 +111,14 @@
   --dur-slow:    700ms;
   --dur-loop:    1600ms;  /* one cycle of a small idle loop, like Ping's wave */
 
+  /* ---------- Scene ---------- */
+  --dof-blur:   3px;     /* depth of field on the background TV */
+  --desk-top:   62%;     /* where the desk surface starts in the scene */
+  --box-w:      clamp(240px, 30vw, 400px);
+  --box-ratio:  0.72;    /* box width / height */
+  --grain:      repeating-linear-gradient(176deg, transparent 0 6px, rgba(110, 63, 32, 0.22) 6px 7px, transparent 7px 15px);
+  --halftone:   radial-gradient(rgba(43, 16, 24, 0.10) 1px, transparent 1.4px) 0 0 / 6px 6px;
+
   /* ---------- Layout ---------- */
   --tabbar-h:   56px;    /* mobile sticky bottom tab bar */
   --topbar-h:   40px;

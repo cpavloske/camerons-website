@@ -114,3 +114,20 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
 - **Visual values:** page bg `--milk-cream`, text `--ink`, headings `--box-burgundy`, top strip `--box-burgundy` with `--milk-cream` text and `--sunny-yellow` wordmark in Titan One. Link underline 2px, offset 3px, hover color `--box-red`. Section dividers 1px `--shadow-soft`.
 - **Tests:** test script not written yet (lands in 1.4). Checked by eye in the preview at desktop width.
 - **Next:** 1.3 static fallback of the scene on `index.html`.
+
+### 2026-11-09 · Opus 5.5 · Phase 1.3 static scene fallback on the homepage
+- **Built:** new `index.html` and `css/scene.css`. The old homepage markup is gone; `css/style.css` and `js/main.js` stay because the two posts and 404 still use them until Phases 4b and 5.
+- **Structure (Phase 2 builds on these ids and classes):**
+  - `.topbar` with JUST THE INGREDIENTS (`data-plain="on"`).
+  - `nav.flap` tabs: OPEN HERE `#front`, ABOUT `#about`, WRITING `#writing`, PROJECTS `#projects`, CONTACT `#contact`. Sticky top on desktop, fixed bottom tab bar under 768px (`--tabbar-h`).
+  - `section.scene`: `.scene-wall`, `.scene-tv` (SVG CRT with rabbit ears, static color bars, `filter: blur(var(--dof-blur))`), `.scene-desk` (wood via `--grain` over a light to dark wood gradient), `article.face-front#front`, `a.scene-bowl` (SVG half eaten bowl, links to `#bowl`).
+  - `div.panels`: `article.face-left#about` (nutrition label as a real `<table>` + MEET THE MAKER with the bio copy unchanged), `article.face-right#writing` (WHAT'S IN THE BOWL checklist + GRAB A SPOON), `article.face-back#projects` (PING'S SATURDAY FUN ZONE! heading + both project cards; Phase 3 adds games above), `article.face-bottom#contact` (barcode SVG, receipt with email, LinkedIn, GitHub, footer line, fine print).
+  - `section.bowl-list#bowl`: the plain list of posts that always sits under the bowl (section 7).
+  - Old blog "Back to writing" links (`index.html#writing`) still land on the writing panel.
+- **Front face copy:** all of section 5 FRONT except the ribbon. `.ribbon-spot` is an empty reserved spot. Hero art is a placeholder bowl of O's; Phase 2 adds Ping with the giant spoon.
+- **Visual values used:** box `--box-burgundy` with `--halftone` dots, 3px `--ink` border, `--shadow-contact` on the desk plus an inset right side shade. Logo Titan One, `--sunny-yellow` fill, 3px `--box-burgundy` stroke (`paint-order: stroke fill`), registration offset `-2px 1px 0 var(--box-red)`, then `--shadow-print`, then `5px 5px 0 var(--ink)`. Logo sized in container query units (17cqi / 24cqi) so it scales with the box. Starburst is a 20 point `clip-path` polygon in `--box-red`, rotated 12deg. Wall: `--wall-warm` to `--wall-shade` at 100deg with a `--light-warm` radial window glow from the top left. TV glow `drop-shadow(0 0 18px var(--tv-glow))`.
+- **Tokens added:** `--dof-blur`, `--desk-top`, `--box-w`, `--box-ratio`, `--grain`, `--halftone`. Reason: scene geometry and textures shared by later phases.
+- **Copy note:** footer adds "Uptime O's is not a real cereal." to make the original brand rule explicit. Homepage meta description had an em dash; replaced with a comma. Page title is now "Cameron Pavloske | Uptime O's".
+- **Checked by eye:** 800px and 375px in the preview, no horizontal scroll at 375.
+- **Tests:** test script not written yet (next sub step).
+- **Next:** 1.4 Playwright test script.
