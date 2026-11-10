@@ -6,7 +6,7 @@ Source of truth: `DESIGN.md`. Runbook: `RUNBOOK.md`. Every session reads both, p
 
 | Phase | Model | State | Tag |
 |---|---|---|---|
-| 1. Audit and foundation | Opus 5.5 | in progress | |
+| 1. Audit and foundation | Opus 5.5 | done | `phase-1-done` |
 | 2. Scene and box | Fable | not started | |
 | 3. Back panel games | Opus | not started | |
 | 4a. The bowl | Fable | not started | |
@@ -141,3 +141,14 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
 - **Decision:** a console error counts as a failure unless it is a failed fetch from a non local host (so offline runs that cannot reach Google Fonts do not fail).
 - **Tests:** `npm test` → 58 passed.
 - **Next:** 1.5 add `/ingredients.html` to the sitemap, final Phase 1 check, tag `phase-1-done`.
+
+### 2026-11-09 · Opus 5.5 · Phase 1.5 sitemap, Phase 1 done
+- **Built:** `/ingredients.html` added to `sitemap.xml`; the 3 original URLs and their lastmod dates are unchanged.
+- **Done when check (section 15):** test script passes (58/58); plain view shows all existing content (asserted by test); every existing URL still loads (asserted by test). Tagged `phase-1-done`.
+- **Known issues and notes for Phase 2:**
+  - The homepage is a static fallback only: a flat front face on the desk, the other faces as panels below. Phase 2 owns the real look and may restructure markup, but must keep the ids `front`, `about`, `writing`, `projects`, `contact`, `bowl`, keep every link the tests look for, and keep the panel scroll as the reduced motion and no JS view.
+  - Ping in plain view is a stand in; Phase 2 defines Ping and should replace it to match.
+  - Box Tops counter and SOUND toggle are not placed yet (Phases 3 and 4c).
+  - Posts and 404 still use the old maroon `css/style.css` and `js/main.js`. Articles get restyled in 4b, 404 in 5. The JUST THE INGREDIENTS link is not on those pages yet for the same reason.
+  - On desktop at short heights (about 600px) the bottom of the box sits below the fold. Phase 2 sizes the scene properly.
+- **Next:** Phase 2, The scene and the box. Assigned model: **Fable**.
