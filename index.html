@@ -43,7 +43,14 @@
   }
   </script>
   <!-- Plain view preference is remembered for the session (DESIGN.md section 10) -->
-  <script>try { if (sessionStorage.getItem('uptime-plain') === 'on') location.replace('/ingredients.html'); } catch (e) {}</script>
+  <script>
+    try {
+      if (sessionStorage.getItem('uptime-plain') === 'on') location.replace('/ingredients.html');
+      // First visit this session: hold the scene behind a cover until the opening sequence starts (section 4)
+      else if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !sessionStorage.getItem('uptime-intro') && !location.hash)
+        document.documentElement.classList.add('intro-pending');
+    } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400&family=Titan+One&display=swap" rel="stylesheet">
@@ -53,246 +60,428 @@
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/scene.css">
+  <link rel="stylesheet" href="/css/faces.css">
   <!-- Google tag (gtag.js) G-81Y5DN2PHQ, loaded by analytics.js, skipped on local previews -->
   <script src="/js/analytics.js" data-ga-id="G-81Y5DN2PHQ" defer></script>
   <script src="/js/prefs.js" defer></script>
+  <script src="/js/libs.js" defer></script>
+  <script src="/js/scene.js" defer></script>
+  <script src="/js/ping.js" defer></script>
 </head>
 <body class="home">
   <a class="skip" href="#main">Skip to content</a>
 
+  <!-- Shared SVG symbols: one cereal O seen from the front, one seen lying flat -->
+  <svg class="visually-hidden" aria-hidden="true" focusable="false" width="0" height="0">
+    <defs>
+      <!-- die cut sticker outline around printed art -->
+      <filter id="sticker" x="-20%" y="-20%" width="140%" height="140%">
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/>
+        <feFlood class="sticker-flood" result="f"/>
+        <feComposite in="f" in2="d" operator="in" result="o"/>
+        <feMerge><feMergeNode in="o"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <symbol id="o-ring" viewBox="-16 -16 32 32">
+        <circle class="o-out" r="10"/>
+        <circle class="o-fill" r="10"/>
+        <path class="o-hi" d="M-8.2 -5.8 A10 10 0 0 1 2.6 -9.7"/>
+      </symbol>
+      <symbol id="o-flat" viewBox="-18 -12 36 24">
+        <ellipse class="o-out" rx="11.5" ry="6.4"/>
+        <ellipse class="o-fill" rx="11.5" ry="6.4"/>
+        <path class="o-hi" d="M-9.6 -3.4 A11.5 6.4 0 0 1 3 -6.2"/>
+      </symbol>
+    </defs>
+  </svg>
+
   <header class="topbar">
     <span class="wordmark">Uptime O's</span>
+    <!-- TOP FLAP: navigation (DESIGN.md section 5). Sticky bottom tab bar on phones. -->
+    <nav class="flap" aria-label="Box panels">
+      <ul role="list">
+        <li><a href="#front" data-face="front">Open here</a></li>
+        <li><a href="#about" data-face="about">About</a></li>
+        <li><a href="#writing" data-face="writing">Writing</a></li>
+        <li><a href="#projects" data-face="projects">Projects</a></li>
+        <li><a href="#contact" data-face="contact">Contact</a></li>
+      </ul>
+    </nav>
     <a class="plain-link" href="/ingredients.html" data-plain="on">Just the ingredients</a>
   </header>
 
-  <!-- TOP FLAP: navigation (DESIGN.md section 5). Sticky bottom tab bar on phones. -->
-  <nav class="flap" aria-label="Box panels">
-    <ul role="list">
-      <li><a href="#front">Open here</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#writing">Writing</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
   <main id="main">
+    <div class="track" id="track">
 
-    <!-- ======================================================
-         THE SCENE (static fallback). Phase 2 turns this into
-         the 3D box, live TV, and opening sequence.
-         ====================================================== -->
-    <section class="scene" aria-label="A Saturday morning desk with a box of Uptime O's, a half eaten bowl, and a TV">
-      <div class="scene-wall" aria-hidden="true"></div>
+      <!-- ======================================================
+           THE SCENE: desk, half eaten bowl, TV in the background.
+           Without JS or with reduced motion this is a still scene
+           and the other faces follow as a simple scroll of panels.
+           ====================================================== -->
+      <section class="scene" id="scene" aria-label="A Saturday morning desk with a box of Uptime O's, a half eaten bowl, and a TV">
+        <div class="cam" id="cam">
 
-      <!-- Old CRT TV in the background, soft focus -->
-      <div class="scene-tv" aria-hidden="true">
-        <svg viewBox="0 0 200 172" focusable="false">
-          <g class="tv-ears">
-            <line x1="100" y1="30" x2="58" y2="2"/>
-            <line x1="100" y1="30" x2="152" y2="4"/>
-            <ellipse cx="100" cy="30" rx="16" ry="6"/>
-          </g>
-          <rect class="tv-shell" x="8" y="30" width="184" height="128" rx="14"/>
-          <rect class="tv-legs" x="34" y="156" width="10" height="14" rx="2"/>
-          <rect class="tv-legs" x="156" y="156" width="10" height="14" rx="2"/>
-          <clipPath id="tv-screen-clip"><rect x="22" y="44" width="128" height="100" rx="18"/></clipPath>
-          <g clip-path="url(#tv-screen-clip)">
-            <rect class="bar bar-1" x="22" y="44" width="19" height="72"/>
-            <rect class="bar bar-2" x="40" y="44" width="19" height="72"/>
-            <rect class="bar bar-3" x="58" y="44" width="19" height="72"/>
-            <rect class="bar bar-4" x="76" y="44" width="19" height="72"/>
-            <rect class="bar bar-5" x="94" y="44" width="19" height="72"/>
-            <rect class="bar bar-6" x="112" y="44" width="19" height="72"/>
-            <rect class="bar bar-7" x="130" y="44" width="20" height="72"/>
-            <rect class="bar bar-low" x="22" y="116" width="128" height="28"/>
-          </g>
-          <rect class="tv-bezel" x="22" y="44" width="128" height="100" rx="18"/>
-          <circle class="tv-knob" cx="171" cy="66" r="9"/>
-          <circle class="tv-knob" cx="171" cy="94" r="9"/>
-          <g class="tv-grille">
-            <line x1="162" y1="116" x2="180" y2="116"/>
-            <line x1="162" y1="123" x2="180" y2="123"/>
-            <line x1="162" y1="130" x2="180" y2="130"/>
-            <line x1="162" y1="137" x2="180" y2="137"/>
-          </g>
-        </svg>
-      </div>
+          <!-- Background: wall, window light, sideboard, TV. Soft focus. -->
+          <div class="back" aria-hidden="true">
+            <div class="wall"></div>
+            <div class="sun"></div>
+            <div class="sideboard"></div>
+            <div class="tv" id="tv">
+              <div class="tv-ears"><i></i><i></i><b></b></div>
+              <div class="tv-cab">
+                <div class="tv-screen" id="tv-screen" data-show="toon">
+                  <canvas class="tv-static" width="96" height="72"></canvas>
+                  <div class="tv-bars"><p>Saturday morning programming will begin shortly.</p></div>
+                  <div class="tv-toon">
+                    <i class="toon-sun"></i>
+                    <i class="toon-cloud"></i>
+                    <i class="toon-hills"></i>
+                    <i class="toon-ping"></i>
+                  </div>
+                  <div class="tv-lines"></div>
+                  <div class="tv-glare"></div>
+                </div>
+                <div class="tv-panel"><i class="knob"></i><i class="knob"></i><i class="grille"></i></div>
+              </div>
+              <div class="tv-feet"><i></i><i></i></div>
+            </div>
+          </div>
 
-      <div class="scene-desk" aria-hidden="true"></div>
+          <!-- Foreground: desk, box, bowl. In focus. -->
+          <div class="fore">
+            <div class="desk" aria-hidden="true"></div>
+            <div class="desk-light" aria-hidden="true"></div>
 
-      <!-- FRONT of the box (Hero) -->
-      <article class="face face-front" id="front" aria-labelledby="logo">
-        <div class="front-inner">
-          <p class="starburst"><span>Now with 15 years of architecture!</span></p>
+            <div class="box-stage">
+              <div class="box-shadow" id="box-shadow" aria-hidden="true"></div>
+              <div class="box-rig" id="box">
 
-          <h1 class="logo" id="logo">
-            <span class="logo-line">Uptime</span>
-            <span class="logo-line logo-o">O's</span>
-          </h1>
-          <p class="tagline">Part of a balanced enterprise breakfast.</p>
+                <!-- FRONT (Hero) -->
+                <article class="face face-front" id="front" data-face="front" aria-labelledby="logo">
+                  <!-- Reserved: clean corner for a future ribbon (out of scope, DESIGN.md section 15) -->
+                  <div class="ribbon-spot" aria-hidden="true"></div>
 
-          <!-- Hero art. Phase 2 adds Ping mid bounce holding a giant spoon. -->
-          <div class="hero-art" aria-hidden="true">
-            <svg viewBox="0 0 200 120" focusable="false">
-              <ellipse class="glow" cx="100" cy="52" rx="74" ry="36"/>
-              <g class="heap">
-                <circle cx="66" cy="58" r="11"/><circle cx="90" cy="48" r="11"/><circle cx="114" cy="50" r="11"/>
-                <circle cx="136" cy="60" r="11"/><circle cx="78" cy="34" r="11"/><circle cx="104" cy="28" r="11"/>
-                <circle cx="126" cy="38" r="11"/>
-              </g>
-              <path class="bowl" d="M28 62 Q36 116 100 116 Q164 116 172 62 Z"/>
-              <ellipse class="bowl-rim" cx="100" cy="62" rx="72" ry="10"/>
+                  <h1 class="logo" id="logo" aria-label="Uptime O's">
+                    <span class="logo-line" aria-hidden="true"><i>U</i><i>P</i><i>T</i><i>I</i><i>M</i><i>E</i></span>
+                    <span class="logo-line logo-o" aria-hidden="true"><i>O</i><i>'</i><i>s</i></span>
+                  </h1>
+                  <p class="starburst"><span>Now with <b>15 years</b> of architecture!</span></p>
+                  <p class="tagline">Part of a balanced enterprise breakfast.</p>
+
+                  <!-- Hero art: Ping mid bounce with a giant spoon and a bowl of glowing O's -->
+                  <button class="hero-art" id="ping-btn" type="button" aria-label="Wave at Ping, the Uptime O's mascot">
+                    <svg viewBox="0 0 352 214" focusable="false" aria-hidden="true">
+                      <defs>
+                        <radialGradient id="hero-glow" cx="50%" cy="50%" r="50%">
+                          <stop class="glow-a" offset="0"/>
+                          <stop class="glow-b" offset="0.55"/>
+                          <stop class="glow-c" offset="1"/>
+                        </radialGradient>
+                        <clipPath id="hero-bowl-clip"><path d="M144 130 A92 20 0 0 0 328 130 Q322 198 236 200 Q150 198 144 130 Z"/></clipPath>
+                        <clipPath id="ping-body-clip"><rect x="14" y="32" width="92" height="62" rx="24"/></clipPath>
+                      </defs>
+
+                      <ellipse cx="236" cy="96" rx="132" ry="98" fill="url(#hero-glow)"/>
+                      <g class="spark">
+                        <path d="M306 30 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z"/>
+                        <path d="M170 34 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z"/>
+                        <path d="M336 110 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z"/>
+                      </g>
+
+                      <!-- Bowl of glowing O's -->
+                      <ellipse class="hb-shadow" cx="238" cy="202" rx="84" ry="7"/>
+                      <g filter="url(#sticker)">
+                      <ellipse class="hb-inner" cx="236" cy="130" rx="92" ry="20"/>
+                      <g class="heap">
+                        <use href="#o-ring" x="161" y="103" width="34" height="34"/>
+                        <use href="#o-ring" x="190" y="108" width="34" height="34"/>
+                        <use href="#o-ring" x="219" y="110" width="34" height="34"/>
+                        <use href="#o-ring" x="248" y="108" width="34" height="34"/>
+                        <use href="#o-ring" x="277" y="103" width="34" height="34"/>
+                        <use href="#o-ring" x="175" y="84" width="34" height="34"/>
+                        <use href="#o-ring" x="204" y="88" width="34" height="34"/>
+                        <use href="#o-ring" x="234" y="88" width="34" height="34"/>
+                        <use href="#o-ring" x="263" y="84" width="34" height="34"/>
+                        <use href="#o-ring" x="190" y="65" width="34" height="34"/>
+                        <use href="#o-ring" x="219" y="68" width="34" height="34"/>
+                        <use href="#o-ring" x="248" y="65" width="34" height="34"/>
+                        <use href="#o-ring" x="219" y="46" width="34" height="34"/>
+                      </g>
+                      <path class="hb-body" d="M144 130 A92 20 0 0 0 328 130 Q322 198 236 200 Q150 198 144 130 Z"/>
+                      <g clip-path="url(#hero-bowl-clip)">
+                        <path class="hb-stripe" d="M130 150 Q236 196 342 150"/>
+                        <ellipse class="hb-shade" cx="318" cy="176" rx="46" ry="60"/>
+                      </g>
+                      <path class="hb-line" d="M144 130 A92 20 0 0 0 328 130 Q322 198 236 200 Q150 198 144 130 Z"/>
+                      <path class="hb-hi" d="M158 150 Q166 180 192 190"/>
+                      </g>
+
+                      <!-- O's flying out of the bowl -->
+                      <g class="fly">
+                        <path class="fly-arc" d="M304 78 Q318 60 322 44"/>
+                        <use href="#o-ring" x="306" y="52" width="30" height="30"/>
+                        <path class="fly-arc" d="M152 96 Q146 84 150 72"/>
+                        <use href="#o-ring" x="140" y="56" width="26" height="26"/>
+                      </g>
+
+                      <!-- Ping -->
+                      <ellipse class="ping-ground" cx="78" cy="203" rx="36" ry="5"/>
+                      <g class="hop-lines"><path d="M52 186 q-3 6 0 12"/><path d="M78 190 q-2 5 0 10"/><path d="M104 186 q3 6 0 12"/></g>
+                      <g transform="translate(18 40) rotate(-9 60 66)" filter="url(#sticker)">
+                        <g id="ping" class="ping">
+                          <!-- giant spoon, held high -->
+                          <g class="ping-spoon">
+                            <path class="spoon-out" d="M116 50 L164 -4"/>
+                            <path class="spoon-fill" d="M116 50 L164 -4"/>
+                            <g transform="rotate(42 176 -18)">
+                              <ellipse class="spoon-head" cx="176" cy="-18" rx="14" ry="20"/>
+                              <path class="spoon-glint" d="M168 -26 Q170 -34 176 -34"/>
+                            </g>
+                            <use href="#o-ring" x="163" y="-32" width="28" height="28"/>
+                          </g>
+                          <g class="ping-ant ping-ant-l"><path d="M38 36 L25 10"/><circle cx="24" cy="8" r="6"/></g>
+                          <g class="ping-ant ping-ant-r"><path d="M82 36 L95 10"/><circle cx="96" cy="8" r="6"/></g>
+                          <g class="ping-legs">
+                            <path d="M40 90 L36 106"/><ellipse cx="33" cy="110" rx="11" ry="6"/>
+                            <path d="M80 90 L86 104"/><ellipse cx="90" cy="107" rx="11" ry="6"/>
+                          </g>
+                          <g class="ping-arm ping-arm-r"><path d="M104 66 Q116 64 118 50"/><circle cx="118" cy="48" r="7"/></g>
+                          <rect class="ping-body" x="14" y="32" width="92" height="62" rx="24"/>
+                          <g clip-path="url(#ping-body-clip)">
+                            <rect class="ping-belly" x="10" y="76" width="100" height="22"/>
+                            <rect class="ping-shine" x="24" y="38" width="46" height="9" rx="4.5"/>
+                          </g>
+                          <rect class="ping-line" x="14" y="32" width="92" height="62" rx="24"/>
+                          <g class="ping-eyes">
+                            <g class="ping-eye"><ellipse cx="44" cy="58" rx="8.5" ry="10.5"/><circle class="glint" cx="41" cy="54" r="2.6"/></g>
+                            <g class="ping-eye"><ellipse cx="76" cy="58" rx="8.5" ry="10.5"/><circle class="glint" cx="73" cy="54" r="2.6"/></g>
+                          </g>
+                          <path class="ping-mouth" d="M51 75 Q60 84 69 75"/>
+                          <g class="ping-leds"><circle cx="50" cy="86" r="2"/><circle cx="60" cy="86" r="2"/><circle cx="70" cy="86" r="2"/></g>
+                          <g class="ping-arm ping-arm-l"><path d="M16 66 Q2 62 0 46"/><circle cx="0" cy="44" r="7"/></g>
+                          <!-- shown while Ping buffers, then sleeps -->
+                          <g class="ping-wheel"><circle cx="60" cy="-12" r="9"/><path d="M60 -21 A9 9 0 0 1 69 -12"/></g>
+                          <g class="ping-zzz"><text x="96" y="6">z</text><text x="106" y="-8">z</text><text x="118" y="-24">Z</text></g>
+                        </g>
+                      </g>
+                    </svg>
+                  </button>
+                  <p class="ping-bubble" id="ping-bubble" role="status" aria-live="polite"></p>
+
+                  <ul class="badges" role="list">
+                    <li class="seal"><span>Fortified with APIs</span></li>
+                    <li class="pill"><span>Zero single points of failure</span></li>
+                    <li class="seal seal-star"><span>Texas made</span></li>
+                  </ul>
+
+                  <div class="band">
+                    <span>Net wt 15 yrs</span>
+                    <span>A Cameron Pavloske Production</span>
+                  </div>
+                  <p class="fine-print front-fine">Serving suggestion. Actual results depend on your architecture.</p>
+                </article>
+
+                <!-- TOP FLAP: decorative. The real navigation is the tab bar above. -->
+                <div class="face face-top" data-face="top" aria-hidden="true">
+                  <div class="flap-print">
+                    <span class="flap-arrow"></span>
+                    <span class="flap-word">Open here</span>
+                    <span class="flap-tabs">About · Writing · Projects · Contact</span>
+                  </div>
+                </div>
+                <!-- scene.js moves the other faces in here when 3D is on -->
+              </div>
+            </div>
+
+            <!-- The half eaten bowl on the desk -->
+            <a class="bowl" id="bowl-prop" href="#bowl" aria-label="Grab a spoon: see what's in the bowl">
+              <svg viewBox="0 0 420 300" focusable="false" aria-hidden="true">
+                <defs>
+                  <clipPath id="bowl-clip"><path d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/></clipPath>
+                  <clipPath id="milk-clip"><ellipse cx="210" cy="136" rx="120" ry="31"/></clipPath>
+                </defs>
+                <ellipse class="b-shadow" cx="236" cy="262" rx="176" ry="24"/>
+                <!-- strays and a drip on the desk -->
+                <ellipse class="b-o-shadow" cx="33" cy="270" rx="13" ry="5"/>
+                <use href="#o-flat" x="12" y="250" width="40" height="27"/>
+                <ellipse class="b-o-shadow" cx="72" cy="290" rx="13" ry="5"/>
+                <use href="#o-flat" x="50" y="270" width="40" height="27"/>
+                <path class="b-drip" d="M360 276 q14 -8 30 -2 q12 5 4 12 q-10 7 -26 3 q-16 -4 -8 -13z"/>
+                <ellipse class="b-drip" cx="404" cy="268" rx="5" ry="2.6"/>
+
+                <ellipse class="b-foot" cx="210" cy="254" rx="74" ry="10"/>
+                <path class="b-body" d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/>
+                <g clip-path="url(#bowl-clip)">
+                  <path class="b-stripe" d="M10 150 Q210 262 410 150"/>
+                  <ellipse class="b-shade" cx="352" cy="214" rx="96" ry="120"/>
+                </g>
+                <path class="b-line" d="M34 112 C40 204 110 256 210 256 C310 256 380 204 386 112 Z"/>
+                <path class="b-hi" d="M58 150 Q72 204 122 232"/>
+
+                <ellipse class="b-rim" cx="210" cy="112" rx="176" ry="56"/>
+                <ellipse class="b-inner" cx="210" cy="116" rx="161" ry="47"/>
+                <ellipse class="b-inner-lit" cx="210" cy="127" rx="146" ry="38"/>
+                <!-- soggy O's stuck to the inside edge -->
+                <g class="soggy">
+                  <use href="#o-flat" x="62" y="96" width="34" height="23" transform="rotate(-24 79 107)"/>
+                  <use href="#o-flat" x="318" y="92" width="34" height="23" transform="rotate(22 335 103)"/>
+                  <use href="#o-flat" x="150" y="76" width="30" height="20"/>
+                </g>
+                <!-- shallow pool of milk -->
+                <ellipse class="b-milk" cx="210" cy="136" rx="120" ry="31"/>
+                <g clip-path="url(#milk-clip)">
+                  <ellipse class="b-milk-shade" cx="210" cy="112" rx="124" ry="26"/>
+                  <ellipse class="spoon-under" cx="158" cy="140" rx="34" ry="14" transform="rotate(-10 158 140)"/>
+                </g>
+                <path class="b-sheen" d="M118 146 Q150 160 196 162"/>
+                <path class="b-sheen" d="M262 124 Q286 126 300 134"/>
+                <g class="floaters" id="floaters">
+                  <ellipse class="b-o-shadow" cx="230" cy="131" rx="13" ry="6"/><use href="#o-flat" x="208" y="113" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="270" cy="146" rx="13" ry="6"/><use href="#o-flat" x="248" y="128" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="300" cy="134" rx="12" ry="5"/><use href="#o-flat" x="280" y="118" width="36" height="24"/>
+                  <ellipse class="b-o-shadow" cx="216" cy="154" rx="13" ry="6"/><use href="#o-flat" x="194" y="136" width="40" height="27"/>
+                  <ellipse class="b-o-shadow" cx="252" cy="160" rx="12" ry="5"/><use href="#o-flat" x="232" y="144" width="36" height="24"/>
+                  <ellipse class="b-o-shadow" cx="128" cy="126" rx="12" ry="5"/><use href="#o-flat" x="108" y="110" width="36" height="24"/>
+                </g>
+                <!-- spoon resting in the bowl, handle toward the viewer -->
+                <g class="b-spoon">
+                  <ellipse class="spoon-head" cx="160" cy="138" rx="30" ry="12" transform="rotate(-10 160 138)"/>
+                  <path class="spoon-glint" d="M140 136 Q150 130 166 131"/>
+                  <path class="spoon-out" d="M186 142 L306 176 L404 232"/>
+                  <path class="spoon-fill" d="M186 142 L306 176 L404 232"/>
+                  <path class="spoon-glint" d="M312 176 L396 224"/>
+                </g>
+                <!-- front lip of the bowl, over the spoon handle shadow -->
+                <path class="b-rim-front" d="M34 112 A176 56 0 0 0 386 112"/>
+              </svg>
+            </a>
+
+            <p class="hint" id="hint" aria-hidden="true">Drag the box to spin it</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           The other faces. scene.js moves them onto the box.
+           Left here, they are the panel scroll (reduced motion, no JS).
+           ====================================================== -->
+      <div class="panels" id="panels">
+
+        <!-- LEFT SIDE: About as Nutrition Facts -->
+        <article class="face face-left" id="about" data-face="about" aria-labelledby="about-h">
+          <h2 class="visually-hidden" id="about-h">About</h2>
+          <div class="nutrition">
+            <p class="n-title">Nutrition Facts</p>
+            <div class="n-row"><span>Serving Size</span><span>1 Deployment</span></div>
+            <div class="n-row"><span>Servings Per Career</span><span>Many</span></div>
+            <div class="n-rule n-rule-heavy"></div>
+            <p class="n-small">Amount Per Serving</p>
+            <div class="n-row n-big"><span>Experience</span><span>15 yrs</span></div>
+            <div class="n-rule n-rule-mid"></div>
+            <table class="n-table">
+              <caption class="visually-hidden">Percent daily values</caption>
+              <thead><tr><th scope="col"><span class="visually-hidden">Nutrient</span></th><th scope="col">% Daily Value*</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">AV Integration</th><td>100%</td></tr>
+                <tr><th scope="row">Enterprise Architecture</th><td>100%</td></tr>
+                <tr><th scope="row">Vendor Side Engineering</th><td>100%</td></tr>
+                <tr><th scope="row">API First Thinking</th><td>100%</td></tr>
+                <tr><th scope="row">Fortune 100 Campuses</th><td>100%</td></tr>
+                <tr><th scope="row">AI Curiosity</th><td>110%</td></tr>
+                <tr><th scope="row">Hype</th><td>0g</td></tr>
+                <tr><th scope="row">Buzzwords</th><td>0g</td></tr>
+              </tbody>
+            </table>
+            <div class="n-rule n-rule-heavy"></div>
+            <p class="n-foot">*Percent Daily Values are based on a 2,000 room enterprise.</p>
+            <p class="n-ingredients"><b>Ingredients:</b> AV integration, enterprise architecture, vendor side engineering, Fortune 100 campuses, airline infrastructure, API first thinking, early AI experiments, Texas sunshine, coffee.</p>
+            <p class="n-allergen">Contains: opinions about agents. May contain traces of webhooks.</p>
+          </div>
+
+          <button class="btn-chunky maker-open" id="maker-open" type="button" aria-haspopup="dialog">Meet the maker</button>
+
+          <section class="maker" id="maker" aria-labelledby="maker-h">
+            <h3 class="panel-head" id="maker-h">Meet the maker</h3>
+            <p>I'm an engineer and proud Aggie, with an electrical engineering degree from Texas A&amp;M and a career spanning enterprise AV, camera and sensor systems, and IT architecture. As a Principal Architect at one of the world's largest enterprises, I spent years designing and deploying collaboration and camera systems at scale, including putting camera streams to work beyond physical security to power AI-driven operational use cases. I know what it's like to inherit a fragmented environment and be expected to make it work, because I've done it.</p>
+            <p>Today, I help organizations carry those same systems forward. Technology moves fast, and yesterday's solutions get left behind. My job is to help teams get ahead of that curve, choosing forward-looking platforms built for what's next that fit cleanly into their broader IT architecture and the collaboration tools their people actually rely on.</p>
+            <a class="btn-chunky" href="https://www.linkedin.com/in/cameron-pavloske/" target="_blank" rel="noopener noreferrer">Read more on LinkedIn</a>
+          </section>
+        </article>
+
+        <!-- RIGHT SIDE: Writing preview -->
+        <article class="face face-right" id="writing" data-face="writing" aria-labelledby="writing-h">
+          <h2 class="face-title" id="writing-h">What's in the bowl</h2>
+          <p class="collect">Collect them all!</p>
+          <ul class="checklist" role="list">
+            <li>
+              <span class="check" aria-hidden="true"></span>
+              <a href="/blog/cameras-on-your-network.html">IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?</a>
+              <time datetime="2026-04-05">Apr 5, 2026</time>
+            </li>
+            <li>
+              <span class="check" aria-hidden="true"></span>
+              <a href="/blog/why-i-work-at-neat.html">Why I Work at Neat</a>
+              <time datetime="2026-02-28">Feb 28, 2026</time>
+            </li>
+          </ul>
+          <div class="spoon-row">
+            <svg class="mini-bowl" viewBox="0 0 120 70" aria-hidden="true" focusable="false">
+              <use href="#o-ring" x="30" y="4" width="26" height="26"/>
+              <use href="#o-ring" x="50" y="0" width="26" height="26"/>
+              <use href="#o-ring" x="68" y="6" width="26" height="26"/>
+              <path class="hb-body" d="M14 26 A46 9 0 0 0 106 26 Q102 64 60 66 Q18 64 14 26 Z"/>
+              <path class="hb-line" d="M14 26 A46 9 0 0 0 106 26 Q102 64 60 66 Q18 64 14 26 Z"/>
             </svg>
+            <a class="btn-chunky" href="#bowl">Grab a spoon</a>
           </div>
+        </article>
 
-          <ul class="badges" role="list">
-            <li>Fortified with APIs</li>
-            <li>Zero single points of failure</li>
-            <li>Texas made</li>
+        <!-- BACK: Projects. Placeholder until Phase 3 builds the four games. -->
+        <article class="face face-back" id="projects" data-face="projects" aria-labelledby="projects-h">
+          <h2 class="face-title" id="projects-h">Ping's Saturday Fun Zone!</h2>
+          <ol class="games-soon" role="list" aria-label="Games on this panel">
+            <li><b>1</b><span>Help the packet reach the server!</span></li>
+            <li><b>2</b><span>Connect the dots to see what Ping built!</span></li>
+            <li><b>3</b><span>Find all 10 words!</span></li>
+            <li><b>4</b><span>Can you spot all 5 differences?</span></li>
+          </ol>
+          <p class="shelf-head">Also available</p>
+          <ul class="projects" role="list">
+            <li class="project">
+              <p class="kicker">AI tooling</p>
+              <h3>Neat Pulse MCP Server</h3>
+              <p class="desc">A Model Context Protocol server that wired the Neat Pulse REST API into Claude Code, exposing 37 tools for AI-assisted management of video devices, sensor data and org controls.</p>
+              <p class="tags">TypeScript · MCP · Node.js · REST API</p>
+              <p class="note">My personal version is now private, but I helped drive Neat's official Pulse MCP server.</p>
+            </li>
+            <li class="project">
+              <p class="kicker">Side project</p>
+              <h3><a href="https://github.com/cpavloske/neat-pad-clock" target="_blank" rel="noopener noreferrer">Neat Pad Clock</a></h3>
+              <p class="desc">A minimal clock and live weather display for the Neat Pad. Detects location via IP, shows current conditions with hourly precipitation. No dependencies, just HTML.</p>
+              <p class="tags">HTML · Open-Meteo API · GitHub Pages</p>
+            </li>
           </ul>
+          <p class="more"><a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer">More on GitHub</a></p>
+        </article>
 
-          <!-- Reserved: clean spot for a future ribbon (out of scope, DESIGN.md section 15) -->
-          <div class="ribbon-spot" aria-hidden="true"></div>
-
-          <div class="band">
-            <span>Net wt 15 yrs</span>
-            <span>A Cameron Pavloske Production</span>
+        <!-- BOTTOM: Contact -->
+        <article class="face face-bottom" id="contact" data-face="contact" aria-labelledby="contact-h">
+          <h2 class="visually-hidden" id="contact-h">Contact</h2>
+          <p class="contact-blurb">Want to talk about where IT and IoT are headed, or anything at the intersection of AV, cameras, and AI? Drop me a line.</p>
+          <figure class="barcode" aria-hidden="true">
+            <svg viewBox="0 0 226 68" focusable="false"><rect x="6" y="0" width="2" height="68"/><rect x="10" y="0" width="2" height="68"/><rect x="14" y="0" width="1" height="60"/><rect x="17" y="0" width="1" height="60"/><rect x="19" y="0" width="1" height="60"/><rect x="22" y="0" width="1" height="60"/><rect x="26" y="0" width="2" height="60"/><rect x="30" y="0" width="1" height="60"/><rect x="34" y="0" width="2" height="60"/><rect x="37" y="0" width="1" height="60"/><rect x="39" y="0" width="2" height="60"/><rect x="42" y="0" width="2" height="60"/><rect x="46" y="0" width="1" height="60"/><rect x="48" y="0" width="3" height="60"/><rect x="54" y="0" width="1" height="60"/><rect x="57" y="0" width="3" height="60"/><rect x="61" y="0" width="1" height="60"/><rect x="64" y="0" width="2" height="60"/><rect x="67" y="0" width="1" height="60"/><rect x="71" y="0" width="1" height="60"/><rect x="73" y="0" width="2" height="60"/><rect x="76" y="0" width="1" height="60"/><rect x="80" y="0" width="1" height="60"/><rect x="83" y="0" width="1" height="60"/><rect x="87" y="0" width="1" height="60"/><rect x="91" y="0" width="1" height="60"/><rect x="93" y="0" width="2" height="60"/><rect x="97" y="0" width="3" height="60"/><rect x="102" y="0" width="1" height="60"/><rect x="104" y="0" width="1" height="60"/><rect x="106" y="0" width="1" height="60"/><rect x="110" y="0" width="2" height="68"/><rect x="114" y="0" width="2" height="68"/><rect x="118" y="0" width="2" height="60"/><rect x="122" y="0" width="3" height="60"/><rect x="126" y="0" width="1" height="60"/><rect x="129" y="0" width="1" height="60"/><rect x="133" y="0" width="1" height="60"/><rect x="136" y="0" width="1" height="60"/><rect x="138" y="0" width="2" height="60"/><rect x="141" y="0" width="1" height="60"/><rect x="145" y="0" width="3" height="60"/><rect x="151" y="0" width="3" height="60"/><rect x="157" y="0" width="2" height="60"/><rect x="161" y="0" width="2" height="60"/><rect x="164" y="0" width="1" height="60"/><rect x="167" y="0" width="1" height="60"/><rect x="170" y="0" width="2" height="60"/><rect x="175" y="0" width="1" height="60"/><rect x="179" y="0" width="1" height="60"/><rect x="182" y="0" width="2" height="60"/><rect x="186" y="0" width="1" height="60"/><rect x="190" y="0" width="1" height="60"/><rect x="194" y="0" width="2" height="60"/><rect x="198" y="0" width="1" height="60"/><rect x="202" y="0" width="3" height="60"/><rect x="206" y="0" width="1" height="60"/><rect x="208" y="0" width="2" height="60"/><rect x="214" y="0" width="2" height="68"/><rect x="218" y="0" width="2" height="68"/></svg>
+            <figcaption>CAMERON PAVLOSKE</figcaption>
+          </figure>
+          <div class="receipt">
+            <ul role="list">
+              <li><span>Email</span><a href="mailto:cpavloske@gmail.com">cpavloske@gmail.com</a></li>
+              <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/cameron-pavloske/" target="_blank" rel="noopener noreferrer">cameron-pavloske</a></li>
+              <li><span>GitHub</span><a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer">cpavloske</a></li>
+            </ul>
+            <p class="r-foot">Thank you for shopping. Please come again.</p>
           </div>
-          <p class="fine-print front-fine">Serving suggestion. Actual results depend on your architecture.</p>
-        </div>
-      </article>
-
-      <!-- The half eaten bowl on the desk -->
-      <a class="scene-bowl" href="#bowl" aria-label="Grab a spoon: see what's in the bowl">
-        <svg viewBox="0 0 240 150" focusable="false" aria-hidden="true">
-          <ellipse class="b-shadow" cx="120" cy="140" rx="102" ry="9"/>
-          <path class="b-body" d="M20 60 Q30 138 120 138 Q210 138 220 60 Z"/>
-          <ellipse class="b-rim" cx="120" cy="60" rx="100" ry="22"/>
-          <ellipse class="b-inner" cx="120" cy="62" rx="90" ry="17"/>
-          <ellipse class="b-milk" cx="120" cy="69" rx="70" ry="10"/>
-          <g class="b-o">
-            <ellipse cx="96" cy="68" rx="6" ry="3.4"/><ellipse cx="118" cy="72" rx="6" ry="3.4"/>
-            <ellipse cx="140" cy="67" rx="6" ry="3.4"/><ellipse cx="106" cy="64" rx="6" ry="3.4"/>
-            <ellipse cx="160" cy="71" rx="6" ry="3.4"/><ellipse cx="80" cy="71" rx="6" ry="3.4"/>
-          </g>
-          <g class="b-o b-soggy">
-            <ellipse cx="44" cy="58" rx="5" ry="3"/><ellipse cx="196" cy="60" rx="5" ry="3"/>
-          </g>
-          <ellipse class="b-spoon-head" cx="132" cy="68" rx="13" ry="6"/>
-          <path class="b-spoon" d="M142 68 L234 108"/>
-          <g class="b-o">
-            <ellipse cx="14" cy="138" rx="6" ry="3.4"/><ellipse cx="32" cy="145" rx="6" ry="3.4"/>
-          </g>
-          <ellipse class="b-drip" cx="226" cy="142" rx="8" ry="2.6"/>
-        </svg>
-      </a>
-    </section>
-
-    <!-- ======================================================
-         The other faces, shown as a simple scroll of panels.
-         This is also the reduced motion and no JS view.
-         ====================================================== -->
-    <div class="panels">
-
-      <!-- LEFT SIDE: About as Nutrition Facts -->
-      <article class="face face-left" id="about" aria-labelledby="about-h">
-        <h2 class="visually-hidden" id="about-h">About</h2>
-        <div class="nutrition">
-          <p class="n-title">Nutrition Facts</p>
-          <div class="n-row"><span>Serving Size</span><span>1 Deployment</span></div>
-          <div class="n-row"><span>Servings Per Career</span><span>Many</span></div>
-          <div class="n-rule n-rule-heavy"></div>
-          <p class="n-small">Amount Per Serving</p>
-          <div class="n-row n-big"><span>Experience</span><span>15 yrs</span></div>
-          <div class="n-rule n-rule-mid"></div>
-          <table class="n-table">
-            <caption class="visually-hidden">Percent daily values</caption>
-            <thead><tr><th scope="col"><span class="visually-hidden">Nutrient</span></th><th scope="col">% Daily Value*</th></tr></thead>
-            <tbody>
-              <tr><th scope="row">AV Integration</th><td>100%</td></tr>
-              <tr><th scope="row">Enterprise Architecture</th><td>100%</td></tr>
-              <tr><th scope="row">Vendor Side Engineering</th><td>100%</td></tr>
-              <tr><th scope="row">API First Thinking</th><td>100%</td></tr>
-              <tr><th scope="row">Fortune 100 Campuses</th><td>100%</td></tr>
-              <tr><th scope="row">AI Curiosity</th><td>110%</td></tr>
-              <tr><th scope="row">Hype</th><td>0g</td></tr>
-              <tr><th scope="row">Buzzwords</th><td>0g</td></tr>
-            </tbody>
-          </table>
-          <div class="n-rule n-rule-heavy"></div>
-          <p class="n-foot">*Percent Daily Values are based on a 2,000 room enterprise.</p>
-          <p class="n-ingredients"><b>Ingredients:</b> AV integration, enterprise architecture, vendor side engineering, Fortune 100 campuses, airline infrastructure, API first thinking, early AI experiments, Texas sunshine, coffee.</p>
-          <p class="n-allergen">Contains: opinions about agents. May contain traces of webhooks.</p>
-        </div>
-
-        <section class="maker" aria-labelledby="maker-h">
-          <h3 class="panel-head" id="maker-h">Meet the maker</h3>
-          <p>I'm an engineer and proud Aggie, with an electrical engineering degree from Texas A&amp;M and a career spanning enterprise AV, camera and sensor systems, and IT architecture. As a Principal Architect at one of the world's largest enterprises, I spent years designing and deploying collaboration and camera systems at scale, including putting camera streams to work beyond physical security to power AI-driven operational use cases. I know what it's like to inherit a fragmented environment and be expected to make it work, because I've done it.</p>
-          <p>Today, I help organizations carry those same systems forward. Technology moves fast, and yesterday's solutions get left behind. My job is to help teams get ahead of that curve, choosing forward-looking platforms built for what's next that fit cleanly into their broader IT architecture and the collaboration tools their people actually rely on.</p>
-          <a class="btn-chunky" href="https://www.linkedin.com/in/cameron-pavloske/" target="_blank" rel="noopener noreferrer">Read more on LinkedIn</a>
-        </section>
-      </article>
-
-      <!-- RIGHT SIDE: Writing preview -->
-      <article class="face face-right" id="writing" aria-labelledby="writing-h">
-        <h2 class="panel-head face-title" id="writing-h">What's in the bowl</h2>
-        <p class="collect">Collect them all!</p>
-        <ul class="checklist" role="list">
-          <li>
-            <span class="check" aria-hidden="true"></span>
-            <a href="/blog/cameras-on-your-network.html">IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?</a>
-            <time datetime="2026-04-05">Apr 5, 2026</time>
-          </li>
-          <li>
-            <span class="check" aria-hidden="true"></span>
-            <a href="/blog/why-i-work-at-neat.html">Why I Work at Neat</a>
-            <time datetime="2026-02-28">Feb 28, 2026</time>
-          </li>
-        </ul>
-        <a class="btn-chunky" href="#bowl">Grab a spoon</a>
-      </article>
-
-      <!-- BACK: Projects. Phase 3 adds the four games above the project cards. -->
-      <article class="face face-back" id="projects" aria-labelledby="projects-h">
-        <h2 class="panel-head face-title" id="projects-h">Ping's Saturday Fun Zone!</h2>
-        <ul class="projects" role="list">
-          <li class="project">
-            <p class="kicker">AI tooling</p>
-            <h3>Neat Pulse MCP Server</h3>
-            <p>A Model Context Protocol server that wired the Neat Pulse REST API into Claude Code, exposing 37 tools for AI-assisted management of video devices, sensor data and org controls.</p>
-            <p class="tags">TypeScript · MCP · Node.js · REST API</p>
-            <p class="note">My personal version is now private, but I helped drive Neat's official Pulse MCP server.</p>
-          </li>
-          <li class="project">
-            <p class="kicker">Side project</p>
-            <h3><a href="https://github.com/cpavloske/neat-pad-clock" target="_blank" rel="noopener noreferrer">Neat Pad Clock</a></h3>
-            <p>A minimal clock and live weather display for the Neat Pad. Detects location via IP, shows current conditions with hourly precipitation. No dependencies, just HTML.</p>
-            <p class="tags">HTML · Open-Meteo API · GitHub Pages</p>
-          </li>
-        </ul>
-        <p><a class="btn-chunky" href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer">More on GitHub</a></p>
-      </article>
-
-      <!-- BOTTOM: Contact -->
-      <article class="face face-bottom" id="contact" aria-labelledby="contact-h">
-        <h2 class="panel-head face-title" id="contact-h">Contact</h2>
-        <p class="contact-blurb">Want to talk about where IT and IoT are headed, or anything at the intersection of AV, cameras, and AI? Drop me a line.</p>
-        <figure class="barcode" aria-hidden="true">
-          <svg viewBox="0 0 226 68" focusable="false"><rect x="6" y="0" width="2" height="68"/><rect x="10" y="0" width="2" height="68"/><rect x="14" y="0" width="1" height="60"/><rect x="17" y="0" width="1" height="60"/><rect x="19" y="0" width="1" height="60"/><rect x="22" y="0" width="1" height="60"/><rect x="26" y="0" width="2" height="60"/><rect x="30" y="0" width="1" height="60"/><rect x="34" y="0" width="2" height="60"/><rect x="37" y="0" width="1" height="60"/><rect x="39" y="0" width="2" height="60"/><rect x="42" y="0" width="2" height="60"/><rect x="46" y="0" width="1" height="60"/><rect x="48" y="0" width="3" height="60"/><rect x="54" y="0" width="1" height="60"/><rect x="57" y="0" width="3" height="60"/><rect x="61" y="0" width="1" height="60"/><rect x="64" y="0" width="2" height="60"/><rect x="67" y="0" width="1" height="60"/><rect x="71" y="0" width="1" height="60"/><rect x="73" y="0" width="2" height="60"/><rect x="76" y="0" width="1" height="60"/><rect x="80" y="0" width="1" height="60"/><rect x="83" y="0" width="1" height="60"/><rect x="87" y="0" width="1" height="60"/><rect x="91" y="0" width="1" height="60"/><rect x="93" y="0" width="2" height="60"/><rect x="97" y="0" width="3" height="60"/><rect x="102" y="0" width="1" height="60"/><rect x="104" y="0" width="1" height="60"/><rect x="106" y="0" width="1" height="60"/><rect x="110" y="0" width="2" height="68"/><rect x="114" y="0" width="2" height="68"/><rect x="118" y="0" width="2" height="60"/><rect x="122" y="0" width="3" height="60"/><rect x="126" y="0" width="1" height="60"/><rect x="129" y="0" width="1" height="60"/><rect x="133" y="0" width="1" height="60"/><rect x="136" y="0" width="1" height="60"/><rect x="138" y="0" width="2" height="60"/><rect x="141" y="0" width="1" height="60"/><rect x="145" y="0" width="3" height="60"/><rect x="151" y="0" width="3" height="60"/><rect x="157" y="0" width="2" height="60"/><rect x="161" y="0" width="2" height="60"/><rect x="164" y="0" width="1" height="60"/><rect x="167" y="0" width="1" height="60"/><rect x="170" y="0" width="2" height="60"/><rect x="175" y="0" width="1" height="60"/><rect x="179" y="0" width="1" height="60"/><rect x="182" y="0" width="2" height="60"/><rect x="186" y="0" width="1" height="60"/><rect x="190" y="0" width="1" height="60"/><rect x="194" y="0" width="2" height="60"/><rect x="198" y="0" width="1" height="60"/><rect x="202" y="0" width="3" height="60"/><rect x="206" y="0" width="1" height="60"/><rect x="208" y="0" width="2" height="60"/><rect x="214" y="0" width="2" height="68"/><rect x="218" y="0" width="2" height="68"/></svg>
-          <figcaption>CAMERON PAVLOSKE</figcaption>
-        </figure>
-        <div class="receipt">
-          <p class="r-head">Uptime O's Market</p>
-          <ul role="list">
-            <li><span>Email</span><a href="mailto:cpavloske@gmail.com">cpavloske@gmail.com</a></li>
-            <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/cameron-pavloske/" target="_blank" rel="noopener noreferrer">cameron-pavloske</a></li>
-            <li><span>GitHub</span><a href="https://github.com/cpavloske" target="_blank" rel="noopener noreferrer">cpavloske</a></li>
-          </ul>
-          <p class="r-foot">Thank you for shopping. Please come again.</p>
-        </div>
-        <p class="fine-print">Best if read before 2036.</p>
-      </article>
+          <p class="fine-print">Best if read before 2036.</p>
+        </article>
+      </div>
     </div>
 
     <!-- The plain list of posts that always sits under the bowl (DESIGN.md section 7) -->

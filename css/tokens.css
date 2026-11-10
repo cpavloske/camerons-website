@@ -111,19 +111,96 @@
   --dur-slow:    700ms;
   --dur-loop:    1600ms;  /* one cycle of a small idle loop, like Ping's wave */
 
-  /* ---------- Scene ---------- */
-  --dof-blur:   3px;     /* depth of field on the background TV */
-  --desk-top:   62%;     /* where the desk surface starts in the scene */
-  --box-w:      clamp(240px, 30vw, 400px);
+  /* ---------- Scene (Phase 2) ---------- */
+  --tabbar-h:   0px;     /* mobile sticky bottom tab bar; 56px under 768px (see media query below) */
+  --topbar-h:   48px;
+  --scene-h:    calc(100svh - var(--topbar-h) - var(--tabbar-h));
+  --stop:       42svh;   /* scroll distance between box faces */
+  --desk-top:   57%;     /* horizon: where the desk surface starts in the scene */
   --box-ratio:  0.72;    /* box width / height */
-  --grain:      repeating-linear-gradient(176deg, transparent 0 6px, rgba(110, 63, 32, 0.22) 6px 7px, transparent 7px 15px);
+  --box-h:      min(calc(var(--scene-h) * 0.9), calc(92vw / var(--box-ratio)), 780px);  /* reading size */
+  --box-w:      calc(var(--box-h) * var(--box-ratio));
+  --box-persp:  1700px;
+  --desk-s:     0.62;    /* box scale while it stands on the desk */
+  --desk-xf:    -0.1;    /* box x offset on the desk, as a fraction of scene width */
+  --desk-foot:  0.9;     /* where the box base meets the desk, fraction of scene height */
+  --read-xf:    -0.05;   /* x offset while a face is held up for reading */
+  --rest-ry:    -26;     /* degrees: jaunty turn of the box on the desk */
+  --rest-rx:    -6;      /* degrees: slight look down at the box */
+  --lean:       26;      /* degrees the box leans toward the next face while scrolling */
+  --dof-blur:   3px;     /* depth of field on everything behind the desk */
+  --dof-intro:  9px;     /* foreground blur while the camera is on the TV */
+  --tv-w:       clamp(190px, 25vw, 380px);
+  --bowl-w:     clamp(230px, 27vw, 420px);
+  --shade-max:  0.5;     /* darkest a box face gets when turned from the light */
+
+  /* Textures. Grayscale noise tinted with palette colors, no image files. */
   --halftone:   radial-gradient(rgba(43, 16, 24, 0.10) 1px, transparent 1.4px) 0 0 / 6px 6px;
+  --halftone-light: radial-gradient(rgba(255, 246, 227, 0.09) 1px, transparent 1.4px) 0 0 / 6px 6px;
+  --rays:       repeating-conic-gradient(from 4deg at 50% 64%, rgba(255, 201, 40, 0.085) 0 9deg, transparent 9deg 18deg);
+  --tex-wood:   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.42 .007' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .26  0 0 0 0 .12  0 0 0 0 .05  1.9 0 0 0 -.62'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --tex-paper:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1  0 0 0 0 .04  0 0 0 0 .05  .9 0 0 0 -.36'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  --scanlines:  repeating-linear-gradient(0deg, rgba(26, 26, 26, 0.28) 0 1px, transparent 1px 3px);
+
+  /* Extra scene colors (Phase 2) */
+  --sideboard:      #4b2f20;  /* furniture under the TV */
+  --sideboard-top:  #6a4630;
+  --cardboard:      #c79a63;  /* raw board on the top flap and box edges */
+  --milk-shade:     #ecdcbc;  /* milk in shadow, O shadows in milk */
+  --wood-seam:      rgba(60, 30, 12, 0.55);
+  --glint:          rgba(255, 255, 255, 0.55);
+  --sun-patch:      rgba(255, 233, 170, 0.5);   /* window light on the wall */
+  --tv-cast:        rgba(159, 227, 255, 0.34);  /* TV light on the desk */
+  --shadow-deep:    rgba(26, 12, 10, 0.5);
+  --edge-wear:      rgba(26, 12, 10, 0.3);      /* box edges and fold lines */
+  --fold:           rgba(255, 246, 227, 0.16);  /* glue flap line on the front */
+  --cream-wash:     rgba(255, 246, 227, 0.4);   /* placeholder game boxes on the back */
+
+  /* ---------- Scene timing, read by JS (Phase 2) ---------- */
+  --dur-spin:         900ms;   /* box rotating to a face */
+  --dur-return:       450ms;   /* box settling back after a short drag */
+  --dur-snap:         500ms;   /* scroll settling on a face */
+  --dur-sheet:        420ms;   /* reading sheet slide */
+  --dur-intro-static: 550ms;
+  --dur-intro-bars:   950ms;
+  --dur-intro-pull:   1150ms;  /* intro total = 2650ms, under 3s (section 4) */
+  --dur-click:        160ms;   /* TV channel click flash */
+  --dur-flicker:      4200ms;  /* TV light flicker loop */
+  --dur-toon:         2600ms;  /* placeholder cartoon loop on the TV */
+  --dur-bounce:       1500ms;  /* Ping idle bounce, full cycle */
+  --dur-wiggle:       900ms;   /* antenna wiggle, full cycle */
+  --dur-blink:        110ms;
+  --dur-wave:         1100ms;
+  --dur-bubble:       1900ms;  /* Connected! speech bubble on screen */
+  --dur-buffer:       3200ms;  /* buffer wheel before Ping dozes off */
+  --ping-idle:        20000ms; /* visitor idle time before Ping gets sleepy (section 3) */
+  --ping-blink-min:   2200ms;
+  --ping-blink-max:   5200ms;
+  --hint-delay:       1400ms;
+  --intro-failsafe:   2500ms;  /* cover lifts by itself if scene.js never starts */
+
+  /* GSAP ease names, read by JS so easing stays in this file */
+  --g-spin:   power3.inOut;
+  --g-out:    power3.out;
+  --g-soft:   sine.inOut;
+  --g-pop:    back.out(1.8);
 
   /* ---------- Layout ---------- */
-  --tabbar-h:   56px;    /* mobile sticky bottom tab bar */
-  --topbar-h:   40px;
   --z-scene:    0;
   --z-box:      10;
   --z-ui:       50;
   --z-overlay:  90;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --tabbar-h: 56px;
+    --topbar-h: 44px;
+    --desk-top: 55%;
+    --desk-s:   0.8;
+    --desk-xf:  -0.07;
+    --read-xf:  0;
+    --tv-w:     52vw;
+    --bowl-w:   50vw;
+  }
 }

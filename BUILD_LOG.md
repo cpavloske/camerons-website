@@ -7,7 +7,7 @@ Source of truth: `DESIGN.md`. Runbook: `RUNBOOK.md`. Every session reads both, p
 | Phase | Model | State | Tag |
 |---|---|---|---|
 | 1. Audit and foundation | Opus 5.5 | done | `phase-1-done` |
-| 2. Scene and box | Fable | not started | |
+| 2. Scene and box | Fable 5.2 | in progress | |
 | 3. Back panel games | Opus | not started | |
 | 4a. The bowl | Fable | not started | |
 | 4b. Milk and O's | Fable | not started | |
@@ -152,3 +152,23 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
   - Posts and 404 still use the old maroon `css/style.css` and `js/main.js`. Articles get restyled in 4b, 404 in 5. The JUST THE INGREDIENTS link is not on those pages yet for the same reason.
   - On desktop at short heights (about 600px) the bottom of the box sits below the fold. Phase 2 sizes the scene properly.
 - **Next:** Phase 2, The scene and the box. Assigned model: **Fable**.
+
+---
+
+## Phase 2 plan (2026-11-09, Fable 5.2)
+
+Sub steps, each one committed with tests run:
+- **2.1** Tokens for the scene, HTML restructure, scene art: wall with window light, sideboard, HTML/CSS TV (soft focus), desk plane in CSS perspective, SVG bowl. Fallback (no JS, reduced motion) stays a static scene plus panel scroll.
+- **2.2** Box faces as printed panels sized in container units (`cqi`), so the same markup works in the cube and in the panel scroll: front, left (nutrition), right (checklist), back (placeholder), bottom (barcode), top flap (decorative).
+- **2.3** `js/scene.js`: builds the cube from the panels, poses, rotation by tabs, scroll, drag, swipe, arrow keys; per face lighting; contact shadow; MEET THE MAKER reading sheet.
+- **2.4** `js/ping.js`: Ping idle, hover wave, 20s sleep and wake.
+- **2.5** Opening sequence on the TV.
+- **2.6** Check 375, 768, 1440; reference screenshots to `/design/reference/`; tag `phase-2-done`.
+
+Architecture decisions (reasons):
+- **One copy of every face.** Faces live in `.panels` in the HTML. With JS and motion allowed, `scene.js` moves them into `#box` and adds `html.is-3d`. Without that they stay as the panel scroll, which is the reduced motion and no JS view (section 14). No duplicated content.
+- **The box is a square prism** (depth = width, taller than wide) so all four side faces are full size and readable. Section 5 calls it a cube with six faces.
+- **Box is laid out at reading size and scaled down on the desk** (never scaled up), so text is always crisp. Desk pose: turned and small on the desk. Any other face: the box is "picked up", centered, straight on, at scale 1.
+- **Rotation is state driven, not scrubbed.** Scroll position picks a face (one stop per `--stop` of scroll), tabs and swipes jump straight to a face by the shortest spin. Scrubbing through every face on a tab jump was dizzying.
+- **MEET THE MAKER opens a reading sheet** (`<dialog>`) in cube mode because 300 words do not fit a box side at a readable size on a phone. In panel mode the bio is inline. Copy is unchanged.
+- **GSAP eases and JS timings are read from tokens.css** (`--g-*`, `--dur-*`) so no timing value lives in JS.
