@@ -1,0 +1,155 @@
+/* ==========================================================
+   room.css: the bedroom around the desk (Phase 2).
+   A dim, lived in kid's room that belongs to someone who takes
+   electronics apart: faded wallpaper, sun cutting through
+   blinds, a corkboard of printouts, a shelf with an old router,
+   and tinkering clutter on the desk. Original designs only.
+   Values come only from tokens.css.
+   ========================================================== */
+
+/* ---------- Wall: faded striped wallpaper in shade ---------- */
+.wall {
+  background:
+    var(--tex-paper),
+    radial-gradient(ellipse 22% 16% at 88% 8%, var(--paper-stain), transparent 70%),
+    repeating-linear-gradient(90deg, transparent 0 34px, var(--paper-stripe) 34px 40px, transparent 40px 46px, var(--paper-stripe) 46px 48px, transparent 48px 82px),
+    radial-gradient(ellipse 60% 90% at 6% 40%, var(--light-warm), transparent 70%),
+    linear-gradient(98deg, var(--wall-dim) 0%, var(--wall-dim) 40%, var(--wall-deep) 100%);
+}
+
+/* ---------- Sun through blinds: slatted light on the wall ---------- */
+.sun {
+  left: -2%; top: 4%;
+  width: 34%; height: calc(var(--desk-top) - 6%);
+  background: repeating-linear-gradient(180deg, var(--blind-light) 0 12px, transparent 12px 22px);
+  clip-path: polygon(10% 0, 100% 14%, 92% 100%, 0 82%);
+  filter: blur(calc(var(--dof-back, var(--dof-blur)) + 1px));
+  opacity: 1;
+}
+/* the shaft of light across the room, with dust in it */
+.beam {
+  position: absolute; left: -6%; top: 0; width: 70%; height: 100%;
+  pointer-events: none; z-index: calc(var(--z-box) + 3);
+  background: linear-gradient(118deg, transparent 18%, var(--beam) 30%, var(--beam) 44%, transparent 58%);
+  mix-blend-mode: screen;
+}
+.dust { position: absolute; inset: 0; }
+.dust i {
+  position: absolute; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--dust);
+  animation: dust var(--dur-dust) var(--ease-in-out) infinite alternate;
+}
+.dust i:nth-child(1) { left: 22%; top: 26%; }
+.dust i:nth-child(2) { left: 30%; top: 44%; animation-delay: calc(var(--dur-dust) * -0.2); width: 2px; height: 2px; }
+.dust i:nth-child(3) { left: 38%; top: 34%; animation-delay: calc(var(--dur-dust) * -0.43); }
+.dust i:nth-child(4) { left: 27%; top: 60%; animation-delay: calc(var(--dur-dust) * -0.64); width: 2px; height: 2px; }
+.dust i:nth-child(5) { left: 44%; top: 52%; animation-delay: calc(var(--dur-dust) * -0.14); }
+.dust i:nth-child(6) { left: 34%; top: 18%; animation-delay: calc(var(--dur-dust) * -0.79); width: 2px; height: 2px; }
+@keyframes dust { from { transform: translate(0, 0); opacity: 0.2; } 50% { opacity: 1; } to { transform: translate(26px, -34px); opacity: 0.35; } }
+
+/* ---------- Corkboard of printouts ---------- */
+.cork {
+  position: absolute; left: 31%; top: 5%;
+  width: clamp(170px, 17vw, 270px);
+  filter: blur(var(--dof-back, var(--dof-blur))) drop-shadow(0 6px 6px var(--shadow-ink));
+}
+.cork-frame { fill: var(--wood-mid); }
+.cork-board { fill: var(--cork); }
+.cork-speck { fill: var(--cork-dark); }
+.note { fill: var(--note-paper); }
+.note-line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; opacity: 0.75; }
+.note-node { fill: var(--note-paper); stroke: var(--ink); stroke-width: 1.6; }
+.note-node-hot { fill: var(--box-red); stroke: var(--ink); stroke-width: 1.6; }
+.note-text { font-family: var(--font-panel); font-stretch: var(--panel-stretch); font-weight: 800; fill: var(--ink); text-transform: uppercase; }
+.sticky { fill: var(--sunny-yellow); }
+.pin { fill: var(--box-red); }
+.pin-hi { fill: var(--white); opacity: 0.7; }
+.tape { fill: var(--tape-gray); opacity: 0.7; }
+.photo { fill: var(--white); }
+.photo-sky { fill: var(--sky-blue); }
+.photo-grass { fill: var(--grass-green); }
+
+/* ---------- Shelf with an old router and cables ---------- */
+.shelf {
+  position: absolute; right: -1%; top: 10%;
+  width: clamp(170px, 18vw, 280px);
+  filter: blur(var(--dof-back, var(--dof-blur))) drop-shadow(0 8px 6px var(--shadow-ink));
+}
+.shelf-board { fill: var(--wood-mid); }
+.shelf-edge { fill: var(--wood-dark); }
+.shelf-bracket { fill: var(--wood-dark); }
+.router { fill: var(--plastic-dark); }
+.router-top { fill: var(--steel-dark); }
+.router-ant { stroke: var(--plastic-dark); stroke-width: 5; stroke-linecap: round; }
+.router-led { fill: var(--grass-green); }
+.router-led-off { fill: var(--box-red); opacity: 0.8; }
+.coil { fill: none; stroke: var(--sky-blue); stroke-width: 4.5; }
+.coil-y { fill: none; stroke: var(--sunny-yellow); stroke-width: 4.5; }
+.hook { fill: none; stroke: var(--steel-dark); stroke-width: 3; stroke-linecap: round; }
+.books rect:nth-child(1) { fill: var(--box-red); }
+.books rect:nth-child(2) { fill: var(--box-burgundy); }
+.books rect:nth-child(3) { fill: var(--sky-blue); }
+
+/* ---------- Tinkering clutter on the desk (in focus) ---------- */
+.clutter { position: absolute; pointer-events: none; }
+.clutter svg { width: 100%; overflow: visible; }
+.c-board { left: 3%; bottom: 5%; width: clamp(150px, 15vw, 240px); z-index: calc(var(--z-box) - 1); }
+.c-cable { left: calc(var(--tv-x) + var(--tv-w) * 0.32); right: -2%; top: calc(var(--desk-top) + 2%); z-index: calc(var(--z-box) - 2); }
+.c-tape { left: 23%; top: calc(var(--desk-top) + 4%); width: clamp(60px, 5.5vw, 90px); z-index: calc(var(--z-box) - 2); filter: blur(0.6px); }
+
+.pcb-shadow { fill: var(--shadow-deep); }
+.pcb-body { fill: var(--pcb); }
+.pcb-edge { fill: var(--pcb-dark); }
+.pcb-trace { fill: none; stroke: var(--copper); stroke-width: 1.6; opacity: 0.85; }
+.pcb-pad { fill: var(--copper); }
+.pcb-chip { fill: var(--chip); }
+.pcb-chip-hi { fill: var(--steel-dark); }
+.pcb-port { fill: var(--steel); stroke: var(--steel-dark); stroke-width: 1; }
+.pcb-cap { fill: var(--sky-blue); }
+.pcb-cap-top { fill: var(--steel-hi); }
+.sd-handle { fill: var(--box-red); }
+.sd-handle-hi { fill: var(--white); opacity: 0.35; }
+.sd-shaft { stroke: var(--steel); stroke-width: 4; stroke-linecap: round; }
+.sd-shadow { fill: var(--shadow-ink); }
+.cable-shadow { fill: none; stroke: var(--shadow-ink); stroke-width: 7; stroke-linecap: round; }
+.cable { fill: none; stroke: var(--sky-blue); stroke-width: 5; stroke-linecap: round; }
+.cable-hi { fill: none; stroke: var(--white); stroke-width: 1.2; stroke-linecap: round; opacity: 0.45; }
+.rj45 { fill: var(--steel-hi); opacity: 0.85; }
+.tape-roll { fill: var(--tape-gray); }
+.tape-hole { fill: var(--wood-mid); }
+.tape-shadow { fill: var(--shadow-ink); }
+
+/* the room is a little darker than the old sunny wall: keep the name readable */
+.hello { text-shadow: 0 1px 0 var(--sun-patch); }
+
+/* ---------- Phones: keep only what fits ---------- */
+@media (max-width: 767px) {
+  .cork { left: auto; right: 3%; top: 3%; width: 30vw; }
+  .shelf, .c-board, .c-tape { display: none; }
+  .sun { width: 60%; left: -10%; }
+  .beam { width: 110%; }
+}
+
+/* ---------- Phones: compact top bar and caption ---------- */
+@media (max-width: 767px) {
+  .home .topbar { gap: var(--space-2xs); }
+  .home .topbar .wordmark { font-size: var(--step--1); white-space: nowrap; }
+  .home .topbar .plain-link { font-size: var(--step--2); white-space: nowrap; padding: var(--space-3xs) var(--space-2xs); }
+  .tv-caption {
+    left: var(--gutter); right: auto; bottom: auto;
+    top: 28.5%;
+    width: min(64vw, 15rem);
+    padding: var(--space-3xs) var(--space-2xs);
+    font-size: var(--step--2);
+  }
+  .tv-caption span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+/* ---------- Tablets: smaller box so the TV shows, compact top bar ---------- */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .home .topbar { gap: var(--space-2xs); }
+  .home .topbar .wordmark { font-size: var(--step--1); white-space: nowrap; }
+  .home .topbar .plain-link { font-size: var(--step--2); white-space: nowrap; }
+  .flap a { padding: var(--space-3xs) var(--space-xs); font-size: var(--step--2); }
+  .tv-caption { left: clamp(var(--gutter), 5vw, var(--space-2xl)); right: auto; bottom: auto; top: 37%; width: 16rem; }
+}

@@ -182,3 +182,12 @@ Architecture decisions (reasons):
 - **Tokens added:** scene geometry (`--box-depth`, `--box-d`, `--fit`, `--desk-*`, `--rest-*`, `--lean`, `--tv-*`), textures (`--tex-wood`, `--tex-paper`, `--rays`, `--scanlines`, `--vignette`), materials (`--ceramic-deep`, `--steel-hi`, `--steel-dark`, `--o-light`, `--o-deep`, `--chrome`, `--sheen`, `--edge-wear`, `--fold`), JS timings (`--dur-spin` 900ms, `--dur-intro-*` totaling 2650ms, `--dur-focus`, `--dur-card`, `--ping-idle` 20000ms, etc.), GSAP ease names (`--g-spin: power3.inOut`, `--g-pop: back.out(1.8)`).
 - **Tests:** 58 passed.
 - **Next:** Cameron asked for Sid's room from Toy Story as inspiration (see next entry).
+
+### 2026-11-09 · Opus 5.5 (Cameron switched mid Phase 2) · Phase 2.4 the room
+- **Cameron's feedback:** "Take inspiration from Sid's room from Toy Story." Applied as mood only, never the film's designs (no recognizable wallpaper, skull motifs, or mutant toys), per the original everything rule: a dim, lived in kid's bedroom of someone who takes electronics apart. Fits Cameron as an engineer.
+- **Built:** `css/room.css`. Faded striped wallpaper in shade (`--wall-dim` to `--wall-deep`, `--paper-stripe`, a `--paper-stain`), sun through blinds as slatted light (`--blind-light`, 12px slats every 22px), a light shaft with 6 drifting dust motes (`--beam`, `--dust`, `--dur-dust` 14s), corkboard (hand drawn "Home network v3" diagram, "Reboot it first" sticky, a photo, a patch list), shelf with an old router (green LEDs, one red), manuals, and a coiled patch cable on a hook. Desk clutter in focus: bare circuit board with chips, traces, cap, port; red screwdriver; tape roll; blue patch cable running from the back of the TV off the right edge. Vignette deepened.
+- **Decision:** DESIGN.md section 4 says nothing else sits on the desk besides box, bowl, spoon. Cameron's direct requests (TV on the desk, Sid's room mood) override it.
+- **Layout fixes:** compact top bar on phones and tablets; new tablet tier 768 to 1100px (`--desk-s: 0.5`, TV at 72%) so the TV is not hidden; "On now" caption sits under Cameron's name on phones and tablets.
+- **Tests:** 58 passed. Checked by screenshot at 375, 768, 1440.
+- **Known issues:** cable reads a little flat (no perspective taper). Corkboard text is blurred by depth of field by design.
+- **Next (exact):** 1) Cameron reviews the room look. 2) Run `node tests/shots.js` (server on port 8000) to save reference screenshots into `/design/reference/`, commit, tag `phase-2-done`, push. 3) Phase 3 checkpoint: Phase 3 is assigned to Opus.

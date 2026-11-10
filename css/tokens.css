@@ -171,7 +171,26 @@
   --o-deep:         #8a5413;  /* toasted O, edge */
   --chrome:         #c9ced4;  /* TV screen trim */
   --sheen:          rgba(255, 255, 255, 0.14);  /* light catching the box board */
-  --vignette:       radial-gradient(ellipse 120% 105% at 42% 46%, transparent 52%, rgba(26, 12, 10, 0.4) 100%);
+  --vignette:       radial-gradient(ellipse 120% 105% at 42% 46%, transparent 46%, rgba(26, 12, 10, 0.55) 100%);
+
+  /* The room (Phase 2): a lived in, slightly dim kid's bedroom of someone who takes
+     electronics apart. Mood inspired by Cameron's Toy Story reference; every design original. */
+  --wall-dim:       #b89a76;  /* wallpaper in the room's shade */
+  --wall-deep:      #8d7257;  /* corners, behind the TV */
+  --paper-stripe:   rgba(43, 16, 24, 0.07);     /* faded wallpaper stripe */
+  --paper-stain:    rgba(110, 63, 32, 0.12);    /* old tape marks and a water stain */
+  --blind-light:    rgba(255, 224, 150, 0.62);  /* sun slicing through the blinds */
+  --beam:           rgba(255, 226, 160, 0.16);  /* shaft of light in the dusty air */
+  --dust:           rgba(255, 240, 205, 0.75);
+  --cork:           #b8875a;
+  --cork-dark:      #8e6240;
+  --note-paper:     #f4ead2;  /* printouts taped to the board */
+  --pcb:            #2f6b45;  /* bare circuit board */
+  --pcb-dark:       #1f4a30;
+  --copper:         #c98a3c;  /* traces and solder pads */
+  --chip:           #24201e;
+  --tape-gray:      #9b9a94;
+  --plastic-dark:   #34302d;  /* old router on the shelf */
 
   /* ---------- Scene timing, read by JS (Phase 2) ---------- */
   --dur-spin:         900ms;   /* box rotating to a face */
@@ -187,6 +206,7 @@
   --dur-focus:        2800ms;  /* how long the TV stays in focus after a channel change */
   --dur-card:         2400ms;  /* NOW SHOWING card on the TV */
   --dur-tv-static:    140ms;   /* burst of static between channels */
+  --dur-dust:         14000ms; /* one slow drift of dust in the light shaft */
   --dur-bounce:       1500ms;  /* Ping idle bounce, full cycle */
   --dur-wiggle:       900ms;   /* antenna wiggle, full cycle */
   --dur-blink:        110ms;
@@ -210,6 +230,16 @@
   --z-box:      10;
   --z-ui:       50;
   --z-overlay:  90;
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  :root {
+    --desk-s:   0.5;
+    --desk-xf:  -0.12;
+    --tv-x:     72%;
+    --tv-w:     32vw;
+    --bowl-w:   32vw;
+  }
 }
 
 @media (max-width: 767px) {
