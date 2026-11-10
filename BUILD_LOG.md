@@ -21,7 +21,10 @@ Source of truth: `DESIGN.md`. Runbook: `RUNBOOK.md`. Every session reads both, p
 ## How to run things
 
 - Preview: `python3 -m http.server 8000` from the repo root, then open `http://localhost:8000`.
-- Tests (filled in once the test script lands in Phase 1).
+- Tests, first time on a machine: `npm run test:install` (installs @playwright/test 1.64.1 and its Chromium).
+- Tests, every time: **`npm test`**. It starts `python3 -m http.server 8000` itself, or reuses one already running on port 8000.
+- What it checks (`tests/site.spec.js`): every page in `PAGES` returns 200 with no console or page errors; every preserved file returns 200; CNAME unchanged; every sitemap URL loads and the 3 original URLs are kept; GA ID and `analytics.js` on every page; zero requests to Google tracking hosts on localhost; only `analytics.js` calls `gtag(`; plain view shows every post, project, bio, and contact item; plain view preference survives a session; homepage links reach every post and project; section anchors exist; no FREE PRIZE INSIDE; with reduced motion there are zero running animations and `window.uptimeScene.motion` is false (once scene code exists); no horizontal scroll at 375, 768, 1440 on every page; no em dashes in body text or titles; every CDN URL in html/js/css is pinned to x.y.z.
+- When a phase adds a page, add it to `PAGES` in the test. When it adds animation, it must expose `window.uptimeScene = { motion: <bool> }` and keep it false under reduced motion.
 
 ---
 
@@ -131,3 +134,10 @@ Prize inside, `FREE PRIZE INSIDE!` ribbon, shake mechanic. Leave a clean empty s
 - **Checked by eye:** 800px and 375px in the preview, no horizontal scroll at 375.
 - **Tests:** test script not written yet (next sub step).
 - **Next:** 1.4 Playwright test script.
+
+### 2026-11-09 · Opus 5.5 · Phase 1.4 Playwright test script
+- **Built:** `package.json` (dev only, no build step; `@playwright/test` pinned to 1.64.1), `playwright.config.js` (Chromium, port 8000, `reuseExistingServer`), `tests/site.spec.js` (58 checks, listed under "How to run things" above). `.gitignore` adds `test-results/` and `playwright-report/`.
+- **Also changed:** the two posts, `blog/_template.html`, and `404.html` now load GA through `/js/analytics.js` (same ID, `G-81Y5DN2PHQ`) instead of the inline snippet, because the inline snippet sent page views from localhost. Their `<title>` and `og:title` suffix " — Cameron Pavloske" is now " | Cameron Pavloske" (no em dashes rule). Post bodies, titles, dates, and URLs are untouched.
+- **Decision:** a console error counts as a failure unless it is a failed fetch from a non local host (so offline runs that cannot reach Google Fonts do not fail).
+- **Tests:** `npm test` → 58 passed.
+- **Next:** 1.5 add `/ingredients.html` to the sitemap, final Phase 1 check, tag `phase-1-done`.

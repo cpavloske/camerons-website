@@ -1,0 +1,12 @@
+{
+  "name": "cameronpavloske-site",
+  "private": true,
+  "description": "Static site. No build step. package.json exists only for the local Playwright test script.",
+  "scripts": {
+    "test": "playwright test",
+    "test:install": "npm install && npx playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}
