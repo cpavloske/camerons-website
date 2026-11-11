@@ -1,4 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#2b1018"/>
-  <text x="16" y="23" font-family="'Inter Tight', 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#ffb3a1" letter-spacing="-1">CP</text>
+  <!-- A little 90s CRT TV with rabbit ears, on CH 3: the site's title screen -->
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a5530"/>
+      <stop offset="1" stop-color="#5a321a"/>
+    </linearGradient>
+    <radialGradient id="glass" cx="0.45" cy="0.4" r="0.75">
+      <stop offset="0" stop-color="#4f6fe0"/>
+      <stop offset="1" stop-color="#1c2a78"/>
+    </radialGradient>
+  </defs>
+  <!-- Rabbit ears -->
+  <path d="M16 9 L9 2 M16 9 L24 1.5" stroke="#a8adb8" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="9" cy="2" r="1.1" fill="#a8adb8"/>
+  <circle cx="24" cy="1.5" r="1.1" fill="#a8adb8"/>
+  <ellipse cx="16" cy="9.2" rx="3" ry="1.4" fill="#2a2a2e"/>
+  <!-- Cabinet -->
+  <rect x="1.5" y="9" width="29" height="20" rx="3.5" fill="url(#wood)"/>
+  <!-- Screen bezel and glass -->
+  <rect x="3.5" y="11" width="19" height="16" rx="3" fill="#141218"/>
+  <rect x="4.6" y="12.1" width="16.8" height="13.8" rx="2.6" fill="url(#glass)"/>
+  <!-- The name on screen, in the title's gold -->
+  <text x="13" y="22.4" text-anchor="middle" font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="8.6" fill="#ffd84a" letter-spacing="-0.4">CP</text>
+  <!-- Glare -->
+  <path d="M6 14.2 Q6 13.2 7 13.2 L11 13.2" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Control panel: two knobs and a power light -->
+  <rect x="23.6" y="11" width="5.4" height="16" rx="1.4" fill="#2a1a10" fill-opacity="0.55"/>
+  <circle cx="26.3" cy="14.8" r="1.7" fill="#cfc8b8"/>
+  <circle cx="26.3" cy="20" r="1.7" fill="#cfc8b8"/>
+  <circle cx="26.3" cy="24.6" r="0.75" fill="#ff4a3a"/>
+  <!-- Feet -->
+  <rect x="5" y="28.6" width="4" height="2" rx="0.8" fill="#3a2010"/>
+  <rect x="23" y="28.6" width="4" height="2" rx="0.8" fill="#3a2010"/>
 </svg>
