@@ -1,5 +1,5 @@
 /**
- * main.js — page entry point for /play/. Runs the whole show:
+ * main.js — page entry point for the homepage (/). Runs the whole show:
  *
  *   room  → the living room. The TV is on CH 3, the game's title screen
  *           (CAMERON PAVLOSKE), so the name is the first thing you see.
@@ -239,7 +239,7 @@ document.querySelector('[data-home]')?.addEventListener('click', (e) => {
   if (mode === 'map') exitGame();
 });
 
-// --- Section shortcuts (top nav) and deep links like /play/#writing ---------------------
+// --- Section shortcuts (top nav) and deep links like /#writing ---------------------
 const SECTIONS = ['about', 'writing', 'projects', 'contact'];
 function openFromHash() {
   const id = location.hash.slice(1);
@@ -547,7 +547,7 @@ canvas.addEventListener('pointermove', (e) => {
 });
 
 roomHint();
-openFromHash();   // /play/#writing etc. opens that section on the TV
+openFromHash();   // /#writing etc. opens that section on the TV
 
 // --- Main loop ----------------------------------------------------------------------------
 let last = performance.now(), time = 0;

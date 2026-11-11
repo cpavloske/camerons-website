@@ -1,5 +1,5 @@
 /**
- * content.js — loads /play/content.json (the single source for posts,
+ * content.js — loads play/content.json (the single source for posts,
  * projects, about text, and contact links) and the player's progress.
  */
 
@@ -20,7 +20,7 @@ export async function loadContent() {
  * original /blog/[slug].html article in the play site's formatting.
  */
 export function postUrl(post) {
-  return `${new URL('../post.html', import.meta.url).pathname}?slug=${encodeURIComponent(post.slug)}`;
+  return `${new URL('../../post.html', import.meta.url).pathname}?slug=${encodeURIComponent(post.slug)}`;
 }
 
 /** "2026-04-05" -> "Apr 5, 2026" without timezone surprises. */

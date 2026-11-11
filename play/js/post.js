@@ -1,5 +1,5 @@
 /**
- * post.js — the play-styled reader: /play/post.html?slug=why-i-work-at-neat
+ * post.js — the play-styled reader: /post.html?slug=why-i-work-at-neat
  *
  * The real posts live at /blog/[slug].html and are never modified. This page
  * fetches the original, pulls the article text out of it, keeps only safe,
