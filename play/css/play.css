@@ -1,0 +1,246 @@
+/* play.css — styles for the playable homepage. */
+:root {
+  --ink: #1d1a24;
+  --cream: #f6f1e4;
+  --accent: #2f8f83;
+  --warm: #e8823a;
+  --bg: #0b0a10;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%;
+  background: var(--bg); color: var(--cream);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The room fills the window; the TV inside it stays 4:3 */
+#game { position: fixed; inset: 0; width: 100vw; height: 100dvh; display: block; touch-action: manipulation; }
+
+/* Hint under the TV ("Click the TV to turn it on") */
+.hint {
+  position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); margin: 0; z-index: 20;
+  padding: 8px 14px; border-radius: 999px; max-width: calc(100vw - 32px); text-align: center;
+  background: rgba(0, 0, 0, 0.6); color: #fff; font: 600 14px/1.3 system-ui, sans-serif;
+  animation: hint-pulse 2s ease-in-out infinite;
+}
+.hint[hidden] { display: none; }
+@keyframes hint-pulse { 50% { opacity: .65; } }
+
+.hud-btn {
+  position: fixed; top: 12px; right: 12px; z-index: 30;
+  width: 38px; height: 38px; border-radius: 10px; border: 0;
+  background: rgba(0, 0, 0, 0.45); color: #fff; font: 800 13px system-ui; cursor: pointer;
+}
+.hud-btn:focus-visible { outline: 2px solid #ffd84a; }
+
+.toasts { position: fixed; top: 62px; left: 12px; right: 12px; z-index: 25; display: grid; justify-items: center; gap: 6px; pointer-events: none; }
+.toast {
+  max-width: 100%; padding: 8px 16px; border-radius: 999px;
+  background: rgba(20, 16, 28, 0.82); color: #fff; font: 600 14px/1.3 system-ui, sans-serif;
+  opacity: 0; transform: translateY(-6px); transition: opacity .3s, transform .3s; text-align: center;
+}
+.toast.show { opacity: 1; transform: none; }
+
+/* Section shortcuts: always on screen, so nobody has to play to find anything */
+.site-nav {
+  position: fixed; left: 12px; top: 12px; z-index: 30;
+  display: flex; gap: 4px; padding: 4px; border-radius: 12px;
+  background: rgba(14, 12, 20, 0.72); backdrop-filter: blur(4px);
+}
+.site-nav a {
+  padding: 8px 12px; border-radius: 8px;
+  color: var(--cream); text-decoration: none; font: 700 14px/1 system-ui, sans-serif;
+}
+.site-nav .nav-name { font-weight: 800; letter-spacing: 0.02em; color: #ffd84a; margin-right: 4px; white-space: nowrap; }
+.nav-sound {
+  display: grid; place-items: center; padding: 0 8px; border: 0; border-radius: 8px;
+  background: transparent; color: var(--cream); cursor: pointer;
+}
+.nav-sound:hover { background: rgba(246, 241, 228, 0.14); }
+.nav-sound:focus-visible { outline: 2px solid #ffd84a; outline-offset: 1px; }
+.nav-sound .x, .nav-sound.off .wave { display: none; }
+.nav-sound.off .x { display: inline; }
+.nav-sound.off { opacity: 0.6; }
+html:not(.game) .nav-sound { display: none; }
+.site-nav a:hover { background: rgba(246, 241, 228, 0.14); }
+.site-nav a:focus-visible { outline: 2px solid #ffd84a; outline-offset: 1px; }
+@media (max-width: 520px) { .site-nav a { padding: 8px 7px; font-size: 13px; } .site-nav .nav-name { margin-right: 0; } }
+@media (max-width: 400px) { .site-nav a { padding: 7px 5px; font-size: 12px; } .nav-sound { padding: 0 4px; } }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- Overlays (cream panels) ---------- */
+.overlay { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; }
+.overlay[hidden] { display: none; }
+.ov-backdrop { position: absolute; inset: 0; background: rgba(10, 8, 14, 0.55); }
+.ov-panel {
+  position: relative; width: min(560px, 100%); max-height: calc(100dvh - 32px); overflow: auto;
+  background: var(--cream); color: var(--ink);
+  border-radius: 14px; padding: 26px 26px 18px;
+  box-shadow: 0 6px 0 #c9bfa6, 0 20px 50px rgba(0,0,0,.45);
+  font: 17px/1.55 Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  transform: translateY(10px) scale(.98); opacity: 0; transition: transform .2s ease-out, opacity .2s;
+}
+.overlay.open .ov-panel { transform: none; opacity: 1; }
+.ov-close {
+  position: absolute; top: 10px; right: 12px; width: 34px; height: 34px; border-radius: 50%;
+  border: 0; background: transparent; font: 26px/1 system-ui; color: var(--ink); cursor: pointer;
+}
+.ov-close:hover { background: rgba(0,0,0,.07); }
+.ov-kicker { margin: 0 0 4px; font: 700 12px/1.2 system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8a5f1c; }
+.ov-title { margin: 0 34px 12px 0; font: 700 clamp(22px, 4vw, 28px)/1.2 Georgia, serif; }
+.ov-body { margin: 0 0 14px; }
+.ov-note { margin: 0 0 14px; font-size: 15px; color: #5a5048; font-style: italic; }
+.ov-email { margin: 0 0 16px; font-size: 20px; }
+.ov-email a { color: var(--accent); font-weight: 700; word-break: break-all; }
+.ov-tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0 0 16px; padding: 0; }
+.ov-tags li { font: 600 12px system-ui, sans-serif; padding: 4px 9px; border-radius: 999px; background: #e8dfc9; }
+.ov-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+.ov-btn {
+  display: inline-block; padding: 10px 16px; border-radius: 10px; border: 2px solid var(--ink);
+  background: var(--ink); color: var(--cream); font: 700 15px/1.2 system-ui, sans-serif; text-decoration: none; cursor: pointer;
+}
+.ov-btn.ghost { background: transparent; color: var(--ink); }
+.ov-btn.wide { width: 100%; margin-top: 14px; }
+.ov-btn:hover { filter: brightness(1.15); }
+.ov-btn:focus-visible, .ov-panel a:focus-visible, .pm-toggle:focus-visible, .ov-close:focus-visible { outline: 3px solid var(--warm); outline-offset: 2px; }
+.ov-hint { margin: 14px 0 0; font: 12px system-ui, sans-serif; color: #7a7068; }
+
+/* Pause menu */
+.pause .ov-title { margin-bottom: 14px; }
+.pm-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.pm-toggle {
+  padding: 10px 14px; border-radius: 10px; border: 2px solid var(--ink); background: transparent;
+  font: 600 14px system-ui, sans-serif; color: var(--ink); cursor: pointer;
+}
+.pm-toggle[aria-pressed="false"] { opacity: .65; }
+.pm-links h3 { margin: 12px 0 4px; font: 700 12px system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8a5f1c; }
+.pm-links ul { margin: 0; padding-left: 18px; font-size: 16px; }
+.pm-links a { color: var(--ink); }
+
+/* Section lists (Writing, Projects) and About facts */
+.ov-list { list-style: none; margin: 0; padding: 0; }
+.ov-list > li { padding: 14px 0; border-top: 1px solid #d9cfb6; }
+.ov-list > li:first-child { border-top: 0; padding-top: 4px; }
+.ov-list h3 { margin: 0 0 6px; font: 700 20px/1.3 Georgia, serif; }
+.ov-list h3 a { color: var(--ink); }
+.ov-list p { margin: 0 0 8px; }
+.ov-date { font: 700 12px/1.2 system-ui, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: #8a5f1c; }
+.ov-more { font: 700 14px system-ui, sans-serif; color: var(--accent); }
+.ov-facts { margin: 6px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font-size: 15px; }
+.ov-facts dt { font: 700 12px/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: #8a5f1c; }
+.ov-facts dd { margin: 0; }
+@media (max-width: 480px) { .ov-facts { grid-template-columns: 1fr; } .ov-panel { padding: 22px 18px 14px; } }
+
+/* ---------- Post reader (post.html): the same cream paper as the overlays ---------- */
+body.reader {
+  overflow: auto; height: auto; min-height: 100%;
+  /* The dim living room: lamp glow on one side, TV glow on the other */
+  background:
+    radial-gradient(60vmax 50vmax at 0% 0%, rgba(255, 180, 104, 0.16), transparent 60%),
+    radial-gradient(50vmax 40vmax at 100% 10%, rgba(120, 170, 255, 0.10), transparent 60%),
+    var(--bg);
+}
+/* Faint CRT scanlines over the room */
+body.reader::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px);
+}
+.reader-wrap { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 76px 16px 64px; }
+.reader-back {
+  display: inline-block; margin: 0 0 14px; color: var(--cream); font: 600 14px system-ui, sans-serif;
+  text-decoration: none; opacity: .85;
+}
+.reader-back:hover, .reader-back:focus-visible { opacity: 1; text-decoration: underline; }
+.reader-paper {
+  background: var(--cream); color: var(--ink);
+  border-radius: 14px; padding: clamp(22px, 5vw, 48px);
+  box-shadow: 0 6px 0 #c9bfa6, 0 24px 60px rgba(0,0,0,.5);
+  font: 19px/1.7 Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  animation: paper-in .35s ease-out;
+}
+@keyframes paper-in { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) { .reader-paper { animation: none; } }
+.reader-title { margin: 4px 0 22px; font: 700 clamp(28px, 5vw, 40px)/1.15 Georgia, serif; }
+.reader-body p, .reader-body ul, .reader-body ol, .reader-body blockquote, .reader-body pre, .reader-body figure { margin: 0 0 1.1em; }
+.reader-body h2, .reader-body h3, .reader-body h4 { font-family: Georgia, serif; line-height: 1.25; margin: 1.6em 0 .5em; }
+.reader-body h2 { font-size: 1.45em; } .reader-body h3 { font-size: 1.2em; }
+.reader-body a, .reader-original a { color: var(--accent); font-weight: 700; }
+.reader-body blockquote { padding: .2em 0 .2em 1em; border-left: 4px solid var(--warm); color: #4a4038; font-style: italic; }
+.reader-body img { max-width: 100%; height: auto; border-radius: 8px; }
+.reader-body figcaption { font: 14px/1.4 system-ui, sans-serif; color: #6a6058; margin-top: 6px; }
+.reader-body code, .reader-body pre { font: 15px/1.5 ui-monospace, Consolas, monospace; background: #ece4cf; border-radius: 6px; }
+.reader-body code { padding: 1px 5px; } .reader-body pre { padding: 12px 14px; overflow: auto; }
+.reader-body hr { border: 0; border-top: 2px dashed #d9cfb6; margin: 2em 0; }
+.reader-note { font: italic 15px/1.5 Georgia, serif; color: #6a6058; border-top: 1px solid #d9cfb6; padding-top: 1em; margin-top: 2em; }
+.reader-original { margin: 1.4em 0 0; font: 14px system-ui, sans-serif; }
+.reader-more { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+.reader-more a {
+  display: block; padding: 14px 16px; border-radius: 12px; text-decoration: none;
+  background: rgba(246, 241, 228, 0.08); color: var(--cream); font: 700 16px/1.35 Georgia, serif;
+  border: 1px solid rgba(246, 241, 228, 0.16);
+}
+.reader-more a:hover, .reader-more a:focus-visible { background: rgba(246, 241, 228, 0.16); }
+.reader-more span { display: block; font: 700 11px system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #ffd84a; margin-bottom: 4px; }
+/* On the reader, the section bar sits at the top and scrolls away with the page */
+body.reader .site-nav { position: absolute; }
+
+/* ---------- Which page shows: game, plain fallback, loading ---------- */
+/* The name is a real heading everywhere; in the game it's for screen readers only */
+html.game .site-title { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html.game #plain { display: none; }
+
+/* Plain page (no JavaScript, no WebGL, or the game failed to load) */
+html:not(.game) #game, html:not(.game) #hint, html:not(.game) .hud-btn,
+html:not(.game) .toasts, html:not(.game) #loading { display: none; }
+html:not(.game), html:not(.game) body { height: auto; min-height: 100%; }
+/* The room locks scrolling on <html>; every non-game page (post reader, plain page) needs it back */
+html:not(.game) { overflow-y: auto; }
+html:not(.game) body { overflow: visible; }
+html:not(.game) body {
+  overflow: auto;
+  background:
+    radial-gradient(60vmax 50vmax at 0% 0%, rgba(255, 180, 104, 0.16), transparent 60%),
+    radial-gradient(50vmax 40vmax at 100% 10%, rgba(120, 170, 255, 0.10), transparent 60%),
+    var(--bg);
+}
+html:not(.game) .site-nav { position: absolute; }
+html:not(.game) { scroll-behavior: smooth; scroll-padding-top: 16px; }
+.site-title {
+  max-width: 720px; margin: 84px auto 0; padding: 0 16px;
+  font: 900 clamp(38px, 9vw, 64px)/1.02 system-ui, "Segoe UI", sans-serif; letter-spacing: -0.01em;
+  color: #ffd84a; text-shadow: 0 4px 0 #e8823a;
+}
+.plain-page { max-width: 720px; margin: 0 auto; padding: 14px 16px 72px; }
+.plain-head { color: var(--cream); margin-bottom: 26px; }
+.plain-tagline { margin: 0 0 4px; font: 700 clamp(18px, 3.4vw, 24px)/1.3 Georgia, serif; }
+.plain-role { margin: 0; font: 15px system-ui, sans-serif; opacity: .8; }
+.plain-section { margin-bottom: 20px; animation: none; font-size: 18px; }
+.plain-section h2 { margin: 2px 0 14px; font: 700 clamp(24px, 4.4vw, 32px)/1.2 Georgia, serif; }
+.plain-section a { color: var(--accent); font-weight: 700; }
+.plain-section .ov-list h3 a { color: var(--ink); }
+.plain-tags { font: 14px/1.5 system-ui, sans-serif; color: #5a5048; }
+
+/* Loading screen: a progress bar that fills as the room loads */
+.loading {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-content: center; justify-items: center; gap: 14px;
+  background: var(--bg); transition: opacity .45s ease .15s, visibility .45s ease .15s;
+}
+html.ready .loading { opacity: 0; visibility: hidden; }
+.loading-bar {
+  width: min(320px, 70vw); height: 14px; padding: 3px; border-radius: 999px;
+  background: #1a1722; box-shadow: inset 0 0 0 2px #3a3550;
+}
+.loading-fill {
+  width: 5%; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #e8823a, #ffd84a);
+  transition: width .35s ease-out;
+}
+.loading-sub { margin: 0; color: var(--cream); font: 600 15px system-ui, sans-serif; opacity: .8; }
+.loading-dots::after { content: ''; animation: loading-dots 1.2s steps(4, end) infinite; }
+@keyframes loading-dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+/* Keep the game's chrome out of the way until it's ready */
+html.game:not(.ready) .site-nav, html.game:not(.ready) .hud-btn, html.game:not(.ready) .hint { visibility: hidden; }

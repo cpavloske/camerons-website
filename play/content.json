@@ -1,0 +1,64 @@
+{
+  "site": {
+    "name": "Cameron Pavloske",
+    "tagline": "Bringing legacy infrastructure into the future.",
+    "role": "Senior Solutions Engineer at Neat · Dallas, TX"
+  },
+
+  "about": {
+    "greeting": "Howdy.",
+    "paragraphs": [
+      "I'm an engineer and proud Aggie, with an electrical engineering degree from Texas A&M and a career spanning enterprise AV, camera and sensor systems, and IT architecture. As a Principal Architect at one of the world's largest enterprises, I spent years designing and deploying collaboration and camera systems at scale, including putting camera streams to work beyond physical security to power AI-driven operational use cases. I know what it's like to inherit a fragmented environment and be expected to make it work, because I've done it.",
+      "Today, I help organizations carry those same systems forward. Technology moves fast, and yesterday's solutions get left behind. My job is to help teams get ahead of that curve, choosing forward-looking platforms built for what's next that fit cleanly into their broader IT architecture and the collaboration tools their people actually rely on."
+    ],
+    "facts": [
+      { "label": "Expertise", "text": "Enterprise AV, collaboration systems, camera & sensor systems, IT architecture, AI-driven operational use cases" },
+      { "label": "Currently", "text": "Senior Solutions Engineer at Neat, helping organizations stay ahead in collaboration and AV" },
+      { "label": "Off the clock", "text": "Keeping up with AI, music production, reading, Texas A&M sports" }
+    ]
+  },
+
+  "posts": [
+    {
+      "slug": "cameras-on-your-network",
+      "title": "IT Leaders, Cameras Are on Your Network. Why Aren't They on Your Roadmap?",
+      "date": "2026-04-05",
+      "summary": "The most underleveraged sensor network in your organization is already installed. The IT leaders who move first will build an advantage that compounds over time."
+    },
+    {
+      "slug": "why-i-work-at-neat",
+      "title": "Why I Work at Neat",
+      "date": "2026-02-28",
+      "summary": "The story of how a question asked in a conference room in 2017 ultimately led me to Neat."
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "Neat Pulse MCP Server",
+      "kind": "AI tooling",
+      "description": "A Model Context Protocol server that wired the Neat Pulse REST API into Claude Code, exposing 37 tools for AI-assisted management of video devices, sensor data and org controls.",
+      "tags": ["TypeScript", "MCP", "Node.js", "REST API"],
+      "note": "My personal version is now private, but I helped drive Neat's official Pulse MCP server.",
+      "links": []
+    },
+    {
+      "name": "Neat Pad Clock",
+      "kind": "Side project",
+      "description": "A minimal clock and live weather display for the Neat Pad. Detects location via IP, shows current conditions with hourly precipitation. No dependencies, just HTML.",
+      "tags": ["HTML", "Open-Meteo API", "GitHub Pages"],
+      "links": [
+        { "label": "View on GitHub", "url": "https://github.com/cpavloske/neat-pad-clock" }
+      ]
+    }
+  ],
+
+  "contact": {
+    "blurb": "Want to talk about where IT and IoT are headed, or anything at the intersection of AV, cameras, and AI? Drop me a line.",
+    "email": "cpavloske@gmail.com",
+    "links": [
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/cameron-pavloske/" },
+      { "label": "GitHub", "url": "https://github.com/cpavloske" }
+    ]
+  }
+}
